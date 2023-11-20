@@ -26,6 +26,8 @@
 # But not these files...
 !/.gitignore
 
+!*.js
+!*.vue
 !*.go
 !go.sum
 !go.mod
