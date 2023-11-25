@@ -33,8 +33,8 @@
 
      <div class="containerGuestName">
         <span class="p-float-label p-input-filled" style="margin-right: 1rem">
-       <InputText id="username" type="text" v-model="userName" />
-       <label for="username">ФИО</label>
+       <InputText id="userName" type="text" v-model="userName" />
+       <label for="userName">ФИО</label>
          </span>
         <div class="buttons">
          <Button  class="p-inputtext-sm" label="Записать" icon="pi pi-save" iconPos="right" severity="success" @click="showSuccess"  style="background-color:oldlace" ></Button>
@@ -60,7 +60,7 @@
              <!-- <Toolbar style="border-radius: 3rem; background-image: linear-gradient(to right, var(--bluegray-500), var(--bluegray-800))"> -->
             <template #start>
                   <ToggleButton v-model="guestsNameFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="ФИО" offLabel="ФИО" style="margin-right: 1rem; border-radius: 1rem" />
-                  <ToggleButton v-model="balanceFrozen"    class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Стоимость" offLabel="Стоимость" style="margin-right: 1rem; border-radius: 1rem"/>
+                  <ToggleButton v-model="costFrozen"    class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Стоимость" offLabel="Стоимость" style="margin-right: 1rem; border-radius: 1rem"/>
              </template>
           </Toolbar>
 
@@ -70,15 +70,15 @@
             <DataTable 
             :value="requisitionsTable" 
             class="mt-4"
-            :frozenValue="lockedCustomers"
+            :frozenValue="lockedRequisitions"
             lazy paginator :first="first"
             :rows="24"
             scrollable scrollHeight="1080px"
             :virtualScrollerOptions="{ itemSize: 38 }"
             v-model:filters="filters" ref="dt" dataKey="id"
             :totalRecords="totalRecords" :loading="loading" @page="onPage($event)" @sort="onSort($event)" @filter="onFilter($event)" filterDisplay="row"
-            :globalFilterFields="['name','country.name', 'company', 'representative.name']"
-            v-model:selection="selectedCustomers" :selectAll="selectAll" @select-all-change="onSelectAllChange" @row-select="onRowSelect" @row-unselect="onRowUnselect" tableStyle="min-width: 75rem"
+            :globalFilterFields="['cost','user.email','user.phone','hotel.city', 'hotel.name', 'hotel.stars','representative.name']"
+            v-model:selection="selectedRequisitions" :selectAll="selectAll" @select-all-change="onSelectAllChange" @row-select="onRowSelect" @row-unselect="onRowUnselect" tableStyle="min-width: 75rem"
             :pt="{
                table: { style: 'min-width: 50rem' },
                bodyrow: ({ props }) => ({
@@ -86,30 +86,73 @@
                 })
             }">
 
-            <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-            <Column field="telegramID" header="Id" style="min-width: 100px; width: 2%"></Column>   
-            <Column field="name" header="ФИО"  style="min-width: 100px; width: 11%" filterMatchMode="startsWith" sortable alignFrozen="right" :frozen="guestsNameFrozen">
+
+            <Column style="flex: 0 0 5rem">
+                <template #body="{ data, frozenRow, index }">
+                  <Button type="button" style="color:green" :icon="frozenRow ? 'pi pi-lock' : 'pi pi-lock-open'" :disabled="frozenRow ? false : lockedRequisitions.length >= 2" text size="small" @click="toggleLock(data, frozenRow, index)" />
+                </template>
+            </Column>
+
+            <Column selectionMode="multiple" headerStyle="width: 4rem"></Column>
+
+            
+
+            <Column field="requisitionNumber" header="Заявка №" style="min-width: 100px; width: 2%"></Column>  
+            <Column field="applicationSubmissionTime" header="Дата заявки" style="min-width: 200px"></Column>
+            <Column field="status" header="Статус" style="min-width: 200px"></Column>
+            <Column field="checkInDate" header="Заезд" style="min-width: 200px"></Column>
+            <Column field="checkOutDate" header="Выезд" style="min-width: 200px"></Column>
+            <Column field="applicationStatusDate" header="Время статуса" style="min-width: 200px"></Column>
+            <Column field="cost" header="Стоимость" style="min-width: 200px" alignFrozen="right" :frozen="costFrozen">
+                 <!-- <template #body="{ data }">
+                    <span class="font-bold">{{ formatCurrency(data.balance) }}</span>
+                </template> -->
+            </Column>
+
+            <Column field="user.telegramId" header="Id пользователя" style="min-width: 100px; width: 2%"></Column>   
+
+            <Column field="user.name" header="ФИО"  style="min-width: 100px; width: 11%" filterMatchMode="startsWith" sortable alignFrozen="right" :frozen="guestsNameFrozen">
               <template #filter="{filterModel,filterCallback}">
                     <InputText type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" placeholder="Search"/>
                 </template>
             </Column>
-            <Column field="country.name" header="Город" filterField="country.name" filterMatchMode="contains" sortable style="min-width: 100px; width: 10%">
+
+            <Column field="user.email" header="Email"  style="min-width: 100px; width: 11%" filterMatchMode="startsWith" sortable alignFrozen="right" :frozen="guestsEmailFrozen">
+              <template #filter="{filterModel,filterCallback}">
+                    <InputText type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" placeholder="Search"/>
+                </template>
+            </Column>
+
+            <Column field="user.phone" header="Телефон"  style="min-width: 100px; width: 11%" filterMatchMode="startsWith" sortable alignFrozen="right" :frozen="guestsPhoneFrozen">
+              <template #filter="{filterModel,filterCallback}">
+                    <InputText type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" placeholder="Search"/>
+                </template>
+            </Column>
+
+            <Column field="hotel.city" header="Город" filterField="hotel.city" filterMatchMode="contains" sortable style="min-width: 100px; width: 10%">
                 <template #body="{ data }">
                     <div class="flex align-items-center gap-2">
-                        <img alt="flag" src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" :class="`flag flag-${data.country.code}`" style="width: 24px" />
-                        <span>{{ data.country.name }}</span>
+                        <img alt="flag" src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" :class="`flag flag-${data.hotel.code}`" style="width: 24px" />
+                        <span>{{ data.hotel.city }}</span>
                     </div>
                 </template>
                 <template #filter="{filterModel,filterCallback}">
                     <InputText type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" placeholder="Search"/>
                 </template>
             </Column>
-            <Column field="company" header="Гостиница" filterMatchMode="contains" sortable>
+
+            <Column field="hotel.name" header="Гостиница" filterMatchMode="contains" sortable>
                 <template #filter="{filterModel,filterCallback}">
                     <InputText type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" placeholder="Search"/>
                 </template>
             </Column>
-            <Column field="representative.name" header="Аватар" filterField="representative.name" sortable>
+
+            <Column field="hotel.stars" header="Звезд" filterMatchMode="contains" sortable>
+                <template #filter="{filterModel,filterCallback}">
+                    <InputText type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" placeholder="Search"/>
+                </template>
+            </Column>
+            <!-- <Column field="representative.name" header="Аватар" filterField="representative.name" sortable>
                 <template #body="{ data }">
                     <div class="flex align-items-center gap-2">
                         <img :alt="data.representative.name" :src="`https://primefaces.org/cdn/primevue/images/avatar/${data.representative.image}`" style="width: 32px" />
@@ -119,20 +162,10 @@
                 <template #filter="{filterModel,filterCallback}">
                     <InputText type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" placeholder="Search"/>
                 </template>
-            </Column>
-            <Column field="status" header="Status" style="min-width: 200px"></Column>
-            <Column field="activity" header="Activity" style="min-width: 200px"></Column>
-            <Column field="date" header="Date" style="min-width: 200px"></Column>
-            <Column field="balance" header="Стоимость" style="min-width: 200px" alignFrozen="right" :frozen="balanceFrozen">
-                 <!-- <template #body="{ data }">
-                    <span class="font-bold">{{ formatCurrency(data.balance) }}</span>
-                </template> -->
-            </Column>
-            <Column style="flex: 0 0 4rem">
-                <template #body="{ data, frozenRow, index }">
-                  <Button type="button" style="color:green" :icon="frozenRow ? 'pi pi-lock-open' : 'pi pi-lock'" :disabled="frozenRow ? false : lockedCustomers.length >= 2" text size="small" @click="toggleLock(data, frozenRow, index)" />
-                </template>
-            </Column>
+            </Column> -->
+
+          
+            
         </DataTable>
 	</div>
 
@@ -166,8 +199,20 @@ import { FilterMatchMode } from 'primevue/api';
 import { defineComponent } from "vue";
 import SidebarDark from "../components/SidebarDark.vue";
 import { CustomerService } from '../components/demo/components/CustomerService';
+import axios from 'axios-https-proxy-fix';
+//import axios from 'axios';
   //import ToastService from 'primevue/toastservice';
   //import { inject } from 'vue';
+
+
+  const proxy = {
+  host: 'https://localhost',
+  port: 9090,
+  // auth: {
+  //   username: 'some_login',
+  //   password: 'some_pass'
+  // }
+};
 
 
 // const customers = ref();
@@ -307,45 +352,77 @@ import { CustomerService } from '../components/demo/components/CustomerService';
     data() {
         return {
 
-            lockedCustomers: [
-                {
-                    id: 5135,
-                    name: 'Geraldine Bisset',
-                    country: {
-                        name: 'France',
-                        code: 'fr'
-                    },
-                    company: 'Bisset Group',
-                    status: 'proposal',
-                    date: '2019-05-05',
-                    activity: 0,
-                    representative: {
-                        name: 'Amy Elsner',
-                        image: 'amyelsner.png'
-                    }
-                }
+            lockedRequisitions: [
+                // {
+                //     user: {
+                //       telegramId: 5135,
+                //       name: 'Иван Грозный',
+                //       email: 'sfdf@mail.ru', 
+                //       phone: '+79218568586',
+                //     },
+                //     hotel: {
+                //         name: 'Лучший',
+                //         code: 'somthing',
+                //         city: 'Москва',
+                //         codeCity: 'MOW',
+                //         address: 'ул. Преображения дом 1',
+                //         stars: 1,
+                //         phone: '+78123546688'
+                //     },
+                //     status: 'новая',
+                //     checkInDaty: '2019-05-05',
+                //     checkOutDay: '2019-05-05',
+                //     applicationSubmissionTime: '2019-05-05',
+                //     applicationStatusDate: '2019-05-05',
+                //     cost: 0,
+           
+                //     // representative: {
+                //     //     name: 'Amy Elsner',
+                //     //     image: 'amyelsner.png'
+                //     // }
+                // }
             ],
           
-            balanceFrozen: false,
+            costFrozen: false,
             guestsNameFrozen: false,
+            guestsEmailFrozen: false,
+            guestsPhoneFrozen: false,
             loading: false,
             totalRecords: 0,
             requisitionsTable: null,
-            selectedCustomers: null,
+            selectedRequisitions: null,
             selectAll: false,
             first: 0,
             filters: {
-                'name': {value: '', matchMode: 'contains'},
-                'country.name': {value: '', matchMode: 'contains'},
-                'company': {value: '', matchMode: 'contains'},
+                'user.name': {value: '', matchMode: 'contains'},
+                'user.email': {value: '', matchMode: 'contains'},
+                'user.phone': {value: '', matchMode: 'contains'},
+                'hotel.city': {value: '', matchMode: 'contains'},
+                'hotel.name': {value: '', matchMode: 'contains'},
+                'hotel.stars': {value: '', matchMode: 'contains'},
                 'representative.name': {value: '', matchMode: 'contains'},
             },
             lazyParams: {},
             columns: [
-                {field: 'name', header: 'Name'},
-                {field: 'country.name', header: 'Country'},
-                {field: 'company', header: 'Company'},
-                {field: 'representative.name', header: 'Representative'}
+                {field: 'user.telegramId', header: 'Id пользователя'},
+                {field: 'user.name', header: 'ФИО'},
+                {field: 'user.phone', header: 'Телефон'},
+                {field: 'user.email', header: 'Email'},
+                {field: 'hotel.name', header: 'Гостиница'},
+                {field: 'hotel.stars', header: 'Звезд'},
+                {field: 'hotel.code', header: 'Гостиница (код)'},
+                {field: 'hotel.city', header: 'Город'},
+                {field: 'hotel.codeCity', header: 'Код \nгорода'},
+                {field: 'hotel.address', header: 'Адрес \nгостиницы'},
+                {field: 'hotel.phone', header: 'Телефон гостиницы'},
+                {field: 'hotel.site', header: 'Сайт гостиницы'},
+                {field: 'status',      header:'Статус'},
+                {field: 'requisitionNumber', header:'Заявка №'},
+                {field: 'checkInDate', header:'Дата заезда'},
+                {field: 'checkOutDate', header:'Дата выезда'},
+                {field: 'applicationSubmissionTime', header:'Дата заявки'},
+                {field: 'applicationStatusDate', header:'Время статуса'},
+                {field: 'cost', header:'Стоимость'},
             ]
         
         };
@@ -362,7 +439,22 @@ import { CustomerService } from '../components/demo/components/CustomerService';
             filters: this.filters
         };
 
-        this.loadLazyData();
+       this.loadLazyData();
+
+       //this.handleUpdateRequisitions();
+
+       axios
+      .get('https://localhost:9090/getRequisitions')
+      .then((res) => {
+      // assign state posts with response data
+       console.info(res.data)
+
+      this.requisitionsTable = res.data;
+      this.loading = false;
+    })
+    .catch((error) => {
+      console.log(error.res.data);
+    });
 
         // CustomerService.getCustomersMedium().then((data) => {
         //     this.customers = data;
@@ -475,17 +567,19 @@ import { CustomerService } from '../components/demo/components/CustomerService';
       //   },
 
       loadLazyData() {
+        
             this.loading = true;
             this.lazyParams = { ...this.lazyParams, first: event?.first || this.first };
 
             setTimeout(() => {
-                CustomerService.getCustomers({ lazyEvent: JSON.stringify(this.lazyParams) }).then((data) => {
-                    this.customers = data.customers;
-                    //this.customers = data;
-                    this.totalRecords = data.totalRecords;
-                    this.loading = false;
-                });
-            }, Math.random() * 2 + 3);
+            //     CustomerService.getCustomers({ lazyEvent: JSON.stringify(this.lazyParams) }).then((data) => {
+            //         this.customers = data.customers;
+            //         //this.customers = data;
+            //         this.totalRecords = data.totalRecords;
+                     this.loading = false;
+            //     });
+           }, Math.random() * 2 + 3);
+
         },
         onPage(event) {
             this.lazyParams = event;
@@ -505,16 +599,16 @@ import { CustomerService } from '../components/demo/components/CustomerService';
             if (selectAll) {
                 CustomerService.getCustomers().then(data => {
                     this.selectAll = true;
-                    this.selectedCustomers = data.customers;
+                    this.selectedRequisitions = data.requisitionsTable;
                 });
             }
             else {
                 this.selectAll = false;
-                this.selectedCustomers = [];
+                this.selectedRequisitions = [];
             }
         },
         onRowSelect() {
-            this.selectAll = this.selectedCustomers.length === this.totalRecords
+            this.selectAll = this.selectedRequisitions.length === this.totalRecords
         },
         onRowUnselect() {
             this.selectAll = false;
@@ -522,11 +616,11 @@ import { CustomerService } from '../components/demo/components/CustomerService';
 
         toggleLock(data, frozen, index) {
             if (frozen) {
-                this.lockedCustomers = this.lockedCustomers.filter((c, i) => i !== index);
+                this.lockedRequisitions = this.lockedRequisitions.filter((c, i) => i !== index);
                 this.requisitionsTable.push(data);
             } else {
                 this.requisitionsTable = this.requisitionsTable.filter((c, i) => i !== index);
-                this.lockedCustomers.push(data);
+                this.lockedRequisitions.push(data);
             }
 
             this.requisitionsTable.sort((val1, val2) => {
@@ -536,21 +630,23 @@ import { CustomerService } from '../components/demo/components/CustomerService';
 
       },
 
-      async handleUpdateRequisitions() {
+    //  async handleUpdateRequisitions() {
 
-        try {
-          const response = await axios.get('http://localhost:9090/users');
-        
-          this.requisitionsTable = response.data;
-          //this.totalRecords = data.totalRecords;
-          this.loading = false;
+    //     try {
+    //       const response = await axios.get('https://localhost:9090/getRequisitions', {proxy});
 
-        } catch (error) {
+    //       console.log(response)
+
+    //       this.requisitionsTable = response.data;
+    //       //this.totalRecords = data.totalRecords;
+    //       this.loading = false;
+
+    //     } catch (error) {
           
-          console.error(error);      
-        }
+    //       console.error(error);      
+    //     }
 
-    }
+    // }
     
   });
 </script>

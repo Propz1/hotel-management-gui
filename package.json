@@ -12,6 +12,8 @@
     "@vue/cli-plugin-babel": "^5.0.8",
     "@vue/cli-plugin-vuex": "^5.0.8",
     "axios": "^1.6.2",
+    "axios-https-proxy-fix": "^0.17.1",
+    "cors": "^2.8.5",
     "primeicons": "^6.0.1",
     "primevue": "^3.40.1",
     "vue": "^3.2.47",
@@ -23,7 +25,8 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.1.0",
-    "vite": "^4.3.2"
+    "vite": "^4.3.2",
+    "vite-plugin-mkcert": "^1.17.1"
   },
   "main": "index.js",
   "author": "",

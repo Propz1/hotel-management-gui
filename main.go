@@ -2,27 +2,22 @@ package main
 
 import (
 	"fmt"
+	"hotelBotGUI/internal/cons"
+	"hotelBotGUI/internal/webserver"
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 
-	"hotelBotGUI/internal/webserver"
+	mymiddleware "hotelBotGUI/internal/middleware"
 
 	"github.com/joho/godotenv"
 	"github.com/rs/zerolog"
 	zrlog "github.com/rs/zerolog/log"
 )
-
-func LoggingMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		zrlog.Info().Msg(fmt.Sprintf("Logged connection from %s", r.RemoteAddr))
-		next.ServeHTTP(w, r)
-		zrlog.Info().Msg("Finished handling request")
-	})
-}
 
 func SimpleAuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -35,33 +30,42 @@ func SimpleAuthMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-
-
 func StartWebServer(host string, port int) {
 
 	router := chi.NewRouter()
 
 	// Chaining middleware
+	router.Use(middleware.RequestID)
+	router.Use(middleware.RealIP)
 	router.Use(middleware.Logger)
-	router.Use(LoggingMiddleware)
-	router.Use(SimpleAuthMiddleware)
+	router.Use(middleware.Recoverer)
+	router.Use(mymiddleware.LoggingMiddleware)
+	//router.Use(SimpleAuthMiddleware)
 
-
+	router.Use(middleware.Timeout(60 * time.Second))
 
 	handler := webserver.NewHandler()
 	handler.Register(router)
 
-	if err := http.ListenAndServe(fmt.Sprintf("%s:%d", host, port), router); err != nil {
-		zrlog.Fatal().Msg(err.Error())
+	// if err := http.ListenAndServe(fmt.Sprintf("%v:%v", host, port), router); err != nil {
+	// 	zrlog.Fatal().Msg(err.Error())
+	// }
+
+	srv := &http.Server{
+		Addr:         fmt.Sprintf("%v:%v", host, port),
+		ReadTimeout:  50 * time.Second,
+		WriteTimeout: 50 * time.Second,
+		//TLSConfig:    tlsConfig,
+		Handler: router,
 	}
 
-	zrlog.Info().Msg(fmt.Sprintf("Starting API server on %v:%v\n", host, port))
+	zrlog.Print(srv.ListenAndServeTLS(cons.CertPaht, cons.KeyPath))
 
 }
 
 func main() {
 
-	logFile, err := os.OpenFile("./temp/info.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0o666)
+	logFile, err := os.OpenFile("./temp/info.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		zrlog.Error().Msg(fmt.Sprintf("the file info.log doesn't open: %v", err))
 		os.Exit(1)
