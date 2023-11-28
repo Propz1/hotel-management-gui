@@ -11,12 +11,15 @@ import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice';
 import Button from 'primevue/button';
 import ToggleButton from 'primevue/togglebutton';
+import Calendar from 'primevue/calendar';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import ColumnGroup from 'primevue/columngroup';  
 import Row from 'primevue/row';                   // optional
 import Paginator from "primevue/paginator"
 import Toolbar from 'primevue/toolbar';
+import Dropdown from 'primevue/dropdown';
+import Tag from 'primevue/tag';
 //import FilterMatchMode from 'primevue/api';
 //import 'primevue/resources/themes/lara-dark-teal/theme.css'
 //import 'primevue/resources/themes/lara-light-teal/theme.css'
@@ -173,6 +176,7 @@ app.use(ToastService)
 app.component('InputText', InputText)
 app.component('Button', Button);
 app.component('ToggleButton', ToggleButton);
+app.component('Calendar', Calendar);
 app.component('DataTable', DataTable);
 app.component('Column', Column)
 app.component('Row', Row)
@@ -180,6 +184,8 @@ app.component('ColumnGroup', ColumnGroup)
 app.component('Toast', Toast)
 app.component('Paginator', Paginator)
 app.component('Toolbar',Toolbar)
+app.component('Dropdown', Dropdown)
+app.component('Tag',Tag)
 
 
 app.mount("#app");

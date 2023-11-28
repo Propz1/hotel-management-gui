@@ -6,6 +6,8 @@
   import InputText from 'primevue/inputtext';
   import DataTable from 'primevue/datatable';
   import Column from 'primevue/column';
+  import Dropdown from 'primevue/dropdown';
+  import Tag from 'primevue/tag';
 // import ColumnGroup from 'primevue/columngroup';   // optional
 // import Row from 'primevue/row';                   // optional
 
@@ -71,8 +73,8 @@
             :value="requisitionsTable" 
             class="mt-4"
             :frozenValue="lockedRequisitions"
-            lazy paginator :first="first"
-            :rows="24"
+            lazy paginator :first="first"  
+            :rows="20"
             scrollable scrollHeight="1080px"
             :virtualScrollerOptions="{ itemSize: 38 }"
             v-model:filters="filters" ref="dt" dataKey="id"
@@ -86,7 +88,6 @@
                 })
             }">
 
-
             <Column style="flex: 0 0 5rem">
                 <template #body="{ data, frozenRow, index }">
                   <Button type="button" style="color:green" :icon="frozenRow ? 'pi pi-lock' : 'pi pi-lock-open'" :disabled="frozenRow ? false : lockedRequisitions.length >= 2" text size="small" @click="toggleLock(data, frozenRow, index)" />
@@ -98,18 +99,66 @@
             
 
             <Column field="requisitionNumber" header="Заявка №" style="min-width: 100px; width: 2%"></Column>  
-            <Column field="applicationSubmissionTime" header="Дата заявки" style="min-width: 200px"></Column>
-            <Column field="status" header="Статус" style="min-width: 200px"></Column>
-            <Column field="checkInDate" header="Заезд" style="min-width: 200px"></Column>
-            <Column field="checkOutDate" header="Выезд" style="min-width: 200px"></Column>
-            <Column field="applicationStatusDate" header="Время статуса" style="min-width: 200px"></Column>
-            <Column field="cost" header="Стоимость" style="min-width: 200px" alignFrozen="right" :frozen="costFrozen">
+            <!-- <Column field="applicationSubmissionTime" header="Дата заявки" style="min-width: 200px"></Column> -->
+            <Column field="applicationSubmissionTime" header="Дата заявки" filterField="applicationSubmissionTime" dataType="date" style="min-width: 12rem">
+                <template #body="{ data }">
+                    {{ formatDateTime(data.applicationSubmissionTime) }}
+                </template>
+                <template #filter="{ filterModel }">
+                    <Calendar v-model="filterModel.value" dateFormat="dd.mm.yy" placeholder="dd.mm.yyyy" mask="99.99.9999" />
+                </template>
+            </Column>
+            
+            <!-- <Column field="checkInDate" header="Заезд" style="min-width: 200px"></Column> -->
+            <Column field="checkInDate" header="Заезд" filterField="checkInDate" dataType="date" style="min-width: 11rem">
+                <template #body="{ data }">
+                    {{ formatDate(data.checkInDate) }}
+                </template>
+                <template #filter="{ filterModel }">
+                    <Calendar v-model="filterModel.value" dateFormat="dd.mm.yy" placeholder="dd.mm.yyyy" mask="99.99.9999" />
+                </template>
+            </Column>
+            <!-- <Column field="checkOutDate" header="Выезд" style="min-width: 200px"></Column> -->
+            <Column field="checkOutDate" header="Выезд" filterField="checkOutDate" dataType="date" style="min-width: 11rem">
+                <template #body="{ data }">
+                    {{ formatDate(data.checkOutDate) }}
+                </template>
+                <template #filter="{ filterModel }">
+                    <Calendar v-model="filterModel.value" dateFormat="dd.mm.yy" placeholder="dd.mm.yyyy" mask="99.99.9999" />
+                </template>
+            </Column>
+
+            
+            <Column field="status" header="Статус" :filterMenuStyle="{ width: '14rem' }" style="min-width: 7rem" >
+                <template #body="{ data }">
+                    <Tag :value="data.status" :severity="getSeverity(data.status)" />
+                </template>
+                <template #filter="{ filterModel }">
+                    <Dropdown v-model="filterModel.value" :options="statuses" placeholder="Выберите статус" class="p-column-filter" showClear>
+                        <template #option="slotProps">
+                            <Tag :value="slotProps.option" :severity="getSeverity(slotProps.option)" />
+                        </template>
+                    </Dropdown>
+                </template>
+            </Column>
+
+            <!-- <Column field="applicationStatusDate" header="Время статуса" style="min-width: 200px"></Column> -->
+            <Column field="applicationStatusDate" header="Время статуса" filterField="applicationStatusDate" dataType="date" style="min-width: 12rem">
+                <template #body="{ data }">
+                    {{ formatDateTime(data.applicationStatusDate) }}
+                </template>
+                <template #filter="{ filterModel }">
+                    <Calendar v-model="filterModel.value" dateFormat="dd.mm.yy" placeholder="dd.mm.yyyy" mask="99.99.9999" />
+                </template>
+            </Column>
+            
+            <Column field="cost" header="Стоимость" style="min-width: 7rem; width: 2%" alignFrozen="right" :frozen="costFrozen">
                  <!-- <template #body="{ data }">
                     <span class="font-bold">{{ formatCurrency(data.balance) }}</span>
                 </template> -->
             </Column>
 
-            <Column field="user.telegramId" header="Id пользователя" style="min-width: 100px; width: 2%"></Column>   
+            <Column field="user.telegramId" header="Id гостя" style="min-width: 1%; width: 6%"></Column>   
 
             <Column field="user.name" header="ФИО"  style="min-width: 100px; width: 11%" filterMatchMode="startsWith" sortable alignFrozen="right" :frozen="guestsNameFrozen">
               <template #filter="{filterModel,filterCallback}">
@@ -129,15 +178,15 @@
                 </template>
             </Column>
 
-            <Column field="hotel.city" header="Город" filterField="hotel.city" filterMatchMode="contains" sortable style="min-width: 100px; width: 10%">
-                <template #body="{ data }">
+            <Column field="hotel.city" header="Город" filterField="hotel.city" filterMatchMode="contains" sortable style="min-width: 100px; width: 10%">    
+              <template #body="{ data }">
                     <div class="flex align-items-center gap-2">
                         <img alt="flag" src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" :class="`flag flag-${data.hotel.code}`" style="width: 24px" />
                         <span>{{ data.hotel.city }}</span>
                     </div>
                 </template>
                 <template #filter="{filterModel,filterCallback}">
-                    <InputText type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" placeholder="Search"/>
+                    <InputText v-model="filterModel.value" type="text" @input.enter="filterCallback()" class="p-column-filter" placeholder="Поиск"/>
                 </template>
             </Column>
 
@@ -164,7 +213,12 @@
                 </template>
             </Column> -->
 
-          
+            <!-- <ColumnGroup type="footer">
+            <Row>
+                <Column footer="Всего стоимость:" :colspan="3" footerStyle="text-align:right"/>
+                <Column :footer="thisTotalCosts" />
+            </Row>
+        </ColumnGroup> -->
             
         </DataTable>
 	</div>
@@ -195,7 +249,8 @@
 
 <script>
 import { ref, onMounted } from 'vue';
-import { FilterMatchMode } from 'primevue/api';
+//import { FilterMatchMode } from 'primevue/api';
+import { FilterMatchMode, FilterOperator } from 'primevue/api';
 import { defineComponent } from "vue";
 import SidebarDark from "../components/SidebarDark.vue";
 import { CustomerService } from '../components/demo/components/CustomerService';
@@ -352,6 +407,8 @@ import axios from 'axios-https-proxy-fix';
     data() {
         return {
 
+            statuses: ['new', 'confirmed', 'rejected', 'canselled'],
+
             lockedRequisitions: [
                 // {
                 //     user: {
@@ -393,15 +450,20 @@ import axios from 'axios-https-proxy-fix';
             selectedRequisitions: null,
             selectAll: false,
             first: 0,
-            filters: {
-                'user.name': {value: '', matchMode: 'contains'},
-                'user.email': {value: '', matchMode: 'contains'},
-                'user.phone': {value: '', matchMode: 'contains'},
-                'hotel.city': {value: '', matchMode: 'contains'},
-                'hotel.name': {value: '', matchMode: 'contains'},
-                'hotel.stars': {value: '', matchMode: 'contains'},
-                'representative.name': {value: '', matchMode: 'contains'},
-            },
+            filters: null,
+            //{
+            //     'user.name': {value: '', matchMode: 'contains'},
+            //     'user.email': {value: '', matchMode: FilterMatchMode.CONTAINS},
+            //     'user.phone': {value: '', matchMode: 'contains'},
+            //     'hotel.city': {value: '', matchMode: 'contains'},
+            //     'hotel.name': {value: '', matchMode: 'contains'},
+            //     'hotel.stars': {value: '', matchMode: 'contains'},
+            //     'checkInDate': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
+            //     'checkOutDate': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
+            //     'applicationSubmissionTime': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
+            //     'applicationStatusDate': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
+            // },
+
             lazyParams: {},
             columns: [
                 {field: 'user.telegramId', header: 'Id пользователя'},
@@ -418,8 +480,8 @@ import axios from 'axios-https-proxy-fix';
                 {field: 'hotel.site', header: 'Сайт гостиницы'},
                 {field: 'status',      header:'Статус'},
                 {field: 'requisitionNumber', header:'Заявка №'},
-                {field: 'checkInDate', header:'Дата заезда'},
-                {field: 'checkOutDate', header:'Дата выезда'},
+                {field: 'checkInDate', header:'Заезд'},
+                {field: 'checkOutDate', header:'Выезд'},
                 {field: 'applicationSubmissionTime', header:'Дата заявки'},
                 {field: 'applicationStatusDate', header:'Время статуса'},
                 {field: 'cost', header:'Стоимость'},
@@ -428,7 +490,14 @@ import axios from 'axios-https-proxy-fix';
         };
     },
 
+    created() {
+        this.initFilters();
+    },
+
       mounted() {
+
+        
+
         this.loading = true;
 
         this.lazyParams = {
@@ -441,28 +510,27 @@ import axios from 'axios-https-proxy-fix';
 
        this.loadLazyData();
 
-       //this.handleUpdateRequisitions();
-
        axios
       .get('https://localhost:9090/getRequisitions')
       .then((res) => {
       // assign state posts with response data
-       console.info(res.data)
-
       this.requisitionsTable = res.data;
+      this.totalRecords = res.data.length
       this.loading = false;
-    })
-    .catch((error) => {
-      console.log(error.res.data);
-    });
+       })
+        .catch((error) => {
+         console.log(error.res.data);
+       });
 
         // CustomerService.getCustomersMedium().then((data) => {
         //     this.customers = data;
         // });
+
+   
     },
 
     name: "Requisitions",
-    components: { SidebarDark, InputText, Button, ToggleButton, Toast, DataTable, Column},
+    components: { SidebarDark, InputText, Button, ToggleButton, Toast, DataTable, Column, Dropdown, Tag},
    
     // setup() {
     // // Table config
@@ -566,13 +634,93 @@ import axios from 'axios-https-proxy-fix';
       //       return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
       //   },
 
+      formatDate(value) {
+
+        const date = new Date(value);
+
+            return date.toLocaleDateString('ru-RU', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+            });
+        },
+
+        formatDateTime(value) {
+
+           const date = new Date(value);
+
+          return date.toLocaleDateString('ru-RU', {
+           day: '2-digit',
+           month: '2-digit',
+           year: 'numeric',
+           hour: 'numeric',
+           minute: 'numeric',
+           second: 'numeric',
+          });
+        },
+
+        formatCurrency(value) {
+            return value.toLocaleString('ru-RU', {style: 'currency', currency: 'RUB'});
+        },
+
+        getSeverity(status) {
+            switch (status) {
+                case 'unqualified':
+                    return 'danger';
+
+                case 'confirmed':
+                    return 'success';
+
+                case 'new':
+                    return 'info';
+
+                case 'rejected':
+                    return 'warning';
+
+                case 'renewal':
+                    return null;
+            }
+        },
+
+        clearFilter() {
+            this.initFilters();
+        },
+
+        initFilters() {
+            this.filters = {
+                global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+                'user.name': {value: '', matchMode: 'contains'},
+                'user.email': {value: '', matchMode: FilterMatchMode.CONTAINS},
+                'user.phone': {value: '', matchMode: 'contains'},
+                'hotel.city': {value: '', matchMode: 'contains'},
+                'hotel.name': {value: '', matchMode: 'contains'},
+                'hotel.stars': {value: '', matchMode: 'contains'},
+                status: { operator: FilterOperator.OR, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] },
+                checkInDate: { operator: FilterOperator.AND, constraints: [{ value: 0, matchMode: FilterMatchMode.DATE_IS }] },
+                checkOutDate: { operator: FilterOperator.AND, constraints: [{ value: 0, matchMode: FilterMatchMode.DATE_IS }] },
+                applicationSubmissionTime: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
+                applicationStatusDate: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
+            };
+        },
+
       loadLazyData() {
         
             this.loading = true;
             this.lazyParams = { ...this.lazyParams, first: event?.first || this.first };
 
             setTimeout(() => {
-            //     CustomerService.getCustomers({ lazyEvent: JSON.stringify(this.lazyParams) }).then((data) => {
+                     axios
+                    .get('https://localhost:9090/getRequisitions')
+                    .then((res) => {
+                  // assign state posts with response data
+                     this.requisitionsTable = res.data;
+                     this.totalRecords = res.data.length
+                     this.loading = false;
+                  })
+                    .catch((error) => {
+                    console.log(error.res.data);
+                });
+             //    CustomerService.getCustomers({ lazyEvent: JSON.stringify(this.lazyParams) }).then((data) => {
             //         this.customers = data.customers;
             //         //this.customers = data;
             //         this.totalRecords = data.totalRecords;
@@ -630,23 +778,35 @@ import axios from 'axios-https-proxy-fix';
 
       },
 
-    //  async handleUpdateRequisitions() {
+     async handleUpdateRequisitions() {
 
-    //     try {
-    //       const response = await axios.get('https://localhost:9090/getRequisitions', {proxy});
+        try {
+          const response = await axios.get('https://localhost:9090/getRequisitions', {proxy});
 
-    //       console.log(response)
+          console.log(response)
 
-    //       this.requisitionsTable = response.data;
-    //       //this.totalRecords = data.totalRecords;
-    //       this.loading = false;
+          this.requisitionsTable = response.data;
+          this.totalRecords = response.data.length;
+          this.loading = false;
 
-    //     } catch (error) {
+        } catch (error) {
           
-    //       console.error(error);      
-    //     }
+          console.error(error);      
+        }
 
-    // }
+    },
+
+    computed: {
+
+    thisTotalCosts() {
+            let total = 0;
+            // for(let req of this.requisitionsTable) {
+            //     total += req.cost;
+            // }
+
+            return this.formatCurrency(total);
+        }
+      }
     
   });
 </script>
