@@ -20,6 +20,7 @@ import Paginator from "primevue/paginator"
 import Toolbar from 'primevue/toolbar';
 import Dropdown from 'primevue/dropdown';
 import Tag from 'primevue/tag';
+//import './assets/theme.css';
 //import FilterMatchMode from 'primevue/api';
 //import 'primevue/resources/themes/lara-dark-teal/theme.css'
 //import 'primevue/resources/themes/lara-light-teal/theme.css'
@@ -186,7 +187,6 @@ app.component('Paginator', Paginator)
 app.component('Toolbar',Toolbar)
 app.component('Dropdown', Dropdown)
 app.component('Tag',Tag)
-
 
 app.mount("#app");
 

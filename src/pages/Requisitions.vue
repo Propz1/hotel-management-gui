@@ -8,6 +8,7 @@
   import Column from 'primevue/column';
   import Dropdown from 'primevue/dropdown';
   import Tag from 'primevue/tag';
+  import Calendar from 'primevue/calendar';
 // import ColumnGroup from 'primevue/columngroup';   // optional
 // import Row from 'primevue/row';                   // optional
 
@@ -72,6 +73,7 @@
             <DataTable 
             :value="requisitionsTable" 
             class="mt-4"
+            resizableColumns columnResizeMode="expand"
             :frozenValue="lockedRequisitions"
             lazy paginator :first="first"  
             :rows="20"
@@ -96,6 +98,7 @@
 
             <Column selectionMode="multiple" headerStyle="width: 4rem"></Column>
 
+           
             
 
             <Column field="requisitionNumber" header="Заявка №" style="min-width: 100px; width: 2%"></Column>  
@@ -158,9 +161,9 @@
                 </template> -->
             </Column>
 
-            <Column field="user.telegramId" header="Id гостя" style="min-width: 1%; width: 6%"></Column>   
+            <Column field="user.telegramId" header="Id клиента" style="min-width: 2rem; width: 6%; padding: 1rem"></Column>   
 
-            <Column field="user.name" header="ФИО"  style="min-width: 100px; width: 11%" filterMatchMode="startsWith" sortable alignFrozen="right" :frozen="guestsNameFrozen">
+            <Column field="user.name" header="ФИО"  style="min-width: 100px; width: 12%; padding: 1rem" filterMatchMode="startsWith" sortable alignFrozen="right" :frozen="guestsNameFrozen">
               <template #filter="{filterModel,filterCallback}">
                     <InputText type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" placeholder="Search"/>
                 </template>
@@ -201,6 +204,12 @@
                     <InputText type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" placeholder="Search"/>
                 </template>
             </Column>
+            <Column header="Подтвердить" headerStyle="width: 5rem; text-align: center" bodyStyle="text-align: center; overflow: visible">
+                <template #body>
+                    <Button type="button" icon="pi pi-thumbs-up" rounded style="backgroundColor: var(--primary-color); color: var(--primary-color-text)"/>
+                </template>
+            </Column>
+           
             <!-- <Column field="representative.name" header="Аватар" filterField="representative.name" sortable>
                 <template #body="{ data }">
                     <div class="flex align-items-center gap-2">
@@ -450,7 +459,7 @@ import axios from 'axios-https-proxy-fix';
             selectedRequisitions: null,
             selectAll: false,
             first: 0,
-            filters: null,
+            filters: null, 
             //{
             //     'user.name': {value: '', matchMode: 'contains'},
             //     'user.email': {value: '', matchMode: FilterMatchMode.CONTAINS},
@@ -458,8 +467,8 @@ import axios from 'axios-https-proxy-fix';
             //     'hotel.city': {value: '', matchMode: 'contains'},
             //     'hotel.name': {value: '', matchMode: 'contains'},
             //     'hotel.stars': {value: '', matchMode: 'contains'},
-            //     'checkInDate': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
-            //     'checkOutDate': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
+             //   'checkInDate': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
+             //    'checkOutDate': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
             //     'applicationSubmissionTime': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
             //     'applicationStatusDate': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
             // },
@@ -530,7 +539,7 @@ import axios from 'axios-https-proxy-fix';
     },
 
     name: "Requisitions",
-    components: { SidebarDark, InputText, Button, ToggleButton, Toast, DataTable, Column, Dropdown, Tag},
+    components: { SidebarDark, InputText, Button, ToggleButton, Toast, DataTable, Column, Dropdown, Tag, Calendar},
    
     // setup() {
     // // Table config
@@ -636,7 +645,7 @@ import axios from 'axios-https-proxy-fix';
 
       formatDate(value) {
 
-        const date = new Date(value);
+        let date = new Date(value/1000000);
 
             return date.toLocaleDateString('ru-RU', {
                 day: '2-digit',
@@ -645,10 +654,16 @@ import axios from 'axios-https-proxy-fix';
             });
         },
 
-        formatDateTime(value) {
+        formatDateTime(value) {     
 
-           const date = new Date(value);
+          const date = new Date(value/1000000);
 
+          //  console.log(typeof value); 
+          //  console.log(value);
+          //  console.log(typeof date); 
+          //  console.log(date instanceof Date); // shows 'true'
+
+    
           return date.toLocaleDateString('ru-RU', {
            day: '2-digit',
            month: '2-digit',
@@ -696,8 +711,8 @@ import axios from 'axios-https-proxy-fix';
                 'hotel.name': {value: '', matchMode: 'contains'},
                 'hotel.stars': {value: '', matchMode: 'contains'},
                 status: { operator: FilterOperator.OR, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] },
-                checkInDate: { operator: FilterOperator.AND, constraints: [{ value: 0, matchMode: FilterMatchMode.DATE_IS }] },
-                checkOutDate: { operator: FilterOperator.AND, constraints: [{ value: 0, matchMode: FilterMatchMode.DATE_IS }] },
+               'checkInDate': { operator: FilterOperator.AND, constraints: [{ value: 0, matchMode: FilterMatchMode.DATE_IS }] },
+                'checkOutDate': { operator: FilterOperator.AND, constraints: [{ value: 0, matchMode: FilterMatchMode.DATE_IS }] },
                 applicationSubmissionTime: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
                 applicationStatusDate: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
             };
