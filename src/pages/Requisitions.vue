@@ -76,9 +76,10 @@
             resizableColumns columnResizeMode="expand"
             :frozenValue="lockedRequisitions"
             lazy paginator :first="first"  
-            :rows="20"
+            :rows="35"
             scrollable scrollHeight="1080px"
             :virtualScrollerOptions="{ itemSize: 38 }"
+            v-model:editingRows="editingRows" editMode="row" @row-edit-save="onRowEditSave"
             v-model:filters="filters" ref="dt" dataKey="id"
             :totalRecords="totalRecords" :loading="loading" @page="onPage($event)" @sort="onSort($event)" @filter="onFilter($event)" filterDisplay="row"
             :globalFilterFields="['cost','user.email','user.phone','hotel.city', 'hotel.name', 'hotel.stars','representative.name']"
@@ -87,8 +88,14 @@
                table: { style: 'min-width: 50rem' },
                bodyrow: ({ props }) => ({
                 class: [{ 'font-bold': props.frozenRow }]
-                })
-            }">
+                }),
+                column: {
+                    bodycell: ({ state }) => ({
+                        style:  state['d_editing']&&'padding-top: 0.6rem; padding-bottom: 0.6rem' 
+                    })
+                  },
+            }"
+              >
 
             <Column style="flex: 0 0 5rem">
                 <template #body="{ data, frozenRow, index }">
@@ -143,6 +150,9 @@
                         </template>
                     </Dropdown>
                 </template>
+                <template #editor="{ data, field }">
+                    <InputText v-model="data[field]" />
+                </template>
             </Column>
 
             <!-- <Column field="applicationStatusDate" header="Время статуса" style="min-width: 200px"></Column> -->
@@ -159,6 +169,9 @@
                  <!-- <template #body="{ data }">
                     <span class="font-bold">{{ formatCurrency(data.balance) }}</span>
                 </template> -->
+                <template #editor="{ data, field }">
+                    <InputText v-model="data[field]" />
+                </template>
             </Column>
 
             <Column field="user.telegramId" header="Id клиента" style="min-width: 2rem; width: 6%; padding: 1rem"></Column>   
@@ -191,11 +204,17 @@
                 <template #filter="{filterModel,filterCallback}">
                     <InputText v-model="filterModel.value" type="text" @input.enter="filterCallback()" class="p-column-filter" placeholder="Поиск"/>
                 </template>
+                <template #editor="{ data, field }">
+                    <InputText v-model="data[field]" />
+                </template>
             </Column>
 
             <Column field="hotel.name" header="Гостиница" filterMatchMode="contains" sortable>
                 <template #filter="{filterModel,filterCallback}">
                     <InputText type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" placeholder="Search"/>
+                </template>
+                <template #editor="{ data, field }">
+                    <InputText v-model="data[field]" />
                 </template>
             </Column>
 
@@ -203,10 +222,14 @@
                 <template #filter="{filterModel,filterCallback}">
                     <InputText type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" placeholder="Search"/>
                 </template>
+                <template #editor="{ data, field }">
+                    <InputText v-model="data[field]" />
+                </template>
             </Column>
+            <Column :rowEditor="true" style="width: 10%; min-width: 8rem" bodyStyle="text-align:center"></Column>
             <Column header="Подтвердить" headerStyle="width: 5rem; text-align: center" bodyStyle="text-align: center; overflow: visible">
-                <template #body>
-                    <Button type="button" icon="pi pi-thumbs-up" rounded style="backgroundColor: var(--primary-color); color: var(--primary-color-text)"/>
+              <template #body="{ data, index }">
+                    <Button type="button" icon="pi pi-thumbs-up" rounded style="backgroundColor: var(--primary-color); color: var(--primary-color-text)" @click="confirmeBookingRequest(data, index)"/>
                 </template>
             </Column>
            
@@ -416,6 +439,7 @@ import axios from 'axios-https-proxy-fix';
     data() {
         return {
 
+            editingRows: [],
             statuses: ['new', 'confirmed', 'rejected', 'canselled'],
 
             lockedRequisitions: [
@@ -505,8 +529,6 @@ import axios from 'axios-https-proxy-fix';
 
       mounted() {
 
-        
-
         this.loading = true;
 
         this.lazyParams = {
@@ -528,7 +550,7 @@ import axios from 'axios-https-proxy-fix';
       this.loading = false;
        })
         .catch((error) => {
-         console.log(error.res.data);
+        // console.log(error.res.data);
        });
 
         // CustomerService.getCustomersMedium().then((data) => {
@@ -643,6 +665,67 @@ import axios from 'axios-https-proxy-fix';
       //       return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
       //   },
 
+      confirmeBookingRequest(data, index){
+
+        console.log(index)
+
+        console.log(data)
+
+
+        if (this.requisitionsTable[index].status === 'new') {
+          
+          const param = {requisitionNumber: this.requisitionsTable[index].requisitionNumber, status: 'confirmed'};
+
+
+
+
+                    axios
+                    .patch('https://localhost:9090/bookingRequest', null,
+
+                    {params: param})
+                      // {
+                      //   requisitionNumber: this.requisitionsTable[index].requisitionNumber, 
+                      //   status: this.requisitionsTable[index].status}
+                      // })
+                         
+                    //  {
+                    //       headers: {
+                    //         'Content-Type': "application/json; charset=UTF-8",
+                    //         'Access-Control-Allow-Origin': "https://localhost:9090"
+                    //       }
+                    //  }
+                    //  headers: {
+                    // 'x-rapidapi-host': 'quotes15.p.rapidapi.com',
+                    // 'x-rapidapi-key': 'YOUR_API_KEY_HERE'
+                    // }
+                    //})
+                    .then((res) => {
+
+                      console.log("Получил ответ от сервера")
+
+                      console.log(res)
+
+                      console.log(res.status)
+
+                      if (res.status == 200) {
+                        //this.requisitionsTable[index].status = 'confirmed'
+
+                        this.loadLazyData()
+                      }
+          
+                  })
+                    .catch((error) => {
+                    // console.log(error.res.data);
+                });
+        }
+
+       
+
+
+      
+
+      },
+
       formatDate(value) {
 
         let date = new Date(value/1000000);
@@ -676,6 +759,12 @@ import axios from 'axios-https-proxy-fix';
 
         formatCurrency(value) {
             return value.toLocaleString('ru-RU', {style: 'currency', currency: 'RUB'});
+        },
+
+        onRowEditSave(event) {
+            let { newData, index } = event;
+
+            this.requisitionsTable[index] = newData;
         },
 
         getSeverity(status) {
@@ -727,13 +816,13 @@ import axios from 'axios-https-proxy-fix';
                      axios
                     .get('https://localhost:9090/getRequisitions')
                     .then((res) => {
-                  // assign state posts with response data
+
                      this.requisitionsTable = res.data;
                      this.totalRecords = res.data.length
                      this.loading = false;
                   })
                     .catch((error) => {
-                    console.log(error.res.data);
+                    //console.log(error.res.data);
                 });
              //    CustomerService.getCustomers({ lazyEvent: JSON.stringify(this.lazyParams) }).then((data) => {
             //         this.customers = data.customers;
