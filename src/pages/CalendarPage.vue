@@ -1,53 +1,7 @@
 <template>
   <div :class="$style.calendarpage">
-    <FieldsSmallLabel
-      fieldsSmallLabelWidth="144px"
-      fieldsSmallLabelBorder="none"
-      fieldsSmallLabelBackgroundColor="transparent"
-      fieldsSmallLabelPosition="absolute"
-      fieldsSmallLabelTop="512px"
-      fieldsSmallLabelLeft="1274px"
-    /><FieldsSmallLabel
-      fieldsSmallLabelWidth="144px"
-      fieldsSmallLabelBorder="none"
-      fieldsSmallLabelBackgroundColor="transparent"
-      fieldsSmallLabelPosition="absolute"
-      fieldsSmallLabelTop="435px"
-      fieldsSmallLabelLeft="1275px"
-    /><FieldsSmallLabel
-      fieldsSmallLabelWidth="144px"
-      fieldsSmallLabelBorder="none"
-      fieldsSmallLabelBackgroundColor="transparent"
-      fieldsSmallLabelPosition="absolute"
-      fieldsSmallLabelTop="361px"
-      fieldsSmallLabelLeft="1274px"
-    /><FieldsSmallLabel
-      fieldsSmallLabelWidth="144px"
-      fieldsSmallLabelBorder="none"
-      fieldsSmallLabelBackgroundColor="transparent"
-      fieldsSmallLabelPosition="absolute"
-      fieldsSmallLabelTop="283px"
-      fieldsSmallLabelLeft="1274px"
-    /><FieldsSmallLabel
-      fieldsSmallLabelWidth="140px"
-      fieldsSmallLabelBorder="none"
-      fieldsSmallLabelBackgroundColor="transparent"
-      fieldsSmallLabelPosition="absolute"
-      fieldsSmallLabelTop="211px"
-      fieldsSmallLabelLeft="1274px"
-    /><FieldsSmallLabel
-      fieldsSmallLabelWidth="144px"
-      fieldsSmallLabelBorder="none"
-      fieldsSmallLabelBackgroundColor="transparent"
-      fieldsSmallLabelPosition="absolute"
-      fieldsSmallLabelTop="139px"
-      fieldsSmallLabelLeft="1273px"
-    /><FieldsSmallDropdown
-      fieldsSmallDropdownWidth="546px"
-      fieldsSmallDropdownPosition="absolute"
-      fieldsSmallDropdownTop="78px"
-      fieldsSmallDropdownLeft="1269px"
-    /><ButtonOutlinedSquareD1
+
+    <ButtonOutlinedSquareD1
       buttonText="Установить"
       propTop="731px"
       propLeft="1275px"
@@ -59,15 +13,15 @@
     <div :class="$style.calendarpageChild" />
     <div :class="$style.div">Отель</div>
     <SidebarDark7 />
-    <div :class="$style.monthandyaertwo">
+    <!-- <div :class="$style.monthandyaertwo">
       <b :class="$style.textmonth">Апрель</b>
       <b :class="$style.textyear">2023</b>
     </div>
     <div :class="$style.monthandyaerone">
       <b :class="$style.textmonth">Март</b>
       <b :class="$style.textyear">2023</b>
-    </div>
-    <CalendarOne1
+    </div> -->
+    <!-- <CalendarOne1
       calendarDayTextSize="23"
       propLeft="660px"
       calendarOneBackgroundColor="rgba(255, 255, 255, 0.2)"
@@ -99,11 +53,22 @@
       weekColor7="#000"
       calendarOneBackgroundColor9="unset"
       weekColor8="#000"
-    /><CalendarOne1
+    /> -->
+    <!-- <CalendarOne1
       calendarDayTextColor="25"
       calendarDayTextSize="19"
-    /><DatePicker />
-    <div :class="$style.div1">Выберите отель</div>
+    /> -->
+    <DatePicker />
+    <div :class="$style.div1">Выберите отель
+    <MultiSelect v-model="selectedHotels" @click="loadMultipleSelectHotels()" :options="groupedHotels" optionLabel="label" optionGroupLabel="label" optionGroupChildren="items" display="chip" placeholder="Выберите отель" class="w-full md:w-50rem">
+       <template #optiongroup="slotProps">
+          <div class="flex align-items-center">
+            <img :alt="slotProps.option.label" src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" :class="`flag flag-${slotProps.option.code.toLowerCase()} mr-2`" style="width: 18px" />
+            <div>{{ slotProps.option.label }}</div>
+          </div>
+       </template>
+   </MultiSelect>
+    </div>
     <div :class="$style.div2">Кол-во номеров</div>
     <div :class="$style.div3">Цена за номер (руб.)</div>
     <div :class="$style.div4">Кэшбек (руб.)</div>
@@ -127,15 +92,67 @@
   import SidebarDark7 from "../components/SidebarDark7.vue";
   import CalendarOne1 from "../components/CalendarOne1.vue";
   import DatePicker from "../components/DatePicker.vue";
+  import MultiSelect from 'primevue/multiselect';
+  import axios from 'axios-https-proxy-fix';
+
+  const proxy = {
+  host: 'https://localhost',
+  port: 9090,
+  // auth: {
+  //   username: 'some_login',
+  //   password: 'some_pass'
+  // }
+};
 
   export default defineComponent({
+
+    data() {
+        return {
+            selectedHotels: null,
+            groupedHotels: null,
+            //     {
+            //         label: 'Москва',
+            //         code: 'DE',
+            //         items: [
+            //             { label: 'Berlinnnnnnnnnnnnnnnnn', value: 'Berlin' },
+            //             { label: 'Frankfurt', value: 'Frankfurt' },
+            //             { label: 'Hamburg', value: 'Hamburg' },
+            //             { label: 'Munich', value: 'Munich' }
+            //         ]
+            //     },
+            //     {
+            //         label: 'Санкт-Петербург',
+            //         code: 'SPB',
+            //         items: [
+            //             { label: 'Chicago', value: 'Chicago' },
+            //             { label: 'Los Angeles', value: 'Los Angeles' },
+            //             { label: 'New York', value: 'New York' },
+            //             { label: 'San Francisco', value: 'San Francisco' }
+            //         ]
+            //     },
+            //     {
+            //         label: 'УФА',
+            //         code: 'UFA',
+            //         items: [
+            //             { label: 'Kyoto', value: 'Kyoto' },
+            //             { label: 'Osaka', value: 'Osaka' },
+            //             { label: 'Tokyo', value: 'Tokyo' },
+            //             { label: 'Yokohama', value: 'Yokohama' }
+            //         ]
+            //     }
+            // ]
+        };
+    },
+
+
+
     name: "CalendarPage",
     components: {
+      MultiSelect,
       FieldsSmallLabel,
       FieldsSmallDropdown,
       ButtonOutlinedSquareD1,
       SidebarDark7,
-      CalendarOne1,
       DatePicker,
     },
     methods: {
@@ -163,6 +180,23 @@
       onLinkSettingsPageContainerClick() {
         this.$router.push("/settings");
       },
+
+      loadMultipleSelectHotels() {
+              console.log("Пытаюсь загрузить в groupedHotels")
+
+
+                 axios
+                .get('https://localhost:9090/getGroupedHotels')
+                .then((res) => {
+
+                  console.log(res.data)
+
+                 this.groupedHotels = res.data;
+                 })
+                .catch((error) => {
+                //console.log(error.res.data);
+            });
+        },
     },
   });
 </script>

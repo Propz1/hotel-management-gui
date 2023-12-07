@@ -8,6 +8,7 @@ import { defineConfig } from 'vite'
       plugins: [vue(),  mkcert() ],
       server: {
         origin: 'https://localhost:5173',
+   
         https: {
           key: fs.readFileSync('./internal/certs/localhost+2-key.pem'),
           cert: fs.readFileSync('./internal/certs/localhost+2.pem'),
