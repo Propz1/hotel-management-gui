@@ -7,6 +7,7 @@ import { createRouter, createWebHistory } from "vue-router";
 //import TableLite from "vue3-table-lite";
 import PrimeVue from 'primevue/config';
 import InputText from 'primevue/inputtext';
+import InputNumber from 'primevue/inputnumber';
 import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice';
 import Button from 'primevue/button';
@@ -187,8 +188,9 @@ app.component('Toast', Toast)
 app.component('Paginator', Paginator)
 app.component('Toolbar',Toolbar)
 app.component('Dropdown', Dropdown)
-app.component('Tag',Tag)
+app.component('Tag', Tag)
 app.component('MultiSelect', MultiSelect)
+app.component('InputNumber', InputNumber)
 
 app.mount("#app");
 

@@ -1,28 +1,33 @@
 <template>
   <div :class="$style.datePicker">
     <v-text-field
+      :class="$style.daterangeoneVtextfield"
+      name="DateRangeOne"
+      label="Начало периода"
+      color="#5d5fef"
+      style="background-color: white;"
+      type="date"
+    />
+    <v-text-field
       :class="$style.daterangetwoVtextfield"
       name="DateRangeTwo"
       label="Окончание периода"
       color="#5d5fef"
+      style="background-color:white;"
       type="date"
     />
-    <v-text-field
-      :class="$style.datarangeoneVtextfield"
-      label="Начало периода"
-      color="#5d5fef"
-      type="date"
-    />
-    <img
+
+
+    <!-- <img
       :class="$style.arrowForwardMultimediaSvgreIcon"
       alt=""
       src="/arrowforwardmultimediasvgrepocom-1.svg"
-    />
-    <button :class="$style.buttoncalendaricon" id="selectCalendarDateButton">
+    /> -->
+    <!-- <button :class="$style.buttoncalendaricon" id="selectCalendarDateButton">
       <div :class="$style.shadow" />
       <div :class="$style.bg" />
       <img :class="$style.calendarIcon" alt="" src="/calendar-icon.svg" />
-    </button>
+    </button> -->
   </div>
 </template>
 <script>
@@ -33,25 +38,43 @@
   });
 </script>
 <style module>
+
+.datePicker {
+    position: absolute;
+    height: 5.19%;
+    /* width: 16.23%; */
+    width: 358px;
+    /* top: 55.19%; */
+    top: 70px;
+    /* left: 52.99%; */
+    left: 260px;
+    right: 10.21%;
+    bottom: 39.63%; 
+    background-color: var(--light-light-100);
+    overflow: hidden; 
+    border-radius: 2rem;
+    color:rgb(61, 56, 122);
+  }
   .daterangetwoVtextfield {
     position: absolute;
     top: calc(50% - 29px);
     left: calc(50% - 0px);
   }
-  .datarangeoneVtextfield {
+  .daterangeoneVtextfield {
     position: absolute;
     top: 0px;
-    left: 0px;
+    left: 0px; 
   }
-  .arrowForwardMultimediaSvgreIcon {
+
+  /* .arrowForwardMultimediaSvgreIcon {
     position: absolute;
     top: 21px;
     left: 183px;
     width: 15px;
     height: 15px;
     overflow: hidden;
-  }
-  .shadow {
+  } */
+  /* .shadow {
     position: absolute;
     height: calc(100% - 16px);
     width: calc(100% - 16px);
@@ -89,16 +112,6 @@
     right: 16px;
     width: 32px;
     height: 32px;
-  }
-  .datePicker {
-    position: absolute;
-    height: 5.19%;
-    width: 23.23%;
-    top: 55.19%;
-    right: 10.21%;
-    bottom: 39.63%;
-    left: 66.56%;
-    background-color: var(--light-light-100);
-    overflow: hidden;
-  }
+  } */
+
 </style>

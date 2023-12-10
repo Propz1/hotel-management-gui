@@ -34,7 +34,7 @@
   
     <div class="wrapperRows">
 
-     <div class="containerGuestName">
+     <!-- <div class="containerGuestName">
         <span class="p-float-label p-input-filled" style="margin-right: 1rem">
        <InputText id="userName" type="text" v-model="userName" />
        <label for="userName">ФИО</label>
@@ -42,7 +42,7 @@
         <div class="buttons">
          <Button  class="p-inputtext-sm" label="Записать" icon="pi pi-save" iconPos="right" severity="success" @click="showSuccess"  style="background-color:oldlace" ></Button>
         </div>
-     </div>
+     </div> -->
 
 
       <div class="requisitionDataTableContainer">
@@ -59,7 +59,7 @@
 
 
          
-           <Toolbar>
+           <Toolbar :class="$style.toolbarTableStyle" style="min-height: 2rem;">
              <!-- <Toolbar style="border-radius: 3rem; background-image: linear-gradient(to right, var(--bluegray-500), var(--bluegray-800))"> -->
             <template #start>
                   <ToggleButton v-model="guestsNameFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="ФИО" offLabel="ФИО" style="margin-right: 1rem; border-radius: 1rem" />
@@ -188,13 +188,13 @@
                 </template>
             </Column>
 
-            <Column field="user.phone" header="Телефон"  style="min-width: 100px; width: 11%" filterMatchMode="startsWith" sortable alignFrozen="right" :frozen="guestsPhoneFrozen">
+            <Column field="user.phone" header="Телефон"  style="min-width: 120px; width: 12%; padding: 1rem" filterMatchMode="startsWith" sortable alignFrozen="right" :frozen="guestsPhoneFrozen">
               <template #filter="{filterModel,filterCallback}">
                     <InputText type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" placeholder="Search"/>
                 </template>
             </Column>
 
-            <Column field="hotel.city" header="Город" filterField="hotel.city" filterMatchMode="contains" sortable style="min-width: 100px; width: 10%">    
+            <Column field="hotel.city" header="Город" filterField="hotel.city" filterMatchMode="contains" sortable style="min-width: 120px; padding: 1rem">    
               <template #body="{ data }">
                     <div class="flex align-items-center gap-2">
                         <img alt="flag" src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" :class="`flag flag-${data.hotel.code}`" style="width: 24px" />
@@ -209,7 +209,7 @@
                 </template>
             </Column>
 
-            <Column field="hotel.name" header="Гостиница" filterMatchMode="contains" sortable>
+            <Column field="hotel.name" header="Гостиница" filterMatchMode="contains" sortable style="min-width: 120px; padding: 1rem">
                 <template #filter="{filterModel,filterCallback}">
                     <InputText type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" placeholder="Search"/>
                 </template>
@@ -925,6 +925,15 @@ import axios from 'axios-https-proxy-fix';
     align-items: flex-start;
     justify-content: flex-start;
   }
+
+  .toolbarTableStyle{
+
+     background: conic-gradient(from 145deg at 40%  75%, rgba(148,179,207,0.26) 0%, rgba(156, 184, 216, 0.75) 30%, transparent 50%, rgba(156, 184, 216, 0.75) 80%, rgba(115, 128, 216, 0.51) 100%) 15% 75%/175% 200%,
+        radial-gradient(ellipse  at 55%  55%, rgb(178, 166, 222) 0%, rgb(9, 3, 22) 100%) 30% 30%/200% 170%;
+   }
+
+
+
 </style>
 
 <style scoped>
