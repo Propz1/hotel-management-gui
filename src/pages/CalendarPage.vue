@@ -2,11 +2,12 @@
   <div :class="$style.calendarpage">
 
     <div :class="$style.calendarpageChild"/>
+<!-- 
+    v-model:filters="filters"
+                  dataKey="id" filterDisplay="row" -->
 
     <div class="card">
         <DataTable 
-                  v-model:filters="filters"
-                  dataKey="id" filterDisplay="row"
                   :loading="loading"
                   :value="calendarTable"
                   showGridlines
@@ -57,11 +58,12 @@
             <Column field="quantity" header="Кол-во" style="min-width: 2rem;padding: 1rem"></Column>
 
             <Column field="hotelName" header="Отель" filterField="hotelName" :showFilterMenu="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 100px; width: 2%; padding: 1rem" alignFrozen="left" :frozen="hotelFrozen">
-              <template #body="{ data }">
+              <!-- <template #body="{ data }">
                     <div class="flex align-items-center gap-2">
                         <span>{{ data.hotelName }}</span>
                     </div>
-              </template>
+              </template> -->
+
               <!-- <template #filter="{ filterModel, filterCallback }">
                     <MultiSelect  id="hotelsSelectInTable" v-model="filterModel.value" @change="filterCallback()" :options="groupedHotelsFoTable" optionLabel="label" ptionGroupLabel="label" optionGroupChildren="items" display="chip" placeholder="Выберите отель" class="p-column-filter" style="min-width: 14rem" :maxSelectedLabels="1">
                         <template #option="slotProps">
@@ -189,7 +191,7 @@
       <div :class="$style.div1">
         <div class="card flex flex-wrap gap-2 p-fluid">
          <!-- <label  for="hotelsSelect" class="font-bold block mb-2"> Выберите отель </label> -->
-        <MultiSelect id="hotelsSelect" v-model="selectedHotels" @click="loadMultipleSelectHotels()" :options="groupedHotels" optionLabel="label" optionGroupLabel="label" optionGroupChildren="items" display="chip" placeholder="Выберите отель" class="w-full md:w-50rem" style="min-width:25rem">
+        <MultiSelect v-model="selectedHotels" @click="loadMultipleSelectHotels()" :options="groupedHotels" optionLabel="label" optionGroupLabel="label" optionGroupChildren="items" display="chip" placeholder="Выберите отель" class="w-full md:w-50rem" style="min-width:25rem">
             <template #optiongroup="slotProps">
                 <div class="flex align-items-center">
                   <img :alt="slotProps.option.label" src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" :class="`flag flag-${slotProps.option.code.toLowerCase()} mr-2`" style="width: 18px" />
@@ -341,7 +343,7 @@
             price_four:0,
             quantityNumbers:0,
             selectedHotels: null,
-            groupedHotelsFoTable: null,
+            //groupedHotelsFoTable: null,
             groupedHotels: null,
             datePicerValues:{
               startDate: null, 
@@ -385,17 +387,17 @@
 
       this.loadLazyData();
 
-      //  axios
-      //  .get('https://localhost:9090/getCalendarTable')
-      //  .then((res) => {
-      //    // assign state posts with response data
-      //      this.calendarTable = res.data;
+        axios
+        .get('https://64ce-176-117-0-227.ngrok-free.app/getCalendarTable')
+        .then((res) => {
+          // assign state posts with response data
+            this.calendarTable = res.data;
       // // this.totalRecords = res.data.length
-      //      this.loading = false;
-      //  })
-      // .catch((error) => {
+          this.loading = false;
+        })
+       .catch((error) => {
       //  // console.log(error.res.data);
-      //  });
+        });
 
 
 
@@ -433,9 +435,9 @@
         
         this.loading = true;
 
-        setTimeout(() => {
+        // setTimeout(() => {
                  axios
-                .get('https://localhost:9090/getCalendarTable')
+                .get('https://64ce-176-117-0-227.ngrok-free.app/getCalendarTable')
                 .then((res) => {
 
                  this.calendarTable = res.data;
@@ -448,7 +450,7 @@
 
                  this.loading = false;
 
-         }, Math.random() * 1 + 2);
+        //  }, Math.random() * 1);
 
       },
 
@@ -517,34 +519,20 @@
 
               }
 
+              var yearStartDate = new Date(this.datePicerValues.startDate).getFullYear()
+              var monthStartDate = new Date(this.datePicerValues.startDate).getMonth() + 1
+              var dayStartDate = new Date(this.datePicerValues.startDate).getDate()
 
-  
-
-              // var yearstartdate = new Date(this.datePicerValues.startDate).getFullYear()
-              // var monthstartdate = new Date(this.datePicerValues.startDate).getMonth()
-              // var daystartdate = new Date(this.datePicerValues.startDate).getDate()
-
-              // var sdate = new Date(yearstartdate, monthstartdate, daystartdate);
-              // var offsetInMs = (sdate.getTimezoneOffset() * -60 * 60 *3)  // 
-
-              // var sday = new Date(sdate.getTime() + offsetInMs);
-
-              var sday = new Date(this.datePicerValues.startDate)
-              var eday = new Date(this.datePicerValues.endDate)
-
-
-             // console.log("Начало периода sday => " + sday)
-             // console.log("Начало периода offsetInMs => " + offsetInMs)
-             // console.log("Начало периода sdate.getTimezoneOffset() => " + sdate.getTimezoneOffset())
-             // console.log("Начало периода sday.getTime() => " + sday.getTime())
-            //  console.log("Начало периода sday.getTime()*1000000 => " + sday.getTime()*1000000)
+              var yearEndDate = new Date(this.datePicerValues.endDate).getFullYear()
+              var monthEndDate = new Date(this.datePicerValues.endDate).getMonth() + 1
+              var dayEndDate = new Date(this.datePicerValues.endDate).getDate()
 
 
               var round = Math.round;
 
         
                axios
-                 .put('https://localhost:9090/updateDataForCalendar',
+                 .put('https://64ce-176-117-0-227.ngrok-free.app/updateDataForCalendar',
                  {
                   installationDate:         0,
                   priceRoom:                round(this.price_one),
@@ -556,8 +544,12 @@
                   cashbackPercent:          round(this.cashbackPercent),
                   cashbackNoCheckIn:        round(this.cashbackNoCheckIn),
                   cashbackNoCheckInPercent: round(this.cashbackNoCheckInPercent),
-                  startDate:                sday.getTime()*1000000,
-                  endDate:                  eday.getTime()*1000000,
+                  startDay:                 dayStartDate,
+                  startMonth:               monthStartDate,
+                  startYear:                yearStartDate,
+                  endDay:                   dayEndDate,
+                  endMonth:                 monthEndDate,
+                  endYear:                  yearEndDate,
                   jsonSelectedHotels,
 
                  })
@@ -582,15 +574,14 @@
       loadMultipleSelectHotels() {
               console.log("Пытаюсь загрузить в groupedHotels")
 
-
                  axios
-                .get('https://localhost:9090/getGroupedHotels')
+                .get('https://64ce-176-117-0-227.ngrok-free.app/getGroupedHotels')
                 .then((res) => {
 
                   console.log(res.data)
 
                  this.groupedHotels = res.data;
-                 this.groupedHotelsForTable = res.data;
+                // this.groupedHotelsForTable = res.data;
                  })
                 .catch((error) => {
                 //console.log(error.res.data);

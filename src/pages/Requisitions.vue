@@ -542,7 +542,7 @@ import axios from 'axios-https-proxy-fix';
        this.loadLazyData();
 
        axios
-      .get('https://localhost:9090/getRequisitions')
+      .get('https://64ce-176-117-0-227.ngrok-free.app/getRequisitions')
       .then((res) => {
       // assign state posts with response data
       this.requisitionsTable = res.data;
@@ -680,7 +680,7 @@ import axios from 'axios-https-proxy-fix';
 
 
                     axios
-                    .patch('https://localhost:9090/bookingRequest', null,
+                    .patch('https://64ce-176-117-0-227.ngrok-free.app/bookingRequest', null,
 
                     {params: param})
                       // {
@@ -814,7 +814,7 @@ import axios from 'axios-https-proxy-fix';
 
             setTimeout(() => {
                      axios
-                    .get('https://localhost:9090/getRequisitions')
+                    .get('https://64ce-176-117-0-227.ngrok-free.app/getRequisitions')
                     .then((res) => {
 
                      this.requisitionsTable = res.data;
@@ -885,7 +885,7 @@ import axios from 'axios-https-proxy-fix';
      async handleUpdateRequisitions() {
 
         try {
-          const response = await axios.get('https://localhost:9090/getRequisitions', {proxy});
+          const response = await axios.get('https://64ce-176-117-0-227.ngrok-free.app/getRequisitions', {proxy});
 
           console.log(response)
 
@@ -976,8 +976,8 @@ import axios from 'axios-https-proxy-fix';
     .requisitionDataTableContainer{
       display: grid;
     }
-    .buttons{
-      /* background-color: #6e6ef7;
-      color: #f8f8f9; */
-    }
+    /* .buttons{
+      background-color: #6e6ef7;
+      color: #f8f8f9; 
+    } */
   </style>
