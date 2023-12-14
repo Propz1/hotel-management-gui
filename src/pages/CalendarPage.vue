@@ -385,17 +385,19 @@
 
       this.loadLazyData();
 
-       axios
-       .get('https://localhost:9090/getCalendarTable')
-       .then((res) => {
-         // assign state posts with response data
-      this.calendarTable = res.data;
-      // this.totalRecords = res.data.length
-       this.loading = false;
-       })
-      .catch((error) => {
-       // console.log(error.res.data);
-       });
+      //  axios
+      //  .get('https://localhost:9090/getCalendarTable')
+      //  .then((res) => {
+      //    // assign state posts with response data
+      //      this.calendarTable = res.data;
+      // // this.totalRecords = res.data.length
+      //      this.loading = false;
+      //  })
+      // .catch((error) => {
+      //  // console.log(error.res.data);
+      //  });
+
+
 
     },
 
@@ -515,8 +517,28 @@
 
               }
 
+
+  
+
+              // var yearstartdate = new Date(this.datePicerValues.startDate).getFullYear()
+              // var monthstartdate = new Date(this.datePicerValues.startDate).getMonth()
+              // var daystartdate = new Date(this.datePicerValues.startDate).getDate()
+
+              // var sdate = new Date(yearstartdate, monthstartdate, daystartdate);
+              // var offsetInMs = (sdate.getTimezoneOffset() * -60 * 60 *3)  // 
+
+              // var sday = new Date(sdate.getTime() + offsetInMs);
+
               var sday = new Date(this.datePicerValues.startDate)
               var eday = new Date(this.datePicerValues.endDate)
+
+
+             // console.log("Начало периода sday => " + sday)
+             // console.log("Начало периода offsetInMs => " + offsetInMs)
+             // console.log("Начало периода sdate.getTimezoneOffset() => " + sdate.getTimezoneOffset())
+             // console.log("Начало периода sday.getTime() => " + sday.getTime())
+            //  console.log("Начало периода sday.getTime()*1000000 => " + sday.getTime()*1000000)
+
 
               var round = Math.round;
 
