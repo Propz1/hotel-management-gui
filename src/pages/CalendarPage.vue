@@ -1,51 +1,90 @@
 <template>
+
+        
   <div :class="$style.calendarpage">
 
-    <div :class="$style.calendarpageChild"/>
+
+
+   <div :class="$style.calendarpageChild"/>
+
 <!-- 
     v-model:filters="filters"
                   dataKey="id" filterDisplay="row" -->
 
     <div class="card">
+
+
+
         <DataTable 
+                  :class="$style.calendarTableDatesStyle"
                   :loading="loading"
                   :value="calendarTable"
                   showGridlines
                   resizableColumns columnResizeMode="expand"
                   scrollable scrollHeight="963px"
                   :virtualScrollerOptions="{}"
-                  :rows="40" 
-                  :class="$style.calendarTableDatesStyle"
+                  :rows="40"   
                   tableStyle="min-width: 50rem">
 
-                
+                 
             <template #header>
                 <!-- <div class="flex flex-wrap align-items-center justify-content-between gap-2">
                     <span class="text-xl text-900 font-bold">Таблица цен</span>
                     <Button icon="pi pi-refresh" rounded raised />
                 </div> -->
 
+          
 
                 
-                <Toolbar :class="$style.toolbarTableStyle" style="min-height: 2rem;">
+                <Toolbar :class="$style.toolbarTableStyle" style="padding-left: 0.3rem; min-height: 3.5rem;">
+        
                    <template #start>
-                       <ToggleButton v-model="dateFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Дата" offLabel="Дата" style="margin-right: 1rem; border-radius: 0.5rem" />
-                       <ToggleButton v-model="hotelFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Отель" offLabel="Отель" style="margin-right: 1rem; border-radius: 0.5rem"/>
-                       <ToggleButton v-model="cityFrozen"  class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Город" offLabel="Город" style="margin-right: 1rem; border-radius: 0.5rem"/>
+                    <Button type="button" icon="pi pi-chevron-left" rounded style="height:35px; width:35px; backgroundColor: var(--primary-color); color: var(--primary-color-text)" @click="previousYear(index)"/>    
+                     <div id="appSelectYear">
+                           <SwipeBox ref="myswipe" @onChange="yearChanged" speed="150">
+                                 <div style="width: 160px; height: 20px; border: 0px solid black">
+                                    <div v-for="image in imagesYear" :key="image.id">
+                                      <img :src="image.url" style="margin-left: 1rem; margin-right: 1rem; width: 120px;  height: 20px"/>
+                                    </div>
+                                  </div> 
+                           </SwipeBox>
+                      <!-- <div>{{index}}</div> -->
+                          <!-- <button @click="goto2">goto index #2</button> -->
+                    </div>
+                     <Button type="button" icon="pi pi-chevron-right" rounded style="margin-right: 0.5rem; height:35px; width:35px; backgroundColor: var(--primary-color); color: var(--primary-color-text)" @click="nextYear(index)"/>
+                     
+                 
+                     <Button  label="Январь"  style="color: white; font-size: 1rem; font-weight:400;padding-left: 1.2rem; padding-right: 1.2rem;padding-top: 0.82rem; padding-bottom: 0.82rem; " />
+                     <Button  label="Февраль" style="color: white; font-size: 1rem; font-weight:400;padding-left: 0.7rem; padding-right: 0.7rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                     <Button  label="Март" style="color: white; font-size: 1rem; font-weight:400;padding-left: 1.62rem; padding-right: 1.62rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                     <Button  label="Апрель" style="color: white; font-size: 1rem; font-weight:400;padding-left: 1.15rem; padding-right: 1.15rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                     <Button  label="Май" style="color: white; font-size: 1rem; font-weight:400;padding-left: 1.89rem; padding-right: 1.89rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                     <Button  label="Июнь" style="color: white; font-size: 1rem; font-weight:400;padding-left: 1.5rem; padding-right: 1.5rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                     <Button  label="Июль" style="color: white; font-size: 1rem; font-weight:400;padding-left: 1.5rem; padding-right: 1.5rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                     <Button  label="Август" style="color: white; font-size: 1rem; font-weight:400;padding-left: 1.1rem; padding-right: 1.1rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                     <Button  label="Сентябрь" style="color: white; font-size: 1rem; font-weight:400;padding-left: 0.7rem; padding-right: 0.7rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                     <Button  label="Октябрь" style="color: white; font-size: 1rem; font-weight:400;padding-left: 1rem; padding-right: 1rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                     <Button  label="Ноябрь" style="color: white; font-size: 1rem; font-weight:400;padding-left: 1.2rem; padding-right: 1.2rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                     <Button  label="Декабрь" style="color: white; font-size: 1rem; font-weight:400;padding-left: 0.7rem; padding-right: 0.7rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
                     </template>
 
+                    <template #center>
 
-                   <template #center  style="min-height: 1.5rem;">
+                 
+                 
+                  </template>
+
+                   <!-- <template #center  style="min-height: 1.5rem;">
                     <Button icon="pi pi-print" class="mr-2" />
-                     <span class="p-input-icon-left-center">
+                       <span class="p-input-icon-left-center">
                         <i class="pi pi-search" style="padding: 0.5rem;"/>
                         <InputText placeholder="Поиск" style="min-height: 10px; "/>
                      </span>
-                   </template>
+                   </template> -->
 
-                    <template #end>
+                    <!-- <template #end>
                       <ToggleButton v-model="installationDateFrozen"  class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Дата обновления" offLabel="Дата обновления" style="margin-right: 1rem; border-radius: 0.5rem"/>
-                     </template>
+                     </template> -->
                   </Toolbar>
                  
             </template>
@@ -55,7 +94,11 @@
                     {{ formatDate(data.date) }}
                 </template>
             </Column>
-            <Column field="quantity" header="Кол-во" style="min-width: 2rem;padding: 1rem"></Column>
+
+
+            <Column field="quantity" header="Кол-во" style="min-width: 2rem;padding: 1rem">
+             
+            </Column>
 
             <Column field="hotelName" header="Отель" filterField="hotelName" :showFilterMenu="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 100px; width: 2%; padding: 1rem" alignFrozen="left" :frozen="hotelFrozen">
               <!-- <template #body="{ data }">
@@ -101,6 +144,8 @@
                 </template></Column>
             <Column field="administratorID" header="id автора" style="min-width: 8rem; width: 2%; padding: 1rem"></Column>
             <Column field="administratorName" header="Автор" style="min-width: 15rem; width: 2%; padding: 1rem"></Column>
+
+
             <!-- <Column header="Image">
                 <template #body="slotProps">
                     <img :src="`https://primefaces.org/cdn/primevue/images/product/${slotProps.data.image}`" :alt="slotProps.data.image" class="w-6rem shadow-2 border-round" />
@@ -112,7 +157,7 @@
                     <Tag :value="slotProps.data.inventoryStatus" :severity="getSeverity(slotProps.data)" />
                 </template>
             </Column> -->
-            <template #footer> Всего {{ calendarTable ? calendarTable.length : 0 }} строк. </template>
+            <template #footer> Всего строк: {{ calendarTable ? calendarTable.length : 0 }}  </template>
         </DataTable>
     </div>
 
@@ -179,18 +224,26 @@
 
    
 
-    <DatePicker id="datePicker" v-model="datePicerValues" @input="onUpdateDatePicker($event)"/>
+    
 
     
       <!-- <div class="card flex flex-wrap gap-2 p-fluid"> -->
- 
-    <!-- <div :class="$style.div0">
-       <label  for="datePickert" class="font-bold block mb-2"> Выберите период</label>
-    </div>  -->
 
-      <div :class="$style.div1">
+        <!-- <div :class="$style.upsideTolbarStyle"> -->
+
+          
+
+        
+
+
+       <DatePicker id="datePicker" v-model="datePicerValues" @input="onUpdateDatePicker($event)"/>
+
+       
+      
+    <div :class="$style.div1">
         <div class="card flex flex-wrap gap-2 p-fluid">
          <!-- <label  for="hotelsSelect" class="font-bold block mb-2"> Выберите отель </label> -->
+        
         <MultiSelect v-model="selectedHotels" @click="loadMultipleSelectHotels()" :options="groupedHotels" optionLabel="label" optionGroupLabel="label" optionGroupChildren="items" display="chip" placeholder="Выберите отель" class="w-full md:w-50rem" style="min-width:25rem">
             <template #optiongroup="slotProps">
                 <div class="flex align-items-center">
@@ -198,20 +251,22 @@
                   <div>{{ slotProps.option.label }}</div>
                 </div>
             </template>
-        </MultiSelect>
-      </div>
+       </MultiSelect>
+     </div>
     </div>
+
+  <!-- </div> -->
 
 
    
-    <div :class="$style.div2">
+    <!-- <div :class="$style.div2">
         <label  for="quantityNumbersInput" class="font-bold block mb-2" style="padding-right: 0.5rem;"> Кол-во номеров </label>
         <InputText id="quantityNumbersInput" v-model="quantityNumbers" type="number" inputId="withoutgrouping" :useGrouping="false" style="min-width: 1px; max-width: 100px; max-height: 2px; background-color:white; border-radius: 0.5rem ; padding: 1rem;"/>
-     </div> 
+     </div> -->
   
    
       <!-- <div class="card flex flex-wrap gap-2 p-fluid"> -->
-        <!-- <div :class="$style.div_main"> -->
+        <!-- <div :class="$style.div_main">
 
           
            <div :class="$style.div3"> 
@@ -234,11 +289,11 @@
              <InputText id="price4" v-model="price_four" type="number" inputId="withoutgrouping" :useGrouping="false" style="min-width: 100px; max-width: 100px; max-height: 2px; background-color:white; border-radius: 0.5rem ; padding: 1rem; "/>
           </div>
 
-        </div>
+      </div> -->
   
 
 
-    <div :class="$style.div7">
+    <!-- <div :class="$style.div7">
       <label  for="cashbackRUBInput" class="font-bold block mb-2" style="padding-right: 0.5rem;"> Cashback (руб.)</label>
       <InputText id="cashbackRUBInput" v-model="cashbackRUB" type="number" inputId="withoutgrouping" :useGrouping="false" style="min-width: 100px; max-width: 100px; max-height: 2px; background-color:white; border-radius: 0.5rem ; padding: 1rem;"/>
     </div> 
@@ -256,12 +311,32 @@
     <div :class="$style.div10">
        <label  for="cashbackNoCheckInPercentInput" class="font-bold block mb-2" style="padding-right: 0.5rem;"> Cashback не заезд (%)</label>
        <InputText id="cashbackNoCheckInPercentInput" v-model="cashbackNoCheckInPercent" type="number" inputId="minmax" :min="0" :max="100" :useGrouping="false" style="min-width: 100px; max-width: 100px; max-height: 2px; background-color:white; border-radius: 0.5rem ; padding: 1rem;"/>
-    </div> 
+    </div>   -->
+
+
+
+
     
+    
+
+
+
+
+    
+
+
+
+
+
+
+
+    </div> 
+
+   
    
 
 
-       <ButtonOutlinedSquareD1
+       <!-- <ButtonOutlinedSquareD1
           buttonText="Установить"
           propTop="620px"
           propLeft="380px"
@@ -271,13 +346,13 @@
           propDisplay="inline-block"
           @click="setupDataForCalendar()"
           style="border-radius: 1rem;"
-        />
+        /> -->
 
-     <div :class="$style.lineTop"/>
+     <!-- <div :class="$style.lineTop"/>
 
-     <div :class="$style.lineBottom"/>
+     <div :class="$style.lineBottom"/> -->
 
-     <div :class="$style.lineRight"/>
+     <!-- <div :class="$style.lineRight"/> -->
 
 <!-- </div>  -->
   <!-- </div> -->
@@ -293,26 +368,47 @@
   import DatePicker from "../components/DatePicker.vue";
   import MultiSelect from 'primevue/multiselect';
   import InputNumber from 'primevue/inputnumber';
+  import InputText from 'primevue/inputtext';
   import ToggleButton from 'primevue/togglebutton';
   import Column from 'primevue/column';
   import DataTable from 'primevue/datatable';
   import axios from 'axios-https-proxy-fix';
+  import SwipeBox from '@shopid/vue3-swipe-box';
+  //import VueHorizontalCalendar from 'vue-horizontal-calendar';
 
-  const proxy = {
-  host: 'https://localhost',
-  port: 9090,
-  // auth: {
-  //   username: 'some_login',
-  //   password: 'some_pass'
-  // }
-};
+
 
 
 
   export default defineComponent({
 
+
     data() {
         return {
+
+           showDate: new Date(),
+
+           imagesYear: [
+            { id: '2023', url: "./year2023.svg" },
+            { id: '2024', url: "./year2024.svg" },
+            { id: '2025', url: "./year2025.svg" },
+            { id: '2026', url: "./year2026.svg" },
+            { id: '2027', url: "./year2027.svg" },
+            { id: '2028', url: "./year2028.svg" },
+            { id: '2029', url: "./year2029.svg" },
+            { id: '2030', url: "./year2030.svg" },
+            { id: '2031', url: "./year2031.svg" },
+            { id: '2032', url: "./year2032.svg" },
+            { id: '2033', url: "./year2033.svg" },
+            { id: '2034', url: "./year2034.svg" },
+            { id: '2035', url: "./year2035.svg" },
+            { id: '2036', url: "./year2036.svg" },
+            { id: '2037', url: "./year2037.svg" },
+            { id: '2038', url: "./year2038.svg" },
+            { id: '2039', url: "./year2039.svg" },
+            { id: '2040', url: "./year2040.svg" },
+           ],
+
           calendarTable: {
             date:0,
 	          installationDate:0,
@@ -368,6 +464,7 @@
     name: "CalendarPage",
     components: {
       InputNumber,
+      InputText,
       MultiSelect,
       FieldsSmallLabel,
       FieldsSmallDropdown,
@@ -377,6 +474,8 @@
       ToggleButton,
       Column,
       DataTable,
+      // VueHorizontalCalendar,
+      SwipeBox, 
     },
 
 
@@ -388,7 +487,7 @@
       this.loadLazyData();
 
         axios
-        .get('https://64ce-176-117-0-227.ngrok-free.app/getCalendarTable')
+        .get('https://localhost:9090/getCalendarTable')
         .then((res) => {
           // assign state posts with response data
             this.calendarTable = res.data;
@@ -431,13 +530,17 @@
         this.$router.push("/settings");
       },
 
+      setShowDate(d) {
+				this.showDate = d;
+			},
+
       loadLazyData() {
         
         this.loading = true;
 
         // setTimeout(() => {
                  axios
-                .get('https://64ce-176-117-0-227.ngrok-free.app/getCalendarTable')
+                .get('https://localhost:9090/getCalendarTable')
                 .then((res) => {
 
                  this.calendarTable = res.data;
@@ -454,10 +557,27 @@
 
       },
 
+    yearChanged: function (index) {
+      console.log('index' + index);
+      this.index = index
+    },
+
+    nextYear: function (x) {
+      this.$refs.myswipe.swipetoNext();
+    },
+    previousYear: function (x) {
+      this.$refs.myswipe.swipetoPrevious();
+    },
+    goto2: function () {
+      this.$refs.myswipe.goTo(2);
+    },
+
 
         formatDateTime(value) {     
 
-        const date = new Date(value/1000000);
+        const date = new Date(value/1000000)
+
+        date.setDate(date.getDate())
 
          return date.toLocaleDateString('ru-RU', {
            day: '2-digit',
@@ -472,7 +592,9 @@
 
        formatDate(value) {
 
-       let date = new Date(value/1000000);
+       let date = new Date(value/1000000)
+     
+       date.setDate(date.getDate())
 
         return date.toLocaleDateString('ru-RU', {
            day: '2-digit',
@@ -525,14 +647,14 @@
 
               var yearEndDate = new Date(this.datePicerValues.endDate).getFullYear()
               var monthEndDate = new Date(this.datePicerValues.endDate).getMonth() + 1
-              var dayEndDate = new Date(this.datePicerValues.endDate).getDate()
+              var dayEndDate = new Date(this.datePicerValues.endDate).getDate() //for period overlaps
 
 
               var round = Math.round;
 
         
                axios
-                 .put('https://64ce-176-117-0-227.ngrok-free.app/updateDataForCalendar',
+                 .put('https://localhost:9090/updateDataForCalendar',
                  {
                   installationDate:         0,
                   priceRoom:                round(this.price_one),
@@ -559,7 +681,8 @@
 
                   console.log(res.data)
 
-                 //this.groupedHotels = res.data;
+                  this.loadLazyData()
+
                  })
                    .catch((error) => {
                 //console.log(error.res.data);
@@ -575,7 +698,7 @@
               console.log("Пытаюсь загрузить в groupedHotels")
 
                  axios
-                .get('https://64ce-176-117-0-227.ngrok-free.app/getGroupedHotels')
+                .get('https://localhost:9090/getGroupedHotels')
                 .then((res) => {
 
                   console.log(res.data)
@@ -588,16 +711,46 @@
             });
         },
     },
+
+
+
+
+
   });
 </script>
 <style module>
+
+
+
+.upsideTolbarStyle{
+    position: absolute;
+    top: 0px;
+    left: 240px;
+    /* background-color: #40409a; */
+    width: 89.5%;
+    height: 70px;
+    border-radius: 0rem;
+  }
+
+ .dateTimePickerStyle{
+    position: absolute;
+    top: 0px;
+    left: 240px;
+    height: 70px; 
+    width: 150px; 
+    background-color: #40409a; 
+    /* width: 89.5%;
+  
+    /* border-radius: 1rem; */
+  }
+
   .calendarpageChild {
     position: absolute;
-    top: 50px;
+    top: 75px;
     left: 255px;
     background-color: #40409a;
     width: 1650px;
-    height: 1.8px;
+    height: 1.3px;
   }
 
   .lineTop{
@@ -628,17 +781,22 @@
   }
 
   .toolbarTableStyle{
+    height: 3rem;
+
+   
     background: conic-gradient(from 145deg at 40%  75%, rgba(148,179,207,0.26) 0%, rgba(156, 184, 216, 0.75) 30%, transparent 50%, rgba(156, 184, 216, 0.75) 80%, rgba(115, 128, 216, 0.51) 100%) 15% 75%/175% 200%,
       radial-gradient(ellipse  at 55%  55%, rgb(178, 166, 222) 0%, rgb(9, 3, 22) 100%) 30% 30%/200% 170%;
+     
 }
 
   .calendarTableDatesStyle{
+    display: grid;
     position: absolute;
-    top: 60px;
-    left: 650px;
+    top: 68px;
+    left: 249px;
     background-color: #40409a;
-    width: 1272px;
-    height: 1020px;
+    width: 89.5%;
+    height: 1010px;
   }
   
 
@@ -709,10 +867,10 @@
     position: absolute;
     top: 12px;
     /* left: 1127px; */
-    left: 255px;
+    left: 655px;
     line-height: 150%;
     font-size: var(--label-large-label-14-size);
-    line-height: 24px;
+    line-height: 35px;
     font-weight: 500;
     text-align: center;
   }
@@ -889,5 +1047,5 @@
     padding: 0 5px;
 }
 
-
 </style>
+

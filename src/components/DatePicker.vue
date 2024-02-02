@@ -45,10 +45,10 @@
     /* width: 16.23%; */
     width: 358px;
     /* top: 55.19%; */
-    top: 70px;
+    top: 5px;
     /* left: 52.99%; */
-    left: 260px;
-    right: 10.21%;
+    left: 255px;
+    /* right: 10.21%; */
     bottom: 39.63%; 
     background-color: var(--light-light-100);
     overflow: hidden; 

@@ -210,8 +210,7 @@ func OrderRoutes() chi.Router {
 
 func OptionsHundler(w http.ResponseWriter, r *http.Request) {
 
-	w.Header().Set("Access-Control-Allow-Origin", "https://77d3-176-117-0-227.ngrok-free.app")
-	//w.Header().Set("Access-Control-Allow-Origin", "https://localhost:5173")
+	w.Header().Set("Access-Control-Allow-Origin", "https://localhost:5173")
 	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, PUT, PATCH, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "X-Custom-Header, X-PINGOTHER, Content-Type")
 
@@ -221,8 +220,7 @@ func OptionsHundler(w http.ResponseWriter, r *http.Request) {
 func GetCalendarTable(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.Header().Set("Access-Control-Allow-Origin", "https://77d3-176-117-0-227.ngrok-free.app")
-	//w.Header().Set("Access-Control-Allow-Origin", "https://localhost:5173")
+	w.Header().Set("Access-Control-Allow-Origin", "https://localhost:5173")
 	w.WriteHeader(http.StatusOK)
 	//json.NewEncoder(w).Encode(map[string]string{"message": "Hello, Golang Chi!"})
 
@@ -257,8 +255,7 @@ func GetCalendarTable(w http.ResponseWriter, r *http.Request) {
 func GetGroupedHotels(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.Header().Set("Access-Control-Allow-Origin", "https://77d3-176-117-0-227.ngrok-free.app")
-	//w.Header().Set("Access-Control-Allow-Origin", "https://localhost:5173")
+	w.Header().Set("Access-Control-Allow-Origin", "https://localhost:5173")
 	w.WriteHeader(http.StatusOK)
 
 	*listGroupedHotels = nil
@@ -294,8 +291,7 @@ func GetRequisitions(w http.ResponseWriter, r *http.Request) {
 	//port := os.Getenv("WEBSERVER_PORT")
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.Header().Set("Access-Control-Allow-Origin", "https://77d3-176-117-0-227.ngrok-free.app")
-	//w.Header().Set("Access-Control-Allow-Origin", "https://localhost:5173")
+	w.Header().Set("Access-Control-Allow-Origin", "https://localhost:5173")
 	w.WriteHeader(http.StatusOK)
 	//json.NewEncoder(w).Encode(map[string]string{"message": "Hello, Golang Chi!"})
 
@@ -430,11 +426,12 @@ func getRequisitionsFromDB(ctx context.Context, toggle string, dbpool *pgxpool.P
 	case toggle == "CanselledBookingRequestes":
 		statusBookingRequest = "canselled"
 		querySQL = fmt.Sprintf("SELECT br.requisition_number, br.check_in_date, br.check_out_date, br.application_submission_time, br.status, br.application_status_date, br.cost, cl.name, cl.email,cl.telephone FROM \"Booking_Request\" AS br LEFT JOIN \"Client\" AS cl ON br.user_telegram_id=cl.user_telegram_id WHERE br.status='%v'", statusBookingRequest)
+
 	case toggle == "AllBookingRequestes":
-		querySQL = fmt.Sprintf("SELECT br.requisition_number, br.check_in_date, br.check_out_date, br.application_submission_time, br.status, br.application_status_date, br.cost, cl.name, cl.email,cl.telephone,cl.user_telegram_id, COALESCE(br.hotel_name,'') as hotel_name, COALESCE(ht.code,'') as hotel_code, COALESCE(ht.city,'') as hotel_city, COALESCE(ht.code_city,'') as hotel_city, COALESCE(ht.address, '') as hotel_address, COALESCE(ht.stars,0) as hotel_stars, COALESCE(ht.phone,'') as hotel_phone FROM \"Booking_Request\" AS br LEFT JOIN \"Client\" AS cl ON br.user_telegram_id=cl.user_telegram_id LEFT JOIN \"Hotel\" AS ht ON (br.city=ht.city AND br.hotel_name=ht.name)")
+		querySQL = fmt.Sprintf("SELECT COALESCE(br.another_city, '') as another_city, COALESCE(br.another_hotel,'') as another_hotel, COALESCE(br.another_hotel_stars,'') as another_hotel_stars, br.requisition_number, br.check_in_date, br.check_out_date, br.application_submission_time, br.status, br.application_status_date, br.cost, br.cashback, br.cashback_no_check_in, COALESCE(br.comment,'') as comment, COALESCE(br.cost_limit,'') as cost_limit, br.guests, br.regular_customer, br.identification_person, cl.name, cl.email,cl.telephone,cl.user_telegram_id, COALESCE(br.hotel_name,'') as hotel_name, COALESCE(ht.code,'') as hotel_code, COALESCE(ht.city,'') as hotel_city, COALESCE(ht.code_city,'') as hotel_city, COALESCE(ht.address, '') as hotel_address, COALESCE(ht.stars,0) as hotel_stars, COALESCE(ht.phone,'') as hotel_phone FROM \"Booking_Request\" AS br LEFT JOIN \"Client\" AS cl ON br.user_telegram_id=cl.user_telegram_id LEFT JOIN \"Hotel\" AS ht ON (br.city=ht.city AND br.hotel_name=ht.name) ORDER BY br.application_status_date DESC")
 
 	default:
-		querySQL = fmt.Sprintf("SELECT br.requisition_number, br.check_in_date, br.check_out_date, br.application_submission_time, br.status, br.application_status_date, br.cost, cl.name, cl.email,cl.telephone,cl.user_telegram_id, COALESCE(br.hotel_name,'') as hotel_name, COALESCE(ht.code,'') as hotel_code, COALESCE(ht.city,'') as hotel_city, COALESCE(ht.code_city,'') as hotel_city, COALESCE(ht.address, '') as hotel_address, COALESCE(ht.stars,0) as hotel_stars, COALESCE(ht.phone,'') as hotel_phone FROM \"Booking_Request\" AS br LEFT JOIN \"Client\" AS cl ON br.user_telegram_id=cl.user_telegram_id LEFT JOIN \"Hotel\" AS ht ON (br.city=ht.city AND br.hotel_name=ht.name)")
+		querySQL = fmt.Sprintf("SELECT COALESCE(br.another_city, '') as another_city, COALESCE(br.another_hotel,'') as another_hotel , COALESCE(br.another_hotel_stars,'') as another_hotel_stars, br.requisition_number, br.check_in_date, br.check_out_date, br.application_submission_time, br.status, br.application_status_date, br.cost, cl.name, cl.email,cl.telephone,cl.user_telegram_id, COALESCE(br.hotel_name,'') as hotel_name, COALESCE(ht.code,'') as hotel_code, COALESCE(ht.city,'') as hotel_city, COALESCE(ht.code_city,'') as hotel_city, COALESCE(ht.address, '') as hotel_address, COALESCE(ht.stars,0) as hotel_stars, COALESCE(ht.phone,'') as hotel_phone FROM \"Booking_Request\" AS br LEFT JOIN \"Client\" AS cl ON br.user_telegram_id=cl.user_telegram_id LEFT JOIN \"Hotel\" AS ht ON (br.city=ht.city AND br.hotel_name=ht.name) ORDER BY br.application_status_date DESC")
 	}
 
 	row, err := dbpool.Query(ctx, querySQL)
@@ -448,6 +445,8 @@ func getRequisitionsFromDB(ctx context.Context, toggle string, dbpool *pgxpool.P
 	var applicationSubmissionTime int64
 	var applicationStatusDate int64
 	var cost int
+	var cashback int
+	var cashbackNoCheckIn int
 	var status string
 	var userName string
 	var userEmail string
@@ -460,10 +459,21 @@ func getRequisitionsFromDB(ctx context.Context, toggle string, dbpool *pgxpool.P
 	var hotelCodeCity string
 	var hotelPhone string
 	var hotelStars int
+	var anotherCity string
+	var anotherHotel string
+	var anotherHotelStars string
+
+	var comment string
+	var costLimit string
+	var guests int
+	var regularCustomer bool
+	var identificationPerson string
 
 	for row.Next() {
 
-		err := row.Scan(&requisitionNumber, &checkInDate, &checkOutDate, &applicationSubmissionTime, &status, &applicationStatusDate, &cost, &userName, &userEmail, &userPhone, &userTelegramID, &hotelName,
+		err := row.Scan(&anotherCity, &anotherHotel, &anotherHotelStars, &requisitionNumber, &checkInDate, &checkOutDate, &applicationSubmissionTime, &status, &applicationStatusDate, &cost, &cashback, &cashbackNoCheckIn,
+			&comment, &costLimit, &guests, &regularCustomer, &identificationPerson,
+			&userName, &userEmail, &userPhone, &userTelegramID, &hotelName,
 			&hotelCode, &hotelCity, &hotelCodeCity, &hotelAddress, &hotelStars, &hotelPhone)
 
 		if err != nil {
@@ -497,6 +507,16 @@ func getRequisitionsFromDB(ctx context.Context, toggle string, dbpool *pgxpool.P
 			Cost:                      cost,
 			User:                      guest,
 			Hotel:                     hotel,
+			AnotherCity:               anotherCity,
+			AnotherHotel:              anotherHotel,
+			AnotherHotelStars:         anotherHotelStars,
+			Comment:                   comment,
+			CostLimit:                 costLimit,
+			Guests:                    guests,
+			RegularCustomer:           regularCustomer,
+			IdentificationPerson:      identificationPerson,
+			Cashback:                  cashback,
+			CashbackNoCheckIn:         cashbackNoCheckIn,
 		}
 
 		*bookingRequests = append(*bookingRequests, br)
@@ -580,8 +600,7 @@ func UpdateCalendar(w http.ResponseWriter, r *http.Request) {
 	var badRequest bool
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.Header().Set("Access-Control-Allow-Origin", "https://77d3-176-117-0-227.ngrok-free.app")
-	//w.Header().Set("Access-Control-Allow-Origin", "https://localhost:5173")
+	w.Header().Set("Access-Control-Allow-Origin", "https://localhost:5173")
 	w.WriteHeader(http.StatusOK)
 
 	var updateCalendar = models.NewCalendaUpdate()
@@ -624,7 +643,10 @@ func UpdateCalendar(w http.ResponseWriter, r *http.Request) {
 		numbersOfDays := diff.Hours() / 24
 
 		//TEST
-		fmt.Printf("numbersOfDays => %v", numbersOfDays)
+		fmt.Printf("\nstartDate => %v\n", startDate)
+		fmt.Printf("\nendDate => %v\n", endDate)
+		fmt.Printf("\nnumbersOfDays => %v\n", numbersOfDays)
+		fmt.Printf("\nupdateCalendar => %v\n", updateCalendar)
 		//TEST
 
 		var periodDates []int64
@@ -711,15 +733,40 @@ func dbUpdateRecord(ctx context.Context, day int64, hotelName string, hotelAddre
 func UpdateBookingRequest(w http.ResponseWriter, r *http.Request) {
 
 	//w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.Header().Set("Access-Control-Allow-Origin", "https://77d3-176-117-0-227.ngrok-free.app")
-	//w.Header().Set("Access-Control-Allow-Origin", "https://localhost:5173")
+	w.Header().Set("Access-Control-Allow-Origin", "https://localhost:5173")
 	w.WriteHeader(http.StatusOK)
 
 	requisitionNumber := r.URL.Query().Get("requisitionNumber")
 	status := r.URL.Query().Get("status")
+	anotherHotel := r.URL.Query().Get("anotherHotel")
+	anotherCity := r.URL.Query().Get("anotherCity")
+	costHotel := r.URL.Query().Get("cost")
+	cashbackToUser := r.URL.Query().Get("cashback")
+	cashbackNoCheckInToUser := r.URL.Query().Get("cashbackNoCheckIn")
+
+	cost, err := strconv.Atoi(costHotel)
+
+	if err != nil {
+		zrlog.Error().Msg(fmt.Sprintf("incorrect cost: %+v\n", err.Error()))
+		cost = 0
+	}
+
+	cashback, err := strconv.Atoi(cashbackToUser)
+
+	if err != nil {
+		zrlog.Error().Msg(fmt.Sprintf("incorrect cashback: %+v\n", err.Error()))
+		cashback = 0
+	}
+
+	cashbackNoCheckIn, err := strconv.Atoi(cashbackNoCheckInToUser)
+
+	if err != nil {
+		zrlog.Error().Msg(fmt.Sprintf("incorrect cashbackNoCheckIn: %+v\n", err.Error()))
+		cashbackNoCheckIn = 0
+	}
 
 	switch {
-	case requisitionNumber != "" && status != "":
+	case requisitionNumber != "":
 
 		_, err := strconv.Atoi(requisitionNumber)
 
@@ -734,7 +781,7 @@ func UpdateBookingRequest(w http.ResponseWriter, r *http.Request) {
 		}
 		defer conn.Close(context.Background())
 
-		err = dbUpdateRequisition(context.Background(), requisitionNumber, status, conn)
+		err = dbUpdateRequisition(context.Background(), requisitionNumber, status, anotherHotel, anotherCity, cost, cashback, cashbackNoCheckIn, conn)
 
 		if err != nil {
 			zrlog.Error().Msg(fmt.Sprintf("query UPDATE to db is failed: %+v\n", err.Error()))
@@ -747,15 +794,32 @@ func UpdateBookingRequest(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func dbUpdateRequisition(ctx context.Context, requisitionNumber string, status string, conn *pgx.Conn) error {
+func dbUpdateRequisition(ctx context.Context, requisitionNumber string, status string, anotherHotel string, anotherCity string, cost int, cashback int, cashbackNoCheckIn int, conn *pgx.Conn) error {
+
+	var query string
 
 	var statusDate int64
+	var anotherHotelForUser string
+	var anotherCityForUser string
+	var costForUser int
+	var cashBack int
+	var cashBackNoCheckIn int
+
+	var err error
 
 	reqNum, _ := strconv.Atoi(requisitionNumber)
 
-	query := fmt.Sprintf("UPDATE %s SET status='%v', application_status_date='%v' WHERE requisition_number=$1 RETURNING application_status_date", "\"Booking_Request\"", status, time.Now().UnixNano())
+	//If the cost, or the cashback, or the cashbackNoCheckIn is incorrect, they will be equal to zero.
+	//
 
-	err := conn.QueryRow(context.Background(), query, reqNum).Scan(&statusDate)
+	switch {
+	case status != "":
+		query = fmt.Sprintf("UPDATE %s SET status='%v', another_hotel='%v', another_city='%v', cost='%v', cashback='%v',cashback_no_check_in='%v', application_status_date='%v' WHERE requisition_number=$1 RETURNING application_status_date", "\"Booking_Request\"", status, anotherHotel, anotherCity, cost, cashback, cashbackNoCheckIn, time.Now().UnixNano())
+		err = conn.QueryRow(context.Background(), query, reqNum).Scan(&statusDate, &anotherHotelForUser, &anotherCityForUser, &costForUser, &cashBack, &cashBackNoCheckIn)
+	case status == "":
+		query = fmt.Sprintf("UPDATE %s SET another_hotel='%v', another_city='%v', cost='%v', cashback='%v', cashback_no_check_in='%v' WHERE requisition_number=$1 RETURNING application_status_date", "\"Booking_Request\"", anotherHotel, anotherCity, cost, cashback, cashbackNoCheckIn)
+		err = conn.QueryRow(context.Background(), query, reqNum).Scan(&anotherHotelForUser, &anotherCityForUser, &costForUser, &cashBack, &cashBackNoCheckIn)
+	}
 
 	if err != nil {
 		return fmt.Errorf("dbUpdateRequisition, query to db is faile: %w", err)

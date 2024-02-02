@@ -97,6 +97,16 @@ type BookingRequests struct {
 	Cost                      int    `json:"cost"`
 	User                      User   `json:"user"`
 	Hotel                     Hotel  `json:"hotel"`
+	AnotherHotelStars         string `json:"anotherHotelStars"`
+	AnotherHotel              string `json:"anotherHotel"`
+	AnotherCity               string `json:"anotherCity"`
+	Comment                   string `json:"comment"`
+	CostLimit                 string `json:"costLimit"`
+	Guests                    int    `json:"guests"`
+	RegularCustomer           bool   `json:"regularCustomer"`
+	IdentificationPerson      string `json:"identificationPerson"`
+	Cashback                  int    `json:"cashback"`
+	CashbackNoCheckIn         int    `json:"cashbackNoCheckIn"`
 }
 
 type User struct {

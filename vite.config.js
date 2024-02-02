@@ -7,7 +7,7 @@ import { defineConfig } from 'vite'
     export default defineConfig({
       plugins: [vue(),  mkcert() ],
       server: {
-        origin: 'https://77d3-176-117-0-227.ngrok-free.app',
+        origin: 'https://localhost:5173',
    
         https: {
           key: fs.readFileSync('./internal/certs/localhost+2-key.pem'),

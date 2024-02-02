@@ -59,58 +59,85 @@
 
 
          
-           <Toolbar :class="$style.toolbarTableStyle" style="min-height: 2rem;">
+           <Toolbar :class="$style.toolbarTableStyle" style="min-height: 2rem">
              <!-- <Toolbar style="border-radius: 3rem; background-image: linear-gradient(to right, var(--bluegray-500), var(--bluegray-800))"> -->
-            <template #start>
-                  <ToggleButton v-model="guestsNameFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="ФИО" offLabel="ФИО" style="margin-right: 1rem; border-radius: 1rem" />
-                  <ToggleButton v-model="costFrozen"    class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Стоимость" offLabel="Стоимость" style="margin-right: 1rem; border-radius: 1rem"/>
-             </template>
+                <template #start>
+                  <ToggleButton v-model="editingFrozen" class="p-inputtext-sm" onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="✍🏼" offLabel="✍🏼" style="min-width: 3rem; margin-left: 0.4rem; margin-right: 1rem; border-radius: 0.5rem"/>
+                  <ToggleButton v-model="requisitionNumberFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="№" offLabel="№" style="min-width: 3.5rem; margin-left: 0.5rem; margin-right: 1rem; border-radius: 1rem" />
+                  <ToggleButton v-model="applicationSubmissionTimeFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Дата заявки" offLabel="Дата заявки" style="min-width: 8.8rem; margin-right: 1rem; border-radius: 1rem" />
+                  <ToggleButton v-model="rejectButtonFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="👎" offLabel="👎" style="min-width: 3.5rem; margin-left: 1rem; margin-right: 1rem; border-radius: 1rem" />
+                  <ToggleButton v-model="confirmButtonFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="👍" offLabel="👍" style="min-width: 3.5rem; margin-right: 1rem; border-radius: 1rem" />
+                  <ToggleButton v-model="statusFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Статус" offLabel="Статус" style="min-width: 6rem; margin-left: 1rem; margin-right: 1rem; border-radius: 1rem" />
+                  <ToggleButton v-model="applicationStatusDateFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Время статуса" offLabel="Время статуса" style="min-width: 10.2rem; margin-right: 1rem; border-radius: 1rem" />
+                  <ToggleButton v-model="checkInDateFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Заезд" offLabel="Заезд" style="min-width: 5.5rem; margin-right: 1rem; border-radius: 1rem" />
+                  <ToggleButton v-model="checkOutDateFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Выезд" offLabel="Выезд" style="min-width: 5.8rem; margin-right: 1rem; border-radius: 1rem" />
+                  <ToggleButton v-model="costFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Стоимость" offLabel="Стоимость" style="min-width: 8rem; margin-right: 1rem; border-radius: 1rem"/>
+                  <ToggleButton v-model="cashbackFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Кешбэк" offLabel="Кешбэк" style="min-width: 6rem; margin-right: 1rem; border-radius: 1rem"/>
+                  <ToggleButton v-model="cashbackNoCheckInFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Кешбэк (незаезд)" offLabel="Кешбэк (незаезд)" style="min-width: 11.5rem; margin-right: 1rem; border-radius: 1rem"/>
+                  <ToggleButton v-model="userNameFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="ФИО" offLabel="ФИО" style="min-width: 5rem; margin-right: 1rem; border-radius: 1rem" />
+                  <ToggleButton v-model="userEmailFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Email" offLabel="Email" style="min-width: 5.4rem; margin-right: 1rem; border-radius: 1rem" />
+                  <ToggleButton v-model="userPhoneFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Телефон" offLabel="Телефон" style="min-width: 7rem; margin-right: 1rem; border-radius: 1rem" />
+                  <ToggleButton v-model="hotelCityFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Город" offLabel="Город" style="min-width: 5.5rem; margin-right: 1rem; border-radius: 1rem" />
+                  <ToggleButton v-model="hotelNameFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Гостиница" offLabel="Гостиница" style="min-width: 8rem; margin-right: 1rem; border-radius: 1rem" />
+                </template>
+
+             <template #end>
+
+              </template>
           </Toolbar>
 
+
+                      <!-- v-model:selection="selectedRequisitions" :selectOne="selectOne" @select-all-change="onSelectAllChange" @row-select="onRowSelect" @row-unselect="onRowUnselect" tableStyle="min-width: 75rem" -->
+
+                      
 
           <div class="card p-fluid">
           
             <DataTable 
             :value="requisitionsTable" 
-            class="mt-4"
-            resizableColumns columnResizeMode="expand"
             :frozenValue="lockedRequisitions"
+            class="mt-4"
+            resizableColumns columnResizeMode="expand"    
             lazy paginator :first="first"  
-            :rows="35"
+            :rows="40"
             scrollable scrollHeight="1080px"
-            :virtualScrollerOptions="{ itemSize: 38 }"
-            v-model:editingRows="editingRows" editMode="row" @row-edit-save="onRowEditSave"
-            v-model:filters="filters" ref="dt" dataKey="id"
+            :virtualScrollerOptions="{ itemSize: 36 }"
+            v-model:filters="filters" ref="dt" 
             :totalRecords="totalRecords" :loading="loading" @page="onPage($event)" @sort="onSort($event)" @filter="onFilter($event)" filterDisplay="row"
-            :globalFilterFields="['cost','user.email','user.phone','hotel.city', 'hotel.name', 'hotel.stars','representative.name']"
-            v-model:selection="selectedRequisitions" :selectAll="selectAll" @select-all-change="onSelectAllChange" @row-select="onRowSelect" @row-unselect="onRowUnselect" tableStyle="min-width: 75rem"
-            :pt="{
-               table: { style: 'min-width: 50rem' },
-               bodyrow: ({ props }) => ({
-                class: [{ 'font-bold': props.frozenRow }]
-                }),
-                column: {
+            :globalFilterFields="['cost','user.email','user.phone','anotherCity','anotherHotel','hotel.city', 'hotel.name', 'hotel.stars','representative.name']"
+             v-model:selection="selectedRequisitions" :selectAll="selectAll" @select-all-change="onSelectAllChange" @row-select="onRowSelect($event)" @row-unselect="onRowUnselect" tableStyle="min-width: 75rem" 
+             v-model:editingRows="editingRows" editMode="row" dataKey="id" @row-edit-save="onRowEditSave" 
+             :pt="{
+               table: { style: 'min-width: 40rem' },
+              //  bodyrow: ({ props }) => ({
+              //   class: [{ 'font-bold': props.frozenRow }]
+              //   }),
+              column: {
                     bodycell: ({ state }) => ({
-                        style:  state['d_editing']&&'padding-top: 0.6rem; padding-bottom: 0.6rem' 
+                        style:  state['d_editing']&&'padding-top: 0.6rem; padding-bottom: 0.6rem'
                     })
-                  },
+                }
             }"
               >
 
-            <Column style="flex: 0 0 5rem">
+
+            <!-- <Column style="flex: 0 0 5rem">
                 <template #body="{ data, frozenRow, index }">
                   <Button type="button" style="color:green" :icon="frozenRow ? 'pi pi-lock' : 'pi pi-lock-open'" :disabled="frozenRow ? false : lockedRequisitions.length >= 2" text size="small" @click="toggleLock(data, frozenRow, index)" />
                 </template>
-            </Column>
+            </Column> -->
 
-            <Column selectionMode="multiple" headerStyle="width: 4rem"></Column>
+            <!-- <Column selectionMode="single" headerStyle="width: 4rem"></Column> --> 
 
            
             
+            <Column :rowEditor="true" style="min-width: 4rem; margin-left: 2rem; margin-right: 1rem;" bodyStyle="text-align:center" alignFrozen="left" :frozen="editingFrozen"></Column>
 
-            <Column field="requisitionNumber" header="Заявка №" style="min-width: 100px; width: 2%"></Column>  
+            <Column field="requisitionNumber" header="№" headerStyle="width: 2%; margin-left: 2rem; text-align: center" sortable: false style="min-width: 85px; width: 2%; padding-left: 0.1rem; padding-right: 0.1rem; text-align: center; font-weight:820" alignFrozen="left" :frozen="requisitionNumberFrozen">
+     
+            </Column>  
             <!-- <Column field="applicationSubmissionTime" header="Дата заявки" style="min-width: 200px"></Column> -->
-            <Column field="applicationSubmissionTime" header="Дата заявки" filterField="applicationSubmissionTime" dataType="date" style="min-width: 12rem">
+            <Column field="applicationSubmissionTime" header="Дата заявки" filterField="applicationSubmissionTime" dataType="date" style="min-width: 10rem; padding-left: 0.5rem; padding-right: 0.5rem" bodyStyle="text-align:center" alignFrozen="left" :frozen="applicationSubmissionTimeFrozen">
                 <template #body="{ data }">
                     {{ formatDateTime(data.applicationSubmissionTime) }}
                 </template>
@@ -118,30 +145,22 @@
                     <Calendar v-model="filterModel.value" dateFormat="dd.mm.yy" placeholder="dd.mm.yyyy" mask="99.99.9999" />
                 </template>
             </Column>
-            
-            <!-- <Column field="checkInDate" header="Заезд" style="min-width: 200px"></Column> -->
-            <Column field="checkInDate" header="Заезд" filterField="checkInDate" dataType="date" style="min-width: 11rem">
-                <template #body="{ data }">
-                    {{ formatDate(data.checkInDate) }}
-                </template>
-                <template #filter="{ filterModel }">
-                    <Calendar v-model="filterModel.value" dateFormat="dd.mm.yy" placeholder="dd.mm.yyyy" mask="99.99.9999" />
-                </template>
-            </Column>
-            <!-- <Column field="checkOutDate" header="Выезд" style="min-width: 200px"></Column> -->
-            <Column field="checkOutDate" header="Выезд" filterField="checkOutDate" dataType="date" style="min-width: 11rem">
-                <template #body="{ data }">
-                    {{ formatDate(data.checkOutDate) }}
-                </template>
-                <template #filter="{ filterModel }">
-                    <Calendar v-model="filterModel.value" dateFormat="dd.mm.yy" placeholder="dd.mm.yyyy" mask="99.99.9999" />
-                </template>
-            </Column>
 
+            <Column header="Отклонить" headerStyle="width: 3rem; text-align: center" bodyStyle="text-align: center; overflow: visible" style="min-width: 3rem; width: 1%; padding-left: 0.2rem; padding-right: 0.2rem" alignFrozen="left" :frozen="rejectButtonFrozen">
+                <template #body="{ data, index }">
+                    <Button type="button" icon="pi pi-thumbs-down" rounded style="height:35px; width:35px; backgroundColor: var(--primary-color); color: var(--primary-color-text)" @click="rejectBookingRequest(data, index)"/>
+                </template>
+            </Column>
+            <Column header="Подтвердить" headerStyle="width: 3rem; text-align: center" bodyStyle="text-align: center; overflow: visible" style="min-width: 3rem; width: 1%; padding-left: 0.2rem; padding-right: 0.2rem" alignFrozen="left" :frozen="confirmButtonFrozen">
+                <template #body="{ data, index }">
+                    <Button type="button" icon="pi pi-thumbs-up" rounded style="height:35px; width:35px; backgroundColor: var(--primary-color); color: var(--primary-color-text)" @click="confirmeBookingRequest(data, index)"/>
+                </template>
+            </Column>
             
-            <Column field="status" header="Статус" :filterMenuStyle="{ width: '14rem' }" style="min-width: 7rem" >
+            <Column field="status"  header="Статус" headerStyle="text-align: center"  :filterMenuStyle="{ width: '5rem'}" style="min-width: 3rem; padding-left: 0.3rem; padding-right: 0.3rem; text-align: left" alignFrozen="left" :frozen="statusFrozen" >
                 <template #body="{ data }">
-                    <Tag :value="data.status" :severity="getSeverity(data.status)" />
+                  <Tag :value=formatEmojiStatus(data.status) style="background-color: white; color: white; font-size: 1rem; font-weight:400; padding-left: 0.7rem; padding-right: 0.7rem;"/>  
+                  <Tag :value=formatStatus(data.status) :severity="getSeverity(formatStatus(data.status))" style="color: white; font-size: 1rem; font-weight:400; padding-left: 0.7rem; padding-right: 0.7rem;"/>
                 </template>
                 <template #filter="{ filterModel }">
                     <Dropdown v-model="filterModel.value" :options="statuses" placeholder="Выберите статус" class="p-column-filter" showClear>
@@ -150,13 +169,10 @@
                         </template>
                     </Dropdown>
                 </template>
-                <template #editor="{ data, field }">
-                    <InputText v-model="data[field]" />
-                </template>
             </Column>
 
             <!-- <Column field="applicationStatusDate" header="Время статуса" style="min-width: 200px"></Column> -->
-            <Column field="applicationStatusDate" header="Время статуса" filterField="applicationStatusDate" dataType="date" style="min-width: 12rem">
+            <Column field="applicationStatusDate" header="Время статуса 🕓" headerStyle="text-align: center" filterField="applicationStatusDate" dataType="date" style="min-width: 12rem; margin-right: 2rem;" bodyStyle="text-align:left"  alignFrozen="left" :frozen="applicationStatusDateFrozen" >
                 <template #body="{ data }">
                     {{ formatDateTime(data.applicationStatusDate) }}
                 </template>
@@ -164,8 +180,26 @@
                     <Calendar v-model="filterModel.value" dateFormat="dd.mm.yy" placeholder="dd.mm.yyyy" mask="99.99.9999" />
                 </template>
             </Column>
+
+             <Column field="checkInDate" header="Заезд" filterField="checkInDate" dataType="date" style="min-width: 10rem;" bodyStyle="text-align:left" alignFrozen="left" :frozen="checkInDateFrozen">
+                <template #body="{ data }">
+                    {{ formatDate(data.checkInDate) }}
+                </template>
+                <template #filter="{ filterModel }">
+                    <Calendar v-model="filterModel.value" dateFormat="dd.mm.yy" placeholder="dd.mm.yyyy" mask="99.99.9999" />
+                </template>
+            </Column>
+
+            <Column field="checkOutDate" header="Выезд" filterField="checkOutDate" dataType="date" style="min-width: 9.5rem;" bodyStyle="text-align:left" alignFrozen="left" :frozen="checkOutDateFrozen">
+                <template #body="{ data }">
+                    {{ formatDate(data.checkOutDate) }}
+                </template>
+                <template #filter="{ filterModel }">
+                    <Calendar v-model="filterModel.value" dateFormat="dd.mm.yy" placeholder="dd.mm.yyyy" mask="99.99.9999" />
+                </template>
+            </Column>
             
-            <Column field="cost" header="Стоимость" style="min-width: 7rem; width: 2%" alignFrozen="right" :frozen="costFrozen">
+            <Column field="cost" header="Стоимость" style="min-width: 6rem; width: 2%; background-color: beige; font-weight:700" bodyStyle="text-align:center" alignFrozen="left" :frozen="costFrozen">
                  <!-- <template #body="{ data }">
                     <span class="font-bold">{{ formatCurrency(data.balance) }}</span>
                 </template> -->
@@ -174,27 +208,49 @@
                 </template>
             </Column>
 
-            <Column field="user.telegramId" header="Id клиента" style="min-width: 2rem; width: 6%; padding: 1rem"></Column>   
+            <Column field="cashback" header="Кешбэк" style="min-width: 6rem; width: 2%; padding-left: 1rem; padding-right: 1rem;" bodyStyle="text-align:center" alignFrozen="left" :frozen="cashbackFrozen">
+              <template #body="{ data }">
+                    <span class="font-bold">{{ formatCurrency(data.cashback) }}</span>
+                </template>
+                <template #editor="{ data, field }">
+                    <InputText v-model="data[field]" />
+                </template>
+            </Column>
 
-            <Column field="user.name" header="ФИО"  style="min-width: 100px; width: 12%; padding: 1rem" filterMatchMode="startsWith" sortable alignFrozen="right" :frozen="guestsNameFrozen">
+            <Column field="cashbackNoCheckIn" header="Кешбэк (незаезд)" style="min-width: 6rem; width: 2%; padding-left: 1rem; padding-right: 1rem;" bodyStyle="text-align:center" alignFrozen="left" :frozen="cashbackNoCheckInFrozen">
+                 <template #body="{ data }">
+                    <span class="font-bold">{{ formatCurrency(data.cashbackNoCheckIn) }}</span>
+                </template>
+                <template #editor="{ data, field }">
+                    <InputText v-model="data[field]" />
+                </template>
+            </Column>
+
+            <Column field="guests" header="Человек" filterMatchMode="contains" style="min-width: 120px; padding-left: 1rem; padding-right: 1rem;">
+                <template #body="{ data }">
+                   <Tag :value=formatPerson(data.guests)  style="background-color: white;"/>
+                </template>
+            </Column>
+
+            <Column field="user.name" header="ФИО"  style="min-width: 100px; width: 12%; padding-left: 1rem; padding-right: 1rem;" filterMatchMode="startsWith" alignFrozen="left" :frozen="userNameFrozen">
               <template #filter="{filterModel,filterCallback}">
                     <InputText type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" placeholder="Search"/>
                 </template>
             </Column>
 
-            <Column field="user.email" header="Email"  style="min-width: 100px; width: 11%" filterMatchMode="startsWith" sortable alignFrozen="right" :frozen="guestsEmailFrozen">
+            <Column field="user.email" header="Email 📧"  style="min-width: 150px; width: 11%; padding-left: 1.5rem;color: rgb(0, 34, 128)" filterMatchMode="startsWith" alignFrozen="left" :frozen="userEmailFrozen">
               <template #filter="{filterModel,filterCallback}">
                     <InputText type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" placeholder="Search"/>
                 </template>
             </Column>
 
-            <Column field="user.phone" header="Телефон"  style="min-width: 120px; width: 12%; padding: 1rem" filterMatchMode="startsWith" sortable alignFrozen="right" :frozen="guestsPhoneFrozen">
+            <Column field="user.phone" header="Телефон 📞"  style="min-width: 120px; width: 12%; padding-left: 1.5rem" filterMatchMode="startsWith" alignFrozen="left" :frozen="userPhoneFrozen">
               <template #filter="{filterModel,filterCallback}">
                     <InputText type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" placeholder="Search"/>
                 </template>
             </Column>
 
-            <Column field="hotel.city" header="Город" filterField="hotel.city" filterMatchMode="contains" sortable style="min-width: 120px; padding: 1rem">    
+            <Column field="hotel.city" header="Город" filterField="hotel.city" filterMatchMode="contains" style="min-width: 180px; padding-left: 1rem; padding-right: 1rem" alignFrozen="left" :frozen="hotelCityFrozen">    
               <template #body="{ data }">
                     <div class="flex align-items-center gap-2">
                         <img alt="flag" src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" :class="`flag flag-${data.hotel.code}`" style="width: 24px" />
@@ -204,34 +260,54 @@
                 <template #filter="{filterModel,filterCallback}">
                     <InputText v-model="filterModel.value" type="text" @input.enter="filterCallback()" class="p-column-filter" placeholder="Поиск"/>
                 </template>
+            </Column>
+
+            <Column field="hotel.name" header="Гостиница" filterMatchMode="contains" style="min-width: 120px; padding-left: 1rem; padding-right: 1rem" alignFrozen="left" :frozen="hotelNameFrozen">
+                <template #filter="{filterModel,filterCallback}">
+                    <InputText type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" placeholder="Search"/>
+                </template>
+            </Column>
+
+            <Column field="hotel.stars" header="Звезд" filterMatchMode="contains" style="min-width: 3px; padding-left: 1rem; padding-right: 1rem" bodyStyle="text-align:center">
+                 <template #body="{ data }">
+                   <Tag :value=formatHotelStars(data.hotel.stars)  style="background-color: white;"/>
+                </template>
+            </Column>
+
+            <Column field="anotherHotel" header="Другая гостиница" filterMatchMode="contains" style="min-width: 120px; padding-left: 1rem; padding-right: 1rem">
                 <template #editor="{ data, field }">
                     <InputText v-model="data[field]" />
                 </template>
             </Column>
 
-            <Column field="hotel.name" header="Гостиница" filterMatchMode="contains" sortable style="min-width: 120px; padding: 1rem">
-                <template #filter="{filterModel,filterCallback}">
-                    <InputText type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" placeholder="Search"/>
-                </template>
+            <Column field="anotherCity" header="Другой город" filterMatchMode="contains" style="min-width: 120px; padding-left: 1rem; padding-right: 1rem">
                 <template #editor="{ data, field }">
                     <InputText v-model="data[field]" />
                 </template>
             </Column>
 
-            <Column field="hotel.stars" header="Звезд" filterMatchMode="contains" sortable>
-                <template #filter="{filterModel,filterCallback}">
-                    <InputText type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" placeholder="Search"/>
-                </template>
-                <template #editor="{ data, field }">
-                    <InputText v-model="data[field]" />
-                </template>
-            </Column>
-            <Column :rowEditor="true" style="width: 10%; min-width: 8rem" bodyStyle="text-align:center"></Column>
-            <Column header="Подтвердить" headerStyle="width: 5rem; text-align: center" bodyStyle="text-align: center; overflow: visible">
-              <template #body="{ data, index }">
-                    <Button type="button" icon="pi pi-thumbs-up" rounded style="backgroundColor: var(--primary-color); color: var(--primary-color-text)" @click="confirmeBookingRequest(data, index)"/>
+            <Column field="costLimit" header="Лимит на проживание" filterMatchMode="contains" style="min-width: 120px; padding-left: 1rem; padding-right: 1rem"></Column>
+
+            <Column field="regularCustomer" header="Постоянный клиент" filterMatchMode="contains" style="min-width: 120px; padding-left: 1rem; padding-right: 1rem; text-align: center;">
+                <template #body="{ data }">
+                   <Tag :value=formatRegularCustomer(data.regularCustomer)  style="background-color: white;"/>
                 </template>
             </Column>
+
+            <Column field="identificationPerson" header="Тип клиента" filterMatchMode="contains" style="min-width: 120px; padding-left: 1rem; padding-right: 1rem; text-align: left;">
+                <template #body="{ data }">
+                   <Tag :value=formatIdentificationPerson(data.identificationPerson)  style="background-color: white; color: rgb(0, 0, 0); font-size: 0.9rem;"/>
+                   <Tag :value=formatEmojiIdentificationPerson(data.identificationPerson) style="background-color: white; color: rgb(0, 0, 0); font-size: 1.1rem;"/>
+                </template>
+            </Column>
+
+            <Column field="comment" header="Комментарий" filterMatchMode="contains" style="min-width: 120px; padding-left: 1rem; padding-right: 1rem"></Column>
+
+            <Column field="user.telegramId" header="Id клиента" style="min-width: 2rem; width: 3%; padding-left: 1rem; padding-right: 1rem"></Column>   
+
+            
+            
+      
            
             <!-- <Column field="representative.name" header="Аватар" filterField="representative.name" sortable>
                 <template #body="{ data }">
@@ -250,7 +326,7 @@
                 <Column footer="Всего стоимость:" :colspan="3" footerStyle="text-align:right"/>
                 <Column :footer="thisTotalCosts" />
             </Row>
-        </ColumnGroup> -->
+        </ColumnGroup> --> 
             
         </DataTable>
 	</div>
@@ -262,18 +338,18 @@
 
 
 
-  <!-- <div>
-     <table-lite
-    :is-loading="table.isLoading"
-    :columns="table.columns"
-    :rows="table.rows"
-    :total="table.totalRecordCount"
-    :sortable="table.sortable"
-    :messages="table.messages"
-    @do-search="doSearch"
-    @is-finished="table.isLoading = false"
-  ></table-lite>
-</div> -->
+   <!-- <div>
+//      <table-lite
+//     :is-loading="table.isLoading"
+//     :columns="table.columns"
+//     :rows="table.rows"
+//     :total="table.totalRecordCount"
+//     :sortable="table.sortable"
+//     :messages="table.messages"
+//     @do-search="doSearch"
+//     @is-finished="table.isLoading = false"
+//   ></table-lite>
+// </div> -->
 
 
 
@@ -292,14 +368,14 @@ import axios from 'axios-https-proxy-fix';
   //import { inject } from 'vue';
 
 
-  const proxy = {
-  host: 'https://localhost',
-  port: 9090,
-  // auth: {
-  //   username: 'some_login',
-  //   password: 'some_pass'
-  // }
-};
+//   const proxy = {
+//   host: 'https://localhost',
+//   port: 9090,
+//   // auth: {
+//   //   username: 'some_login',
+//   //   password: 'some_pass'
+//   // }
+// };
 
 
 // const customers = ref();
@@ -440,7 +516,7 @@ import axios from 'axios-https-proxy-fix';
         return {
 
             editingRows: [],
-            statuses: ['new', 'confirmed', 'rejected', 'canselled'],
+            statuses: ['new', 'confirmed', 'rejected', 'cancelled'],
 
             lockedRequisitions: [
                 // {
@@ -473,10 +549,26 @@ import axios from 'axios-https-proxy-fix';
                 // }
             ],
           
-            costFrozen: false,
-            guestsNameFrozen: false,
-            guestsEmailFrozen: false,
-            guestsPhoneFrozen: false,
+            requisitionNumberFrozen: null,
+            applicationSubmissionTimeFrozen: null,
+            rejectButtonFrozen: null,
+            confirmButtonFrozen: null,
+            statusFrozen: null,
+            applicationStatusDateFrozen: null,
+            checkInDateFrozen: null,
+            checkOutDateFrozen: null,
+            costFrozen: null,
+            userNameFrozen: null,
+            userEmailFrozen: null,
+            userPhoneFrozen: null,
+            hotelCityFrozen: null,
+            hotelNameFrozen: null,
+            hotelStarsFrozen: null,
+            anotherHotelFrozen: null,
+            anotherCityFrozen: null,
+            editingFrozen: null,
+            cashbackFrozen: null,
+            cashbackNoCheckInFrozen: null,
             loading: false,
             totalRecords: 0,
             requisitionsTable: null,
@@ -501,8 +593,10 @@ import axios from 'axios-https-proxy-fix';
             columns: [
                 {field: 'user.telegramId', header: 'Id пользователя'},
                 {field: 'user.name', header: 'ФИО'},
-                {field: 'user.phone', header: 'Телефон'},
-                {field: 'user.email', header: 'Email'},
+                {field: 'user.phone', header: 'Телефон 📞'},
+                {field: 'user.email', header: 'Email 📧'},
+                {field: 'anotherCity', header: 'Другой город'},
+                {field: 'anotherHotel', header: 'Другая гостиница'},
                 {field: 'hotel.name', header: 'Гостиница'},
                 {field: 'hotel.stars', header: 'Звезд'},
                 {field: 'hotel.code', header: 'Гостиница (код)'},
@@ -512,12 +606,19 @@ import axios from 'axios-https-proxy-fix';
                 {field: 'hotel.phone', header: 'Телефон гостиницы'},
                 {field: 'hotel.site', header: 'Сайт гостиницы'},
                 {field: 'status',      header:'Статус'},
-                {field: 'requisitionNumber', header:'Заявка №'},
+                {field: 'requisitionNumber', header:'№'},
                 {field: 'checkInDate', header:'Заезд'},
                 {field: 'checkOutDate', header:'Выезд'},
                 {field: 'applicationSubmissionTime', header:'Дата заявки'},
-                {field: 'applicationStatusDate', header:'Время статуса'},
+                {field: 'applicationStatusDate', header:'Время статуса 🕓'},
                 {field: 'cost', header:'Стоимость'},
+                {field: 'cashback', header:'Кешбэк'},
+                {field: 'cashbackNoCheckIn', header:'Кешбэк (незаезд)'},
+                {field: 'guests', header:'Человек'},
+                {field: 'regularCustomer', header:'Постоянный клиент'},
+                {field: 'costLimit', header:'Лимит на проживание'},
+                {field: 'identificationPerson', header:'Тип клиента'},
+                {field: 'comment', header:'Комментарий'},
             ]
         
         };
@@ -540,23 +641,6 @@ import axios from 'axios-https-proxy-fix';
         };
 
        this.loadLazyData();
-
-       axios
-      .get('https://64ce-176-117-0-227.ngrok-free.app/getRequisitions')
-      .then((res) => {
-      // assign state posts with response data
-      this.requisitionsTable = res.data;
-      this.totalRecords = res.data.length
-      this.loading = false;
-       })
-        .catch((error) => {
-        // console.log(error.res.data);
-       });
-
-        // CustomerService.getCustomersMedium().then((data) => {
-        //     this.customers = data;
-        // });
-
    
     },
 
@@ -665,47 +749,58 @@ import axios from 'axios-https-proxy-fix';
       //       return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
       //   },
 
+      onRowEditSave(event) {
+
+            let { newData, index } = event;
+
+            this.requisitionsTable[index] = newData;
+
+            const param = {requisitionNumber: this.requisitionsTable[index].requisitionNumber,
+               status: "",
+               anotherHotel: this.requisitionsTable[index].anotherHotel,
+               anotherCity: this.requisitionsTable[index].anotherCity,
+               cost: this.requisitionsTable[index].cost, 
+               cashback: this.requisitionsTable[index].cashback,
+               cashbackNoCheckIn: this.requisitionsTable[index].cashbackNoCheckIn};
+
+
+          axios
+            .patch('https://localhost:9090/bookingRequest', null,
+
+             {params: param})
+
+            .then((res) => {
+
+             if (res.status == 200) {
+               this.loadLazyData()
+             }
+
+           })
+              .catch((error) => {
+                  // console.log(error.res.data);  
+           });
+
+      },
+
       confirmeBookingRequest(data, index){
 
-        console.log(index)
-
-        console.log(data)
-
-
-        if (this.requisitionsTable[index].status === 'new') {
+        if (this.requisitionsTable[index].status === 'new' || this.requisitionsTable[index].status === 'rejected') {
           
-          const param = {requisitionNumber: this.requisitionsTable[index].requisitionNumber, status: 'confirmed'};
-
-
+          const param = {requisitionNumber: this.requisitionsTable[index].requisitionNumber, 
+                         status: 'confirmed',  
+                         anotherHotel: this.requisitionsTable[index].anotherHotel,
+                         anotherCity: this.requisitionsTable[index].anotherCity,
+                         cost: this.requisitionsTable[index].cost, 
+                         cashback: this.requisitionsTable[index].cashback,
+                         cashbackNoCheckIn: this.requisitionsTable[index].cashbackNoCheckIn};
 
 
                     axios
-                    .patch('https://64ce-176-117-0-227.ngrok-free.app/bookingRequest', null,
+                    .patch('https://localhost:9090/bookingRequest', null,
 
                     {params: param})
-                      // {
-                      //   requisitionNumber: this.requisitionsTable[index].requisitionNumber, 
-                      //   status: this.requisitionsTable[index].status}
-                      // })
-                         
-                    //  {
-                    //       headers: {
-                    //         'Content-Type': "application/json; charset=UTF-8",
-                    //         'Access-Control-Allow-Origin': "https://localhost:9090"
-                    //       }
-                    //  }
-                    //  headers: {
-                    // 'x-rapidapi-host': 'quotes15.p.rapidapi.com',
-                    // 'x-rapidapi-key': 'YOUR_API_KEY_HERE'
-                    // }
-                    //})
+
                     .then((res) => {
-
-                      console.log("Получил ответ от сервера")
-
-                      console.log(res)
-
-                      console.log(res.status)
 
                       if (res.status == 200) {
                         //this.requisitionsTable[index].status = 'confirmed'
@@ -718,12 +813,36 @@ import axios from 'axios-https-proxy-fix';
                     // console.log(error.res.data);
                 });
         }
+      },
 
-       
+      rejectBookingRequest(data, index){
 
+           if (this.requisitionsTable[index].status === 'new' || this.requisitionsTable[index].status === 'confirmed') {
+  
+           const param = {requisitionNumber: this.requisitionsTable[index].requisitionNumber,
+                          status: 'rejected',      
+                          anotherHotel: this.requisitionsTable[index].anotherHotel,
+                          anotherCity: this.requisitionsTable[index].anotherCity,
+                          cost: this.requisitionsTable[index].cost,
+                          cashback: this.requisitionsTable[index].cashback,
+                          cashbackNoCheckIn: this.requisitionsTable[index].cashbackNoCheckIn};
 
-      
+            axios
+            .patch('https://localhost:9090/bookingRequest', null,
 
+            {params: param})
+
+            .then((res) => {
+
+              if (res.status == 200) {
+                this.loadLazyData()
+              }
+  
+          })
+            .catch((error) => {
+            // console.log(error.res.data);
+           });
+        }    
       },
 
       formatDate(value) {
@@ -757,26 +876,189 @@ import axios from 'axios-https-proxy-fix';
           });
         },
 
+
+        formatHotelStars(value){
+          var s = ""
+
+          if (value === 1) {
+            s = "⭐"
+          }
+
+          if (value === 2) {
+            s = "⭐⭐"
+          }
+
+          if (value === 3) {
+            s = "⭐⭐⭐"
+          }
+
+          if (value === 4) {
+            s = "⭐⭐⭐⭐"
+          }
+
+          if (value === 5) {
+            s = "⭐⭐⭐⭐⭐"
+          }
+         
+          return s
+        },
+
+        formatEmojiStatus(value){
+          var s = ""
+
+          if (value === "new") {
+            s = "🔵"
+          }
+
+          if (value === "confirmed") {
+            s = "✔️"
+          }
+
+          if (value === "rejected") {
+            s = "⛔"
+          }
+
+          if (value === "cancelled") {
+            s = "❌"
+          }
+         
+          return s
+        },
+
+        formatStatus(value){
+          var s = ""
+
+          if (value === "new") {
+            s = "новая"
+          }
+
+          if (value === "confirmed") {
+            s = "подтверждена"
+          }
+
+          if (value === "rejected") {
+            s = "отклонена"
+          }
+
+          if (value === "cancelled") {
+            s = "отменена пользователем"
+          }
+         
+          return s
+        },
+
+      
+        formatEmojiIdentificationPerson(value) {
+         
+         var eip = ""
+
+         if (value === "Турист") {
+           eip = " 🧳"
+         }
+
+         if (value === "В деловой поездке") {
+           eip = " 💼"
+         }
+
+         if (value === "Представитель компании") {
+           eip =  " 👨‍💼🏦"
+         }
+
+         return eip
+       },
+
+        formatIdentificationPerson(value) {
+         
+          var ip = ""
+
+          if (value === "Турист") {
+            ip = "Турист "
+          }
+
+          if (value === "В деловой поездке") {
+            ip = "В деловой поездке "
+          }
+
+          if (value === "Представитель компании") {
+            ip =  "Представитель компании  "
+          }
+
+          return ip
+        },
+
+        formatRegularCustomer(regularCustomer){
+
+          var rc = ""
+
+          if (regularCustomer === true) {
+            rc = "✔️"
+          }
+
+          return rc
+        },
+        
+        formatPerson(value){
+          var p = ""
+
+          if (value === 1) {
+            p = "🙎‍♂️"
+          }
+
+          if (value === 2) {
+            p = "🙎‍♂️🙎‍♂️"
+          }
+
+          if (value === 3) {
+            p = "🙎‍♂️🙎‍♂️🙎‍♂️"
+          }
+
+          if (value === 4) {
+            p = "🙎‍♂️🙎‍♂️🙎‍♂️🙎‍♂️"
+          }
+         
+          return p
+        },
+
         formatCurrency(value) {
             return value.toLocaleString('ru-RU', {style: 'currency', currency: 'RUB'});
         },
 
-        onRowEditSave(event) {
-            let { newData, index } = event;
+       
 
-            this.requisitionsTable[index] = newData;
+        getColorPerson(guests) {
+
+           switch (guests) {
+            case '🙎‍♂️':
+              return 'danger';
+            
+           default:
+              return null;
+            }
         },
+
 
         getSeverity(status) {
             switch (status) {
-                case 'unqualified':
+                case 'отменена пользователем':
                     return 'danger';
+                   
+                case 'cancelled':
+                    return 'danger';
+
+                case 'подтверждена':
+                    return 'success';
 
                 case 'confirmed':
                     return 'success';
 
+                case 'новая':
+                    return 'info';
+
                 case 'new':
                     return 'info';
+
+                case 'отклонена':
+                    return 'warning';
 
                 case 'rejected':
                     return 'warning';
@@ -785,6 +1067,8 @@ import axios from 'axios-https-proxy-fix';
                     return null;
             }
         },
+
+     
 
         clearFilter() {
             this.initFilters();
@@ -814,7 +1098,7 @@ import axios from 'axios-https-proxy-fix';
 
             setTimeout(() => {
                      axios
-                    .get('https://64ce-176-117-0-227.ngrok-free.app/getRequisitions')
+                    .get('https://localhost:9090/getRequisitions')
                     .then((res) => {
 
                      this.requisitionsTable = res.data;
@@ -849,35 +1133,42 @@ import axios from 'axios-https-proxy-fix';
             const selectAll = event.checked;
 
             if (selectAll) {
-                CustomerService.getCustomers().then(data => {
-                    this.selectAll = true;
-                    this.selectedRequisitions = data.requisitionsTable;
-                });
+                     this.selectAll = true;
+                     this.selectedRequisitions = data.requisitionsTable
             }
             else {
                 this.selectAll = false;
-                this.selectedRequisitions = [];
+                this.selectedRequisitions = this.requisitionsTable;
             }
         },
-        onRowSelect() {
-            this.selectAll = this.selectedRequisitions.length === this.totalRecords
+        onRowSelect(event) {
+           // this.selectAll = this.selectedRequisitions.length === this.totalRecords
+
+           console.log("Индекс" + event.index)
+
+          
+  
+           this.selectAll = false
+         //  this.selectedRequisitions = this.requisitionsTable[event.index]
         },
+
         onRowUnselect() {
             this.selectAll = false;
+            this.selectedRequisitions = []
         },
 
         toggleLock(data, frozen, index) {
-            if (frozen) {
-                this.lockedRequisitions = this.lockedRequisitions.filter((c, i) => i !== index);
-                this.requisitionsTable.push(data);
-            } else {
-                this.requisitionsTable = this.requisitionsTable.filter((c, i) => i !== index);
-                this.lockedRequisitions.push(data);
-            }
+            // if (frozen) {
+            //     this.lockedRequisitions = this.lockedRequisitions.filter((c, i) => i !== index);
+            //     this.requisitionsTable.push(data);
+            // } else {
+            //     this.requisitionsTable = this.requisitionsTable.filter((c, i) => i !== index);
+            //     this.lockedRequisitions.push(data);
+            // }
 
-            this.requisitionsTable.sort((val1, val2) => {
-                return val1.id < val2.id ? -1 : 1;
-            });
+            // this.requisitionsTable.sort((val1, val2) => {
+            //     return val1.id < val2.id ? -1 : 1;
+            // });
         },  
 
       },
@@ -885,7 +1176,7 @@ import axios from 'axios-https-proxy-fix';
      async handleUpdateRequisitions() {
 
         try {
-          const response = await axios.get('https://64ce-176-117-0-227.ngrok-free.app/getRequisitions', {proxy});
+          const response = await axios.get('https://localhost:9090/getRequisitions', {proxy});
 
           console.log(response)
 
@@ -926,7 +1217,10 @@ import axios from 'axios-https-proxy-fix';
     justify-content: flex-start;
   }
 
+
   .toolbarTableStyle{
+    height: 4%;
+    left: 240px;
 
      background: conic-gradient(from 145deg at 40%  75%, rgba(148,179,207,0.26) 0%, rgba(156, 184, 216, 0.75) 30%, transparent 50%, rgba(156, 184, 216, 0.75) 80%, rgba(115, 128, 216, 0.51) 100%) 15% 75%/175% 200%,
         radial-gradient(ellipse  at 55%  55%, rgb(178, 166, 222) 0%, rgb(9, 3, 22) 100%) 30% 30%/200% 170%;
@@ -939,13 +1233,18 @@ import axios from 'axios-https-proxy-fix';
 <style scoped>
 
 .wrapperColumns{
+  /* position: absolute; */
+  /* height: 1080px; */
   display: grid;
-  grid-template-columns: 10% 90% ; 
+  grid-template-columns: 7% 93% ; 
 
   /* grid-template-columns: 1fr 2fr 1fr */
 }
 
 .wrapperRows{
+  position: absolute;
+  left: 240px;
+  width: 90%;
   display: grid;
   grid-template-rows: 7% 93% ; 
 
@@ -953,6 +1252,7 @@ import axios from 'axios-https-proxy-fix';
 }
 
  .containerGuestName {
+     
       /* position: relative; */
       display: flex;
       /* position:relative;
@@ -974,8 +1274,19 @@ import axios from 'axios-https-proxy-fix';
     };
 
     .requisitionDataTableContainer{
+      position: absolute;
+      left: 240px;
+      height: 100%; 
       display: grid;
     }
+
+    .headerTable {
+      background:#1f2936; 
+      color:white; 
+      padding:10px;
+    }
+
+
     /* .buttons{
       background-color: #6e6ef7;
       color: #f8f8f9; 

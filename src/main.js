@@ -22,6 +22,7 @@ import Toolbar from 'primevue/toolbar';
 import Dropdown from 'primevue/dropdown';
 import Tag from 'primevue/tag';
 import MultiSelect from 'primevue/multiselect';
+
 //import './assets/theme.css';
 //import FilterMatchMode from 'primevue/api';
 //import 'primevue/resources/themes/lara-dark-teal/theme.css'
@@ -45,6 +46,7 @@ import Occupancy from "./pages/Occupancy.vue";
 import CalendarPage from "./pages/CalendarPage.vue";
 import Main from "./pages/Main.vue";
 import "./global.css";
+//import "./css/default.css";
 
 
 
@@ -116,7 +118,7 @@ const router = createRouter({
 
 router.beforeEach((toRoute, fromRoute, next) => {
   const documentTitle =
-    toRoute?.meta && toRoute?.meta?.title ? toRoute?.meta?.title : "Ormand4";
+    toRoute?.meta && toRoute?.meta?.title ? toRoute?.meta?.title : "Ormand";
   window.document.title = documentTitle;
   if (toRoute?.meta?.description) {
     addMetaTag(toRoute?.meta?.description);
