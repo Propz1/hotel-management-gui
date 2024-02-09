@@ -7,13 +7,18 @@ import { defineConfig } from 'vite'
     export default defineConfig({
       plugins: [vue(),  mkcert() ],
       server: {
-        origin: 'https://localhost:5173',
+        origin: 'https://ormand.localhost:5173',
    
         https: {
-          key: fs.readFileSync('./internal/certs/localhost+2-key.pem'),
-          cert: fs.readFileSync('./internal/certs/localhost+2.pem'),
-        } 
-      }
+          key: fs.readFileSync('./internal/certs/local-key.pem'),
+          cert: fs.readFileSync('./internal/certs/local-cert.pem'),
+        }, 
+
+        // // add the next lines if you're using windows and hot reload doesn't work
+        watch: {
+          usePolling: true
+        },
+      },
       
     })
     
