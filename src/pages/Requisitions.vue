@@ -141,9 +141,9 @@
                 <template #body="{ data }">
                     {{ formatDateTime(data.applicationSubmissionTime) }}
                 </template>
-                <template #filter="{ filterModel }">
+                <!-- <template #filter="{ filterModel }">
                     <Calendar v-model="filterModel.value" dateFormat="dd.mm.yy" placeholder="dd.mm.yyyy" mask="99.99.9999" />
-                </template>
+                </template> -->
             </Column>
 
             <Column header="Отклонить" headerStyle="width: 3rem; text-align: center" bodyStyle="text-align: center; overflow: visible" style="min-width: 3rem; width: 1%; padding-left: 0.2rem; padding-right: 0.2rem" alignFrozen="left" :frozen="rejectButtonFrozen">
@@ -162,13 +162,13 @@
                   <Tag :value=formatEmojiStatus(data.status) style="background-color: white; color: white; font-size: 1rem; font-weight:400; padding-left: 0.7rem; padding-right: 0.7rem;"/>  
                   <Tag :value=formatStatus(data.status) :severity="getSeverity(formatStatus(data.status))" style="color: white; font-size: 1rem; font-weight:400; padding-left: 0.7rem; padding-right: 0.7rem;"/>
                 </template>
-                <template #filter="{ filterModel }">
+                <!-- <template #filter="{ filterModel }">
                     <Dropdown v-model="filterModel.value" :options="statuses" placeholder="Выберите статус" class="p-column-filter" showClear>
                         <template #option="slotProps">
                             <Tag :value="slotProps.option" :severity="getSeverity(slotProps.option)" />
                         </template>
                     </Dropdown>
-                </template>
+                </template> -->
             </Column>
 
             <!-- <Column field="applicationStatusDate" header="Время статуса" style="min-width: 200px"></Column> -->
@@ -176,27 +176,27 @@
                 <template #body="{ data }">
                     {{ formatDateTime(data.applicationStatusDate) }}
                 </template>
-                <template #filter="{ filterModel }">
+                <!-- <template #filter="{ filterModel }">
                     <Calendar v-model="filterModel.value" dateFormat="dd.mm.yy" placeholder="dd.mm.yyyy" mask="99.99.9999" />
-                </template>
+                </template> -->
             </Column>
 
              <Column field="checkInDate" header="Заезд" filterField="checkInDate" dataType="date" style="min-width: 10rem;" bodyStyle="text-align:left" alignFrozen="left" :frozen="checkInDateFrozen">
                 <template #body="{ data }">
                     {{ formatDate(data.checkInDate) }}
                 </template>
-                <template #filter="{ filterModel }">
+                <!-- <template #filter="{ filterModel }">
                     <Calendar v-model="filterModel.value" dateFormat="dd.mm.yy" placeholder="dd.mm.yyyy" mask="99.99.9999" />
-                </template>
+                </template> -->
             </Column>
 
             <Column field="checkOutDate" header="Выезд" filterField="checkOutDate" dataType="date" style="min-width: 9.5rem;" bodyStyle="text-align:left" alignFrozen="left" :frozen="checkOutDateFrozen">
                 <template #body="{ data }">
                     {{ formatDate(data.checkOutDate) }}
                 </template>
-                <template #filter="{ filterModel }">
+                <!-- <template #filter="{ filterModel }">
                     <Calendar v-model="filterModel.value" dateFormat="dd.mm.yy" placeholder="dd.mm.yyyy" mask="99.99.9999" />
-                </template>
+                </template> -->
             </Column>
             
             <Column field="cost" header="Стоимость" style="min-width: 6rem; width: 2%; background-color: beige; font-weight:700" bodyStyle="text-align:center" alignFrozen="left" :frozen="costFrozen">
@@ -233,21 +233,21 @@
             </Column>
 
             <Column field="user.name" header="ФИО"  style="min-width: 100px; width: 12%; padding-left: 1rem; padding-right: 1rem;" filterMatchMode="startsWith" alignFrozen="left" :frozen="userNameFrozen">
-              <template #filter="{filterModel,filterCallback}">
+              <!-- <template #filter="{filterModel,filterCallback}">
                     <InputText type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" placeholder="Search"/>
-                </template>
+                </template> -->
             </Column>
 
             <Column field="user.email" header="Email 📧"  style="min-width: 150px; width: 11%; padding-left: 1.5rem;color: rgb(0, 34, 128)" filterMatchMode="startsWith" alignFrozen="left" :frozen="userEmailFrozen">
-              <template #filter="{filterModel,filterCallback}">
+              <!-- <template #filter="{filterModel,filterCallback}">
                     <InputText type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" placeholder="Search"/>
-                </template>
+                </template> -->
             </Column>
 
             <Column field="user.phone" header="Телефон 📞"  style="min-width: 120px; width: 12%; padding-left: 1.5rem" filterMatchMode="startsWith" alignFrozen="left" :frozen="userPhoneFrozen">
-              <template #filter="{filterModel,filterCallback}">
+              <!-- <template #filter="{filterModel,filterCallback}">
                     <InputText type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" placeholder="Search"/>
-                </template>
+                </template> -->
             </Column>
 
             <Column field="hotel.city" header="Город" filterField="hotel.city" filterMatchMode="contains" style="min-width: 180px; padding-left: 1rem; padding-right: 1rem" alignFrozen="left" :frozen="hotelCityFrozen">    
@@ -257,15 +257,15 @@
                         <span>{{ data.hotel.city }}</span>
                     </div>
                 </template>
-                <template #filter="{filterModel,filterCallback}">
+                <!-- <template #filter="{filterModel,filterCallback}">
                     <InputText v-model="filterModel.value" type="text" @input.enter="filterCallback()" class="p-column-filter" placeholder="Поиск"/>
-                </template>
+                </template> -->
             </Column>
 
             <Column field="hotel.name" header="Гостиница" filterMatchMode="contains" style="min-width: 120px; padding-left: 1rem; padding-right: 1rem" alignFrozen="left" :frozen="hotelNameFrozen">
-                <template #filter="{filterModel,filterCallback}">
+                <!-- <template #filter="{filterModel,filterCallback}">
                     <InputText type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" placeholder="Search"/>
-                </template>
+                </template> -->
             </Column>
 
             <Column field="hotel.stars" header="Звезд" filterMatchMode="contains" style="min-width: 3px; padding-left: 1rem; padding-right: 1rem" bodyStyle="text-align:center">

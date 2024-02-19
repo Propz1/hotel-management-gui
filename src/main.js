@@ -11,6 +11,7 @@ import InputNumber from 'primevue/inputnumber';
 import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice';
 import Button from 'primevue/button';
+import Dialog from 'primevue/dialog';
 import ToggleButton from 'primevue/togglebutton';
 import Calendar from 'primevue/calendar';
 import DataTable from 'primevue/datatable';
@@ -20,6 +21,7 @@ import Row from 'primevue/row';                   // optional
 import Paginator from "primevue/paginator"
 import Toolbar from 'primevue/toolbar';
 import Dropdown from 'primevue/dropdown';
+import RadioButton from 'primevue/radiobutton';
 import Tag from 'primevue/tag';
 import MultiSelect from 'primevue/multiselect';
 
@@ -190,6 +192,8 @@ app.component('Toast', Toast)
 app.component('Paginator', Paginator)
 app.component('Toolbar',Toolbar)
 app.component('Dropdown', Dropdown)
+app.component('Dialog', Dialog)
+app.component('RadioButton', RadioButton)
 app.component('Tag', Tag)
 app.component('MultiSelect', MultiSelect)
 app.component('InputNumber', InputNumber)

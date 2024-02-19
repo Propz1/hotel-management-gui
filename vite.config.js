@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+    import { defineConfig } from 'vite'
     import vue from '@vitejs/plugin-vue'
     import mkcert from 'vite-plugin-mkcert'
     import fs from 'fs';
@@ -7,7 +7,7 @@ import { defineConfig } from 'vite'
     export default defineConfig({
       plugins: [vue(),  mkcert() ],
       server: {
-        origin: 'https://ormand.localhost:5173',
+        origin: 'https://localhost:5173',
    
         https: {
           key: fs.readFileSync('./internal/certs/local-key.pem'),
@@ -15,9 +15,9 @@ import { defineConfig } from 'vite'
         }, 
 
         // // add the next lines if you're using windows and hot reload doesn't work
-        watch: {
-          usePolling: true
-        },
+        // watch: {
+        //   usePolling: true
+        // },
       },
       
     })

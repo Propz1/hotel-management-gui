@@ -7,15 +7,116 @@
 
    <div :class="$style.calendarpageChild"/>
 
-<!-- 
-    v-model:filters="filters"
-                  dataKey="id" filterDisplay="row" -->
-
     <div class="card">
 
+                  <div :class="$style.buttonGETfromDB">
+                    <Button type="button" label="Обновить ⬅ " icon="pi pi-database" iconPos="right" style="padding-right:0.5rem; margin-right: 0.4rem; height:35px; width:145px; backgroundColor: var(--primary-color); color: var(--primary-color-text)" @click="loadLazyData()"/>
+                  </div>
 
+                  <div :class="$style.buttonPUTtoDB">
+                    <Button type="button" label="Записать ➞ " icon="pi pi-database" iconPos="right" style="padding-right:0.5rem; margin-right: 0.4rem; height:35px; width:145px; backgroundColor: var(--primary-color); color: var(--primary-color-text)" @click="putDataToServer()"/>
+                  </div>
+    
+                <Toolbar :class="$style.toolbarTableStyle" style="padding-left: 0.3rem; min-height: 3.5rem;">     
+                   <template #start>
+                    <!-- <Button type="button" icon="pi pi-chevron-left" rounded style="height:35px; width:35px; backgroundColor: var(--primary-color); color: var(--primary-color-text)" @click="previousYear(index)"/>    
+                     <div id="appSelectYear">
+                           <SwipeBox ref="myswipe" @onChange="yearChanged" speed="150">
+                                 <div style="width: 160px; height: 20px; border: 0px solid black">
+                                    <div v-for="image in imagesYear" :key="image.id">
+                                      <img :src="image.url" style="margin-left: 1rem; margin-right: 1rem; width: 120px;  height: 20px"/>
+                                    </div>
+                                  </div> 
+                           </SwipeBox>
+                    </div>
+                     <Button type="button" icon="pi pi-chevron-right" rounded style="margin-right: 0.5rem; height:35px; width:35px; backgroundColor: var(--primary-color); color: var(--primary-color-text)" @click="nextYear(index)"/> -->
+                       
+                      <div :class="$style.buttonsDatePicker">
+                         <DatePicker id="datePicker" v-model="datePicerValues" @input="onUpdateDatePicker($event)"/>
+                      </div>
 
-        <DataTable 
+                     <!-- <div :class="$style.buttonsMonth">
+                     <Button  label="Январь"  style="color: white; font-size: 1rem; font-weight:400;padding-left: 1.2rem; padding-right: 1.2rem;padding-top: 0.82rem; padding-bottom: 0.82rem; " />
+                     <Button  label="Февраль" style="color: white; font-size: 1rem; font-weight:400;padding-left: 0.7rem; padding-right: 0.7rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                     <Button  label="Март" style="color: white; font-size: 1rem; font-weight:400;padding-left: 1.62rem; padding-right: 1.62rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                     <Button  label="Апрель" style="color: white; font-size: 1rem; font-weight:400;padding-left: 1.15rem; padding-right: 1.15rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                     <Button  label="Май" style="color: white; font-size: 1rem; font-weight:400;padding-left: 1.89rem; padding-right: 1.89rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                     <Button  label="Июнь" style="color: white; font-size: 1rem; font-weight:400;padding-left: 1.5rem; padding-right: 1.5rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                     <Button  label="Июль" style="color: white; font-size: 1rem; font-weight:400;padding-left: 1.5rem; padding-right: 1.5rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                     <Button  label="Август" style="color: white; font-size: 1rem; font-weight:400;padding-left: 1.1rem; padding-right: 1.1rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                     <Button  label="Сентябрь" style="color: white; font-size: 1rem; font-weight:400;padding-left: 0.7rem; padding-right: 0.7rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                     <Button  label="Октябрь" style="color: white; font-size: 1rem; font-weight:400;padding-left: 1rem; padding-right: 1rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                     <Button  label="Ноябрь" style="color: white; font-size: 1rem; font-weight:400;padding-left: 1.2rem; padding-right: 1.2rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                     <Button  label="Декабрь" style="color: white; font-size: 1rem; font-weight:400;padding-left: 0.7rem; padding-right: 0.7rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                     </div> -->
+
+                      <div :class="$style.selectHotelsStyle">
+                        <div class="card flex flex-wrap gap-2 p-fluid">       
+                          <MultiSelect v-model="selectedHotels" @click="loadMultipleSelectHotels()" :options="groupedHotels" optionLabel="label" optionGroupLabel="label" optionGroupChildren="items" display="chip" placeholder="Выберите отель" class="w-full md:w-50rem" style="min-width:22rem">
+                           <template #optiongroup="slotProps">
+                             <div class="flex align-items-center">
+                               <img :alt="slotProps.option.label" src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" :class="`flag flag-${slotProps.option.code.toLowerCase()} mr-2`" style="width: 18px" />
+                               <div>{{ slotProps.option.label }}</div>
+                             </div>
+                            </template>
+                          </MultiSelect>
+                        </div>
+                      </div>
+
+                    <div :class="$style.buttonsMonth">
+                       <Button  label="Январь"  style="color: white; font-size: 0.9rem; font-weight:400;padding-left: .62rem; padding-right: 0.62rem;padding-top: 0.82rem; padding-bottom: 0.82rem; " />
+                       <Button  label="Февраль" style="color: white; font-size: 0.9rem; font-weight:400;padding-left: 0.5rem; padding-right: 0.5rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                       <Button  label="Март" style="color: white; font-size: 0.9rem; font-weight:400;padding-left: 1.22rem; padding-right: 1.22rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                       <Button  label="Апрель" style="color: white; font-size: 0.9rem; font-weight:400;padding-left: 0.75rem; padding-right: .75rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                       <Button  label="Май" style="color: white; font-size: 0.9rem; font-weight:400;padding-left: 1.29rem; padding-right: 1.29rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                       <Button  label="Июнь" style="color: white; font-size: 0.9rem; font-weight:400;padding-left: 0.65rem; padding-right: 0.65rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                       <Button  label="Июль" style="color: white; font-size: 0.9rem; font-weight:400;padding-left: 0.65rem; padding-right: 0.65rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                       <Button  label="Август" style="color: white; font-size: 0.9rem; font-weight:400;padding-left: 0.61rem; padding-right: 0.61rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                       <Button  label="Сентябрь" style="color: white; font-size: 0.9rem; font-weight:400;padding-left: 0.3rem; padding-right: 0.3rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                       <Button  label="Октябрь" style="color: white; font-size: 0.9rem; font-weight:400;padding-left: 0.6rem; padding-right: 0.6rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                       <Button  label="Ноябрь" style="color: white; font-size: 0.9rem; font-weight:400;padding-left: 0.62rem; padding-right: 0.62rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                       <Button  label="Декабрь" style="color: white; font-size: 0.9rem; font-weight:400;padding-left: 0.3rem; padding-right: 0.3rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
+                    </div>
+
+                    </template>
+                  </Toolbar>
+<!-- 
+                  <Toolbar :class="$style.toolbar2TableStyle" style="padding-left: 0.3rem; min-height: 2rem;">     
+                   <template #center>
+                     <div :class="$style.buttonsMonth">
+                     <Button  label="Январь"  style="color: #6187ae; font-size: 0.9rem; font-weight:400;padding-left: 1.2rem; padding-right: 1.2rem;padding-top: 0.1rem; padding-bottom: 0.1rem; " />
+                     <Button  label="Февраль" style="color: #6187ae; font-size: 0.9rem; font-weight:400;padding-left: 0.7rem; padding-right: 0.7rem;padding-top: 0.1rem; padding-bottom: 0.1rem; " />
+                     <Button  label="Март" style="color: #6187ae; font-size: 0.9rem; font-weight:400;padding-left: 1.62rem; padding-right: 1.62rem;padding-top: 0.1rem; padding-bottom: 0.1rem; " />
+                     <Button  label="Апрель" style="color: #6187ae; font-size: 0.9rem; font-weight:400;padding-left: 1.15rem; padding-right: 1.15rem;padding-top: 0.1rem; padding-bottom: 0.1rem; " />
+                     <Button  label="Май" style="color: #6187ae; font-size: 0.9rem; font-weight:400;padding-left: 1.89rem; padding-right: 1.89rem;padding-top: 0.1rem; padding-bottom: 0.1rem; " />
+                     <Button  label="Июнь" style="color: #6187ae; font-size: 0.9rem; font-weight:400;padding-left: 1.5rem; padding-right: 1.5rem;padding-top: 0.1rem; padding-bottom: 0.1rem; " />
+                     <Button  label="Июль" style="color: #6187ae; font-size: 0.9rem; font-weight:400;padding-left: 1.5rem; padding-right: 1.5rem;padding-top: 0.1rem; padding-bottom: 0.1rem; " />
+                     <Button  label="Август" style="color: #6187ae; font-size: 0.9rem; font-weight:400;padding-left: 1.1rem; padding-right: 1.1rem;padding-top: 0.1rem; padding-bottom: 0.1rem; " />
+                     <Button  label="Сентябрь" style="color: #6187ae; font-size: 0.9rem; font-weight:400;padding-left: 0.7rem; padding-right: 0.7rem;padding-top: 0.1rem; padding-bottom: 0.1rem; " />
+                     <Button  label="Октябрь" style="color: #6187ae; font-size: 0.9rem; font-weight:400;padding-left: 1rem; padding-right: 1rem;padding-top: 0.1rem; padding-bottom: 0.1rem; " />
+                     <Button  label="Ноябрь" style="color: #6187ae; font-size: 0.9rem; font-weight:400;padding-left: 1.2rem; padding-right: 1.2rem;padding-top: 0.1rem; padding-bottom: 0.1rem; " />
+                     <Button  label="Декабрь" style="color: #6187ae; font-size: 0.9rem; font-weight:400;padding-left: 0.7rem; padding-right: 0.7rem;padding-top: 0.1rem; padding-bottom: 0.1rem; " />
+                     </div>
+                    </template>
+                  </Toolbar> -->
+
+                  <div :class="$style.calendarTableDatesStyle">
+                         <sc
+                           :schedule-data="scData"
+                           :setting="setting"
+                           @row-click-event="rowClickEvent"
+                           @date-click-event="dateClickEvent"
+                           @click-event="clickEvent"
+                           @add-event="addEvent"
+                           @move-event="moveEvent"
+                           @edit-event="editEvent"
+                           @delete-event="deleteEvent"
+                          ></sc>
+                  </div>
+                 
+   
+
+        <!-- <DataTable 
                   :class="$style.calendarTableDatesStyle"
                   :loading="loading"
                   :value="calendarTable"
@@ -28,13 +129,6 @@
 
                  
             <template #header>
-                <!-- <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-                    <span class="text-xl text-900 font-bold">Таблица цен</span>
-                    <Button icon="pi pi-refresh" rounded raised />
-                </div> -->
-
-          
-
                 
                 <Toolbar :class="$style.toolbarTableStyle" style="padding-left: 0.3rem; min-height: 3.5rem;">
         
@@ -48,8 +142,6 @@
                                     </div>
                                   </div> 
                            </SwipeBox>
-                      <!-- <div>{{index}}</div> -->
-                          <!-- <button @click="goto2">goto index #2</button> -->
                     </div>
                      <Button type="button" icon="pi pi-chevron-right" rounded style="margin-right: 0.5rem; height:35px; width:35px; backgroundColor: var(--primary-color); color: var(--primary-color-text)" @click="nextYear(index)"/>
                      
@@ -67,24 +159,6 @@
                      <Button  label="Ноябрь" style="color: white; font-size: 1rem; font-weight:400;padding-left: 1.2rem; padding-right: 1.2rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
                      <Button  label="Декабрь" style="color: white; font-size: 1rem; font-weight:400;padding-left: 0.7rem; padding-right: 0.7rem;padding-top: 0.80rem; padding-bottom: 0.80rem; " />
                     </template>
-
-                    <template #center>
-
-                 
-                 
-                  </template>
-
-                   <!-- <template #center  style="min-height: 1.5rem;">
-                    <Button icon="pi pi-print" class="mr-2" />
-                       <span class="p-input-icon-left-center">
-                        <i class="pi pi-search" style="padding: 0.5rem;"/>
-                        <InputText placeholder="Поиск" style="min-height: 10px; "/>
-                     </span>
-                   </template> -->
-
-                    <!-- <template #end>
-                      <ToggleButton v-model="installationDateFrozen"  class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Дата обновления" offLabel="Дата обновления" style="margin-right: 1rem; border-radius: 0.5rem"/>
-                     </template> -->
                   </Toolbar>
                  
             </template>
@@ -101,31 +175,12 @@
             </Column>
 
             <Column field="hotelName" header="Отель" filterField="hotelName" :showFilterMenu="false" :filterMenuStyle="{ width: '14rem' }" style="min-width: 100px; width: 2%; padding: 1rem" alignFrozen="left" :frozen="hotelFrozen">
-              <!-- <template #body="{ data }">
-                    <div class="flex align-items-center gap-2">
-                        <span>{{ data.hotelName }}</span>
-                    </div>
-              </template> -->
-
-              <!-- <template #filter="{ filterModel, filterCallback }">
-                    <MultiSelect  id="hotelsSelectInTable" v-model="filterModel.value" @change="filterCallback()" :options="groupedHotelsFoTable" optionLabel="label" ptionGroupLabel="label" optionGroupChildren="items" display="chip" placeholder="Выберите отель" class="p-column-filter" style="min-width: 14rem" :maxSelectedLabels="1">
-                        <template #option="slotProps">
-                            <div class="flex align-items-center gap-2">
-                                <img :alt="slotProps.option.label" src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" :class="`flag flag-${slotProps.option.code.toLowerCase()} mr-2`" style="width: 18px" />
-                                <span>{{ slotProps.option.label }}</span>
-                            </div>
-                        </template>
-                    </MultiSelect>
-                </template> -->
             </Column>
 
             <Column field="hotelCity" header="Город" style="min-width: 100px; width: 2%; padding: 1rem" alignFrozen="left" :frozen="cityFrozen" >
              
             </Column>
             <Column field="hotelStars" header="Звезд" style="min-width: 1rem; padding: 1rem">
-                <!-- <template #body="slotProps">
-                    <Rating :modelValue="slotProps.data.hotelStars" readonly :cancel="false" />
-                </template> -->
               </Column>
             <Column field="priceRoom" header="Цена /номер" style="min-width: 100px; width: 2%; padding: 1rem"></Column>
                 <template #body="slotProps">
@@ -144,227 +199,29 @@
                 </template></Column>
             <Column field="administratorID" header="id автора" style="min-width: 8rem; width: 2%; padding: 1rem"></Column>
             <Column field="administratorName" header="Автор" style="min-width: 15rem; width: 2%; padding: 1rem"></Column>
-
-
-            <!-- <Column header="Image">
-                <template #body="slotProps">
-                    <img :src="`https://primefaces.org/cdn/primevue/images/product/${slotProps.data.image}`" :alt="slotProps.data.image" class="w-6rem shadow-2 border-round" />
-                </template>
-            </Column> -->
-            <!-- <Column field="category" header="Category"></Column>
-            <Column header="Status">
-                <template #body="slotProps">
-                    <Tag :value="slotProps.data.inventoryStatus" :severity="getSeverity(slotProps.data)" />
-                </template>
-            </Column> -->
             <template #footer> Всего строк: {{ calendarTable ? calendarTable.length : 0 }}  </template>
-        </DataTable>
+        </DataTable> -->
     </div>
 
-
-
-
-     
-    <!-- <div :class="$style.div">Отель</div> -->
     <SidebarDark7 />
-    <!-- <div :class="$style.monthandyaertwo">
-      <b :class="$style.textmonth">Апрель</b>
-      <b :class="$style.textyear">2023</b>
-    </div>
-    <div :class="$style.monthandyaerone">
-      <b :class="$style.textmonth">Март</b>
-      <b :class="$style.textyear">2023</b>
-    </div> -->
-    <!-- <CalendarOne1
-      calendarDayTextSize="23"
-      propLeft="660px"
-      calendarOneBackgroundColor="rgba(255, 255, 255, 0.2)"
-      weekColor="#9d9ca3"
-      calendarOneBackgroundColor1="rgba(255, 255, 255, 0.2)"
-      weekColor1="#9d9ca3"
-      calendarOneBorderRadius="unset"
-      calendarOneBackgroundColor2="rgba(255, 255, 255, 0.2)"
-      weekColor2="#9d9ca3"
-      calendarOneBorderRadius1="unset"
-      calendarOneBackgroundColor3="rgba(255, 255, 255, 0.2)"
-      weekColor3="#9d9ca3"
-      calendarOneBorderRadius2="unset"
-      calendarOneBackgroundColor4="rgba(255, 255, 255, 0.2)"
-      weekColor4="#9d9ca3"
-      calendarOneBorderRadius3="2px"
-      calendarOneBackgroundColor5="#ef5da8"
-      calendarOneBackgroundColor6="rgba(68, 153, 238, 0.75)"
-      calendarOneCursor="pointer"
-      calendarOneBorder="none"
-      calendarOnePadding="0"
-      calendarOneBorderRadius4="30px"
-      weekColor5="#000"
-      calendarOneBackgroundColor7="rgba(68, 153, 238, 0.75)"
-      calendarOneBorderRadius5="30px"
-      weekColor6="#000"
-      calendarOneBackgroundColor8="rgba(68, 153, 238, 0.75)"
-      calendarOneBorderRadius6="30px"
-      weekColor7="#000"
-      calendarOneBackgroundColor9="unset"
-      weekColor8="#000"
-    /> -->
-    <!-- <CalendarOne1
-      calendarDayTextColor="25"
-      calendarDayTextSize="19"
-    /> -->
-
-
-
-    <!-- <div>
-       <label  for="datePickert" class="font-bold block mb-2"> Выберите период</label>
-       <DatePicker id="datePicker" v-model="Values" @input="onUpdateDatePicker($event)"/>
-    </div> -->
-   
-
-
-   
 
     
-
-    
-      <!-- <div class="card flex flex-wrap gap-2 p-fluid"> -->
-
-        <!-- <div :class="$style.upsideTolbarStyle"> -->
-
-          
-
-        
-
-
-       <DatePicker id="datePicker" v-model="datePicerValues" @input="onUpdateDatePicker($event)"/>
-
-       
-      
-    <div :class="$style.div1">
-        <div class="card flex flex-wrap gap-2 p-fluid">
-         <!-- <label  for="hotelsSelect" class="font-bold block mb-2"> Выберите отель </label> -->
-        
-        <MultiSelect v-model="selectedHotels" @click="loadMultipleSelectHotels()" :options="groupedHotels" optionLabel="label" optionGroupLabel="label" optionGroupChildren="items" display="chip" placeholder="Выберите отель" class="w-full md:w-50rem" style="min-width:25rem">
-            <template #optiongroup="slotProps">
-                <div class="flex align-items-center">
-                  <img :alt="slotProps.option.label" src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" :class="`flag flag-${slotProps.option.code.toLowerCase()} mr-2`" style="width: 18px" />
-                  <div>{{ slotProps.option.label }}</div>
-                </div>
-            </template>
-       </MultiSelect>
-     </div>
-    </div>
-
-  <!-- </div> -->
-
-
-   
-    <!-- <div :class="$style.div2">
-        <label  for="quantityNumbersInput" class="font-bold block mb-2" style="padding-right: 0.5rem;"> Кол-во номеров </label>
-        <InputText id="quantityNumbersInput" v-model="quantityNumbers" type="number" inputId="withoutgrouping" :useGrouping="false" style="min-width: 1px; max-width: 100px; max-height: 2px; background-color:white; border-radius: 0.5rem ; padding: 1rem;"/>
-     </div> -->
-  
-   
-      <!-- <div class="card flex flex-wrap gap-2 p-fluid"> -->
-        <!-- <div :class="$style.div_main">
-
-          
-           <div :class="$style.div3"> 
-              <label  for="price1" class="font-bold block mb-2" style="padding-right: 0.5rem;"> Цена / номер (руб.)</label>
-              <InputText id="price1" v-model="price_one" type="number" inputId="withoutgrouping" :useGrouping="false" style="min-width: 100px; max-width: 100px;; max-height: 2px; background-color:white; border-radius: 0.5rem ; padding: 1rem; "/>
-           </div>
-
-           <div :class="$style.div4">
-              <label  for="price2" class="font-bold block mb-2" style="padding-right: 0.5rem;"> Цена / место (2-х) (руб.)</label>
-              <InputText id="price2" v-model="price_two" type="number" inputId="withoutgrouping" :useGrouping="false" style="min-width: 100px; max-width: 100px; max-height: 2px; background-color:white; border-radius: 0.5rem ; padding: 1rem; "/> 
-           </div>
-           
-           <div :class="$style.div5">
-             <label  for="price3" class="font-bold block mb-2" style="padding-right: 0.5rem;"> Цена / место (3-х) (руб.)</label>
-             <InputText id="price3" v-model="price_three" type="number" inputId="withoutgrouping" :useGrouping="false" style="min-width: 100px; max-width: 100px; max-height: 2px; background-color:white; border-radius: 0.5rem ; padding: 1rem; "/>
-           </div>
-           
-           <div :class="$style.div6">
-             <label  for="price4" class="font-bold block mb-2" style="padding-right: 0.5rem;"> Цена за место (4-х) (руб.)</label>
-             <InputText id="price4" v-model="price_four" type="number" inputId="withoutgrouping" :useGrouping="false" style="min-width: 100px; max-width: 100px; max-height: 2px; background-color:white; border-radius: 0.5rem ; padding: 1rem; "/>
-          </div>
-
-      </div> -->
-  
-
-
-    <!-- <div :class="$style.div7">
-      <label  for="cashbackRUBInput" class="font-bold block mb-2" style="padding-right: 0.5rem;"> Cashback (руб.)</label>
-      <InputText id="cashbackRUBInput" v-model="cashbackRUB" type="number" inputId="withoutgrouping" :useGrouping="false" style="min-width: 100px; max-width: 100px; max-height: 2px; background-color:white; border-radius: 0.5rem ; padding: 1rem;"/>
-    </div> 
-
-    <div :class="$style.div8">
-      <label  for="cashbackPercentInput" class="font-bold block mb-2" style="padding-right: 0.5rem;"> Cashback (%)</label>
-      <InputText id="cashbackPercentInput" v-model="cashbackPercent" type="number" inputId="minmax" :min="0" :max="100" :useGrouping="false" style="min-width: 100px; max-width: 100px; max-height: 2px; background-color:white; border-radius: 0.5rem ; padding: 1rem;"/>
-    </div> 
-
-    <div :class="$style.div9">
-      <label  for="cashbackNoCheckInRUBInput" class="font-bold block mb-2" style="padding-right: 0.5rem;"> Cashback не заезд (руб.)</label>
-      <InputText id="cashbackNoCheckInRUBInput" v-model="cashbackNoCheckInRUB" type="number" inputId="withoutgrouping" :useGrouping="false" style="min-width: 100px; max-width: 100px; max-height: 2px; background-color:white; border-radius: 0.5rem ; padding: 1rem;"/>
-    </div> 
-
-    <div :class="$style.div10">
-       <label  for="cashbackNoCheckInPercentInput" class="font-bold block mb-2" style="padding-right: 0.5rem;"> Cashback не заезд (%)</label>
-       <InputText id="cashbackNoCheckInPercentInput" v-model="cashbackNoCheckInPercent" type="number" inputId="minmax" :min="0" :max="100" :useGrouping="false" style="min-width: 100px; max-width: 100px; max-height: 2px; background-color:white; border-radius: 0.5rem ; padding: 1rem;"/>
-    </div>   -->
-
-
-
-
-    
-    
-
-
-
-
-    
-
-
-
-
-
-
-
-    </div> 
-
-   
+ 
    
 
-
-       <!-- <ButtonOutlinedSquareD1
-          buttonText="Установить"
-          propTop="620px"
-          propLeft="380px"
-          propCursor="pointer"
-          propBackgroundColor="transparent"
-          propWidth="111px"
-          propDisplay="inline-block"
-          @click="setupDataForCalendar()"
-          style="border-radius: 1rem;"
-        /> -->
-
-     <!-- <div :class="$style.lineTop"/>
-
-     <div :class="$style.lineBottom"/> -->
-
-     <!-- <div :class="$style.lineRight"/> -->
-
-<!-- </div>  -->
-  <!-- </div> -->
+</div>    
 </template>
+
+
 <script>
   import { defineComponent } from "vue";
+  import { ref } from 'vue';
+  import schedulerLite from "../components/schedulerLite.vue";
   import { FilterMatchMode } from 'primevue/api';
   import FieldsSmallLabel from "../components/FieldsSmallLabel.vue";
   import FieldsSmallDropdown from "../components/FieldsSmallDropdown.vue";
   import ButtonOutlinedSquareD1 from "../components/ButtonOutlinedSquareD1.vue";
   import SidebarDark7 from "../components/SidebarDark7.vue";
-  // import CalendarOne1 from "../components/CalendarOne1.vue";
   import DatePicker from "../components/DatePicker.vue";
   import MultiSelect from 'primevue/multiselect';
   import InputNumber from 'primevue/inputnumber';
@@ -374,22 +231,560 @@
   import DataTable from 'primevue/datatable';
   import axios from 'axios-https-proxy-fix';
   import SwipeBox from '@shopid/vue3-swipe-box';
-  //import VueHorizontalCalendar from 'vue-horizontal-calendar';
+  import { PrimeIcons } from 'primevue/api';
+  import 'primeicons/primeicons.css';
 
 
+  const sampleData = [
+  {
+    title: "Отель такой-то",
+    noBusinessDate: [],
+    businessHours: [
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+    ],
+    schedule: [
+      {
+        text: "",
+        start: "2024/1/3 00:00",
+        end: "2024/1/7 24:00",
+        data: {
+          resourceName: "quantity",
+          value: "2",
+        },
+      },
+      {
+        text: "12",
+        start: "2024/02/14 00:00",
+        end: "2024/02/14 24:00",
+        data: {
+          resourceName: "quantity",
+          value: "12",
+        },
+      },
+    ],
+  },
+  {
+    title: "Количество номеров",
+    noBusinessDate: [],
+    businessHours: [
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+    ],
+    schedule: [
+      {
+        text: "2",
+        start: "2024/02/21 00:00",
+        end: "2024/02/22 24:00",
+        data: {
+          quantity: "something",
+        },
+      },
+      {
+        text: "2",
+        start: "2024/02/14 00:00",
+        end: "2024/02/14 24:00",
+        data: {
+          quantity: "something",
+        },
+      },
+    ],
+  },
+  {
+    title: "Цена 👨‍💼",
+    noBusinessDate: [],
+    businessHours: [
+      {
+        start: "0:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+    ],
+    schedule: [
+      {
+        text: "2500",
+        start: "2024/02/20 00:00",
+        end: "2024/02/20 24:00",
+        data: {
+          quantity: "something",
+        },
+      },
+    ],
+  },
+  {
+    title: "Цена 👨‍💼👨‍💼",
+    noBusinessDate: [],
+    businessHours: [
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+    ],
+    schedule: [
+      {
+        text: "2500",
+        start: "2024/02/18 00:00",
+        end: "2024/02/18 24:00",
+        data: {
+          quantity: "something",
+        },
+      },
+    ],
+  },
+  {
+    title: "Цена 👨‍💼👨‍💼👨‍💼",
+    noBusinessDate: [],
+    businessHours: [
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+    ],
+    schedule: [
+      {
+        text: "1500",
+        start: "2024/02/21 00:00",
+        end: "2024/02/21 24:00",
+        data: {
+          something: "something",
+        },
+      },
+      {
+        text: "1600",
+        start: "2024/02/22 00:00",
+        end: "2024/02/22 24:00",
+        data: {
+          something: "something",
+        },
+      },
+    ],
+  },
+  {
+    title: "Цена 👨‍💼👨‍💼👨‍💼👨‍💼",
+    noBusinessDate: [],
+    businessHours: [
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+    ],
+    schedule: [
+      {
+        text: "1500",
+        start: "2024/02/21 00:00",
+        end: "2024/02/21 24:00",
+        data: {
+          something: "something",
+        },
+      },
+      {
+        text: "1600",
+        start: "2024/02/22 00:00",
+        end: "2024/02/22 24:00",
+        data: {
+          something: "something",
+        },
+      },
+    ],
+  },
+  {
+    title: "Cashback",
+    noBusinessDate: [],
+    businessHours: [
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+    ],
+    schedule: [
+      {
+        text: "150",
+        start: "2024/02/21 00:00",
+        end: "2024/02/21 24:00",
+        data: {
+          something: "something",
+        },
+      },
+      {
+        text: "160",
+        start: "2024/02/22 00:00",
+        end: "2024/02/22 24:00",
+        data: {
+          something: "something",
+        },
+      },
+    ],
+  },
+  {
+    title: "Cashback (%)",
+    noBusinessDate: [],
+    businessHours: [
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+    ],
+    schedule: [
+      {
+        text: "15%",
+        start: "2024/02/21 00:00",
+        end: "2024/02/21 24:00",
+        data: {
+          something: "something",
+        },
+      },
+      {
+        text: "16%",
+        start: "2024/02/22 00:00",
+        end: "2024/02/22 24:00",
+        data: {
+          something: "something",
+        },
+      },
+    ],
+  },
+  {
+    title: "Cashback без заезда",
+    noBusinessDate: [],
+    businessHours: [
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+    ],
+    schedule: [
+      {
+        text: "100",
+        start: "2024/02/21 00:00",
+        end: "2024/02/21 24:00",
+        data: {
+          something: "something",
+        },
+      },
+      {
+        text: "100",
+        start: "2024/02/22 00:00",
+        end: "2024/02/22 24:00",
+        data: {
+          something: "something",
+        },
+      },
+    ],
+  },
+  {
+    title: "Cashback без заезда (%)",
+    noBusinessDate: [],
+    businessHours: [
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+      {
+        start: "00:00",
+        end: "24:00",
+      },
+    ],
+    schedule: [
+      {
+        text: "5",
+        start: "2024/02/21 00:00",
+        end: "2024/02/21 24:00",
+        data: {
+          something: "something",
+        },
+      },
+      {
+        text: "5",
+        start: "2024/02/22 00:00",
+        end: "2024/02/22 24:00",
+        data: {
+          something: "something",
+        },
+      },
+    ],
+  },
+];
 
+
+const month = ref({
+  month: new Date().getMonth(),
+  year: new Date().getFullYear(),
+});
+
+const formatMonthYear = (date) => {
+  const month = date.getMonth();
+  const year = date.getFullYear();
+  let monthArray = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+  let monthText = monthArray[month];
+  return `${monthText}, ${year}`;
+};
+
+var startSetting = {
+             startDate: "2023/1/3 00:00",
+             endDate: "2026/1/1 24:00",
+             weekdayText: ["ВС", "ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ"],
+             unit: 1440, // Minutes 
+             borderW: 1, // Px
+             dateDivH: 26, // Px 26
+             timeDivH: 26, // Px
+             unitDivW: 54, // Px //width of the cells
+             titleDivW: 8, // Percent
+             rowH: 57, // Px
+       };
 
 
   export default defineComponent({
 
-
     data() {
         return {
+
+           scData:  [],
+           setting: startSetting,
+           month,
+           formatMonthYear,
 
            showDate: new Date(),
 
            imagesYear: [
-            { id: '2023', url: "./year2023.svg" },
             { id: '2024', url: "./year2024.svg" },
             { id: '2025', url: "./year2025.svg" },
             { id: '2026', url: "./year2026.svg" },
@@ -438,7 +833,7 @@
             price_three:0,
             price_four:0,
             quantityNumbers:0,
-            selectedHotels: null,
+            selectedHotels: [],
             //groupedHotelsFoTable: null,
             groupedHotels: null,
             datePicerValues:{
@@ -474,32 +869,15 @@
       ToggleButton,
       Column,
       DataTable,
-      // VueHorizontalCalendar,
+      PrimeIcons,
       SwipeBox, 
+      sc: schedulerLite,
     },
-
-
 
     mounted() {
 
       this.loading = true;
-
       this.loadLazyData();
-
-        axios
-        .get('https://localhost:9090/getCalendarTable')
-        .then((res) => {
-          // assign state posts with response data
-            this.calendarTable = res.data;
-      // // this.totalRecords = res.data.length
-          this.loading = false;
-        })
-       .catch((error) => {
-      //  // console.log(error.res.data);
-        });
-
-
-
     },
 
 
@@ -530,30 +908,222 @@
         this.$router.push("/settings");
       },
 
+      onUpdateSetting() {
+        this.setting.startDate = "2022/1/1 00:00"
+        this.setting.endDate = "2025/1/1 00:00"
+      },
+
+      dateClickEvent(date) {
+      console.log("------");
+      console.log("DateClickEvent:");
+      console.log("Date:" + date);
+    },
+    rowClickEvent(rowIndex, text) {
+      console.log("------");
+      console.log("RowClickEvent:");
+      console.log("RowIndex:" + rowIndex);
+      console.log("RowTitle:" + text);
+    },
+    
+    clickEvent(startDate, endDate, text, other) {
+      console.log("------");
+      console.log("ClickEvent:");
+      console.log("StartDate:" + startDate);
+      console.log("EndDate:" + endDate);
+      console.log("ContentText:" + text);
+      
+      if (other) {
+        console.log("OtherData:");
+        console.log(other);
+      }
+    },
+    addEvent(rowIndex, startDate, endDate) {
+      console.log("------");
+      console.log("AddEvent:");
+      console.log("RowIndex:" + rowIndex);
+      console.log("StartDate:" + startDate);
+      console.log("EndDate:" + endDate);
+    },
+    moveEvent(status, newStartDate, newEndDate) {
+      console.log("------");
+      console.log("MoveEvent:");
+      if (status == 1) {
+        console.log("NewStartDate:" + newStartDate);
+        console.log("NewEndDate:" + newEndDate);
+      } else if (status == 2) {
+        console.log("Has other event, can't move.");
+      } else {
+        console.log("Not businessDay, can't move.");
+      }
+    },
+    editEvent(newStartDate, newEndDate) {
+      console.log("------");
+      console.log("EditEvent:");
+      console.log("NewStartDate:" + newStartDate);
+      console.log("NewEndDate:" + newEndDate);
+    },
+    deleteEvent(row, index) {
+      console.log("------");
+      console.log("DeleteEvent:");
+      console.log("Row:" + row);
+      console.log("Index:" + index);
+    },
+    addNewRow() {
+      let newTitle = "Room" + (this.scData.length + 1);
+      this.scData.push({
+        title: newTitle,
+        noBusinessDate: [],
+        businessHours: [
+          {
+            start: "00:00",
+            end: "24:00",
+          },
+          {
+            start: "00:00",
+            end: "24:00",
+          },
+          {
+            start: "00:00",
+            end: "24:00",
+          },
+          {
+            start: "00:00",
+            end: "24:00",
+          },
+          {
+            start: "00:00",
+            end: "24:00",
+          },
+          {
+            start: "00:00",
+            end: "24:00",
+          },
+          {
+            start: "00:00",
+            end: "24:00",
+          },
+          {
+            start: "00:00",
+            end: "24:00",
+          },
+          {
+            start: "00:00",
+            end: "24:00",
+          },
+        ],
+        schedule: [],
+      });
+    },
+
+
+
+
+
+
       setShowDate(d) {
 				this.showDate = d;
 			},
 
+
+      putDataToServer(){
+
+
+
+      },
+
+      
+
       loadLazyData() {
+
+        var today = new Date();
+
+        var yearStartDate 
+        var monthStartDate 
+        var dayStartDate 
+
+        var yearEndDate
+        var monthEndDate 
+        var dayEndDate 
+
+        
+        if (this.datePicerValues.startDate === null && this.datePicerValues.endDate === null ){  
+            this.datePicerValues.startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            this.datePicerValues.endDate = new Date(today.getFullYear() + 1, today.getMonth(), today.getDate());
+        }
+
+        yearStartDate = new Date(this.datePicerValues.startDate).getFullYear()
+        monthStartDate = new Date(this.datePicerValues.startDate).getMonth() + 1
+        dayStartDate = new Date(this.datePicerValues.startDate).getDate()
+
+        yearEndDate = new Date(this.datePicerValues.endDate).getFullYear()
+        monthEndDate = new Date(this.datePicerValues.endDate).getMonth() + 1
+        dayEndDate = new Date(this.datePicerValues.endDate).getDate() //for period overlaps
+
+
+        this.setting = {
+                                  startDate: `${yearStartDate}/${monthStartDate}/${dayStartDate} 00:00`,
+                                  endDate: `${yearEndDate}/${monthEndDate}/${dayEndDate} 24:00`,
+                                  weekdayText: ["ВС", "ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ"],
+                                  unit: 1440, // Minutes 
+                                  borderW: 1, // Px
+                                  dateDivH: 26, // Px 26
+                                  timeDivH: 26, // Px
+                                  unitDivW: 54, // Px //width of the cells
+                                  titleDivW: 8, // Percent
+                                  rowH: 57, // Px
+                                 };
+
+        //var jsonSelectedHotels = []     
+        var h  
+
+         console.log("yearStartDate =>" + yearStartDate);
+         console.log("this.selectedHotels.length =>" + this.selectedHotels.length)
+
+         if (this.selectedHotels.length > 0 ) {
+
+          // jsonSelectedHotels.push({
+          //                        name: this.selectedHotels[0].label,
+          //                        address: this.selectedHotels[0].value,
+          //                        city: this.selectedHotels[0].city,
+          //                      });
+                              
+         h = this.selectedHotels[0].label
+         
+        const param = {startDay:   dayStartDate, 
+                       startMonth: monthStartDate, 
+                       startYear:  yearStartDate,
+                       endDay:     dayEndDate,
+                       endMonth:   monthEndDate,
+                       endYear:    yearEndDate,
+                       hotels:     h};
+
         
         this.loading = true;
 
         // setTimeout(() => {
                  axios
-                .get('https://localhost:9090/getCalendarTable')
+                .get('https://localhost:9090/getCalendarTable', {params: param})
                 .then((res) => {
 
-                 this.calendarTable = res.data;
-                 this.totalRecords = res.data.length
-                 this.loading = false;
-              })
+                  this.scData = res.data;
+               
+                  })
                 .catch((error) => {
                 //console.log(error.res.data);
-            });
+                });
 
                  this.loading = false;
 
+
+                 console.log("this.setting.startDate =>" + this.setting.startDate);
+                 console.log("this.setting.endDate =>" + this.setting.endDate);
+
+                
+
+
         //  }, Math.random() * 1);
+
+      }
 
       },
 
@@ -718,295 +1288,87 @@
 
   });
 </script>
+
+
+
 <style module>
-
-
-
-.upsideTolbarStyle{
-    position: absolute;
-    top: 0px;
-    left: 240px;
-    /* background-color: #40409a; */
-    width: 89.5%;
-    height: 70px;
-    border-radius: 0rem;
-  }
-
- .dateTimePickerStyle{
-    position: absolute;
-    top: 0px;
-    left: 240px;
-    height: 70px; 
-    width: 150px; 
-    background-color: #40409a; 
-    /* width: 89.5%;
-  
-    /* border-radius: 1rem; */
-  }
-
   .calendarpageChild {
     position: absolute;
     top: 75px;
     left: 255px;
     background-color: #40409a;
-    width: 1650px;
-    height: 1.3px;
-  }
-
-  .lineTop{
-    position: absolute;
-    top: 0px;
-    left: 240px;
-    background-color: #b4b4d2;
-    width: 1680px;
-    height: 0.5px;
-  }
-
-  .lineBottom{
-    position: absolute;
-    top: 1079px;
-    left: 240px;
-    background-color: #b4b4d2;
-    width: 1680px;
-    height: 0.5px;
-  }
-
-  .lineRight{
-    position: absolute;
-    top: 0px;
-    left: 1920px;
-    background-color: #b4b4d2;
-    width: 0.5px;
-    height: 1080px;
+    width: 0px;
+    height: 0px;
   }
 
   .toolbarTableStyle{
+    position: absolute;
+    top: 50px;
+    left: 249px;
+    width: 100%;
     height: 3rem;
-
-   
     background: conic-gradient(from 145deg at 40%  75%, rgba(148,179,207,0.26) 0%, rgba(156, 184, 216, 0.75) 30%, transparent 50%, rgba(156, 184, 216, 0.75) 80%, rgba(115, 128, 216, 0.51) 100%) 15% 75%/175% 200%,
-      radial-gradient(ellipse  at 55%  55%, rgb(178, 166, 222) 0%, rgb(9, 3, 22) 100%) 30% 30%/200% 170%;
-     
-}
+      radial-gradient(ellipse  at 55%  55%, rgb(178, 166, 222) 0%, rgb(9, 3, 22) 100%) 30% 30%/200% 170%;  
+
+   }
+
+   .toolbar2TableStyle{
+    position: absolute;
+    top:70px;
+    left: 249px;
+    width: 100%;
+    height: 1rem;
+    background: black;
+    background:rgba(91, 108, 128, 0.75);
+    background: #f1eded;
+    
+   }
+
+   .buttonsDatePicker{
+    position: absolute;
+    left: 10px;
+    top:3px;
+   }
+
+   .buttonsMonth{
+    position: absolute;
+    left: 730px;
+   }
 
   .calendarTableDatesStyle{
     display: grid;
     position: absolute;
-    top: 68px;
+    top: 120.9px;
     left: 249px;
-    background-color: #40409a;
+    background-color: white;
     width: 89.5%;
     height: 1010px;
   }
   
-
-  .textmonth {
+  .selectHotelsStyle{
     position: absolute;
-    top: 0px;
-    left: 0px;
-    letter-spacing: 0.15px;
-    line-height: 32px;
-    display: inline-block;
-    width: 88px;
-  }
-  .textyear {
-    position: absolute;
-    top: 0px;
-    left: 108px;
-    letter-spacing: 0.15px;
-    line-height: 32px;
-  }
-  .monthandyaertwo {
-    position: absolute;
-    top: 132px;
-    left: 741px;
-    width: 208px;
-    height: 32px;
-    font-size: var(--h6-size);
-  }
-  .monthandyaerone {
-    position: absolute;
-    top: 133px;
-    left: 360px;
-    width: 208px;
-    height: 32px;
-    font-size: var(--h6-size);
-  }
-
-  .div_main{
-    position: absolute;
-    top: 150px;
-    /* left: 1091px; */
-    left: 260px;
-    max-width: 300px;
-    line-height: 150%;
-  }
-
-  .div {
-    position: absolute;
-    top: 28px;
-    left: 333px;
-    font-size: var(--label-large-label-14-size);
-    line-height: 24px;
-    font-weight: 500;
-    color: var(--buttonon4);
-    text-align: center;
-  }
-
-  .div0 {
-    position: absolute;
-    top: 30px;
-    left: 380px;
-    font-size: var(--label-large-label-14-size);
-    line-height: 24px;
-    font-weight: 500;
-    text-align: center;
-  }
-  
-  .div1 {
-    position: absolute;
-    top: 12px;
+    top: 9px;
     /* left: 1127px; */
-    left: 655px;
-    line-height: 150%;
+    left: 370px;
+    line-height:150%;
     font-size: var(--label-large-label-14-size);
     line-height: 35px;
     font-weight: 500;
     text-align: center;
   }
-  .div2 {
+
+  .buttonGETfromDB{
     position: absolute;
-    top: 150px;
-    left: 315px;
-    line-height: 150%;
-    font-size: var(--label-large-label-14-size);
-    line-height: 24px;
-    font-weight: 500;
-    text-align: center;
-  }
-  .div3 {
-    position: absolute;
-    top: 200px;
-    left: 300px;
-    /* max-width: 200px; */
-    line-height: 150%;
-    font-size: var(--label-large-label-14-size);
-    line-height: 24px;
-    font-weight: 500;
-    text-align: center;
-  }
-  .div4 {
-    position: absolute;
-    top: 250px;
-    left: 265px;
-    line-height: 150%;
-    font-size: var(--label-large-label-14-size);
-    line-height: 24px;
-    font-weight: 500;
-    text-align: center;
-  }
-  .div5 {
-    position: absolute;
-    top: 300px;
-    /* left: 1166px; */
-    left: 265px;
-    line-height: 150%;
-    font-size: var(--label-large-label-14-size);
-    line-height: 24px;
-    font-weight: 500;
-    text-align: center;
-  }
-  .div6 {
-    position: absolute;
-    top: 350px;
-    left: 255px;
-    line-height: 150%;
-    font-size: var(--label-large-label-14-size);
-    line-height: 24px;
-    font-weight: 500;
-    text-align: center;
-  }
-  .div7 {
-    position: absolute;
-    top: 400px;
-    left: 325px;
-    line-height: 150%;
-    font-size: var(--label-large-label-14-size);
-    line-height: 24px;
-    font-weight: 500;
-    text-align: center;
-  }
-  .div8 {
-    position: absolute;
-    top: 450px;
-    left: 345px;
-    font-size: var(--label-large-label-14-size);
-    line-height: 24px;
-    font-weight: 500;
-    text-align: center;
+    top: 5px;
+    left: 250px;
   }
 
-  .div9 {
+  .buttonPUTtoDB{
     position: absolute;
-    top: 500px;
-    left: 260px;
-    font-size: var(--label-large-label-14-size);
-    line-height: 24px;
-    font-weight: 500;
-    text-align: center;
+    top: 5px;
+    left: 420px;
   }
 
-  .div10 {
-    position: absolute;
-    top: 550px;
-    left: 280px;
-    font-size: var(--label-large-label-14-size);
-    line-height: 24px;
-    font-weight: 500;
-    text-align: center;
-  }
-
- 
-  .layer1Icon {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    top: -100%;
-    right: 0%;
-    bottom: 100%;
-    left: 0%;
-    max-width: 100%;
-    overflow: hidden;
-    max-height: 100%;
-  }
-  .arrowRightCalendar {
-    cursor: pointer;
-    border: none;
-    padding: 0;
-    background-color: transparent;
-    position: absolute;
-    top: 128px;
-    left: 655px;
-    width: 40px;
-    height: 40px;
-    overflow: hidden;
-    transform: rotate(-90deg);
-    transform-origin: 0 0;
-  }
-  .arrowLeftCalendar {
-    cursor: pointer;
-    border: none;
-    padding: 0;
-    background-color: transparent;
-    position: absolute;
-    top: 128px;
-    left: 568px;
-    width: 40px;
-    height: 40px;
-    overflow: hidden;
-    transform: rotate(-90deg);
-    transform-origin: 0 0;
-  }
   .calendarpage {
     position: relative;
     background-color: var(--color-whitesmoke-300);
@@ -1018,33 +1380,19 @@
     font-family: var(--body-body-16);
   }
 
-   .datarangeoneVtextfield {
-    position: absolute;
-    top: calc(45% - 29px);
-    left: calc(45% - 0px);
-  }
-
-.input__box {
-    display: flex;
-    flex-direction: column;
-    position: relative;
+  .sample {
+  width: 10px;
+  height: 10px;
+  margin: 5px;
+  border: 1px solid black;
 }
 
-.name__input{
-    background: #fff;
-    padding: 1px;
-    border: 1px solid #6c6c6c;
-    color: #000;
-
+.cant-res {
+  background-color: #999 !important;
 }
 
-.name__input_label{
-    position: absolute;
-    color: #6c6c6c;
-    top: -10px;
-    left: 20px;
-    background: #fff;
-    padding: 0 5px;
+.reserved {
+  background-color: #ec920a !important;
 }
 
 </style>
