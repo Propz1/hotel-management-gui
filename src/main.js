@@ -25,6 +25,7 @@ import RadioButton from 'primevue/radiobutton';
 import Tag from 'primevue/tag';
 import MultiSelect from 'primevue/multiselect';
 
+
 //import './assets/theme.css';
 //import FilterMatchMode from 'primevue/api';
 //import 'primevue/resources/themes/lara-dark-teal/theme.css'
@@ -179,6 +180,7 @@ app.use(vuetify)
 app.use(PrimeVue);
 app.use(ToastService)
 
+
 //app.component('ToastService', ToastService)
 app.component('InputText', InputText)
 app.component('Button', Button);
@@ -197,6 +199,7 @@ app.component('RadioButton', RadioButton)
 app.component('Tag', Tag)
 app.component('MultiSelect', MultiSelect)
 app.component('InputNumber', InputNumber)
+
 
 app.mount("#app");
 

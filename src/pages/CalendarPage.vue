@@ -14,7 +14,7 @@
                   </div>
 
                   <div :class="$style.buttonPUTtoDB">
-                    <Button type="button" label="Записать ➞ " icon="pi pi-database" iconPos="right" style="padding-right:0.5rem; margin-right: 0.4rem; height:35px; width:145px; backgroundColor: var(--primary-color); color: var(--primary-color-text)" @click="putDataToServer()"/>
+                    <Button type="button" label="Записать ➞ " icon="pi pi-database" iconPos="right" style="padding-right:0.5rem; margin-right: 0.4rem; height:35px; width:145px; backgroundColor: var(--primary-color); color: var(--primary-color-text)" @click="updateDataForCalendar()"/>
                   </div>
     
                 <Toolbar :class="$style.toolbarTableStyle" style="padding-left: 0.3rem; min-height: 3.5rem;">     
@@ -52,7 +52,19 @@
 
                       <div :class="$style.selectHotelsStyle">
                         <div class="card flex flex-wrap gap-2 p-fluid">       
-                          <MultiSelect v-model="selectedHotels" @click="loadMultipleSelectHotels()" :options="groupedHotels" optionLabel="label" optionGroupLabel="label" optionGroupChildren="items" display="chip" placeholder="Выберите отель" class="w-full md:w-50rem" style="min-width:22rem">
+                          <MultiSelect class="w-full md:w-50rem" style="min-width:22rem"
+                                v-model="selectedHotels" 
+                                :options="groupedHotels" 
+                                optionLabel="label"
+                                optionGroupLabel="label" 
+                                optionGroupChildren="items"
+                                display="chip"
+                                placeholder="Выберите отель" 
+                                :selectionLimit=1 
+                                :maxSelectedLabels=1
+                                :showToggleAll=false 
+                                @click="loadMultipleSelectHotels()" 
+                               >
                            <template #optiongroup="slotProps">
                              <div class="flex align-items-center">
                                <img :alt="slotProps.option.label" src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" :class="`flag flag-${slotProps.option.code.toLowerCase()} mr-2`" style="width: 18px" />
@@ -758,9 +770,15 @@ const formatMonthYear = (date) => {
   return `${monthText}, ${year}`;
 };
 
+const getDateDiff = (date1, date2) => {
+        const diffTime = Math.abs(date2 - date1);
+        return Math.ceil(diffTime / (1000 * 60 * 60 *24))-1;//
+      };
+
 var startSetting = {
              startDate: "2023/1/3 00:00",
              endDate: "2026/1/1 24:00",
+             resourceNames:["quantity", "price_room", "price_bed_twin", "price_bed_triple", "price_bed_quadriple", "cashback", "cashback_percent", "cashback_no_check_in","cashback_no_check_in_percent"],
              weekdayText: ["ВС", "ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ"],
              unit: 1440, // Minutes 
              borderW: 1, // Px
@@ -784,46 +802,47 @@ var startSetting = {
 
            showDate: new Date(),
 
-           imagesYear: [
-            { id: '2024', url: "./year2024.svg" },
-            { id: '2025', url: "./year2025.svg" },
-            { id: '2026', url: "./year2026.svg" },
-            { id: '2027', url: "./year2027.svg" },
-            { id: '2028', url: "./year2028.svg" },
-            { id: '2029', url: "./year2029.svg" },
-            { id: '2030', url: "./year2030.svg" },
-            { id: '2031', url: "./year2031.svg" },
-            { id: '2032', url: "./year2032.svg" },
-            { id: '2033', url: "./year2033.svg" },
-            { id: '2034', url: "./year2034.svg" },
-            { id: '2035', url: "./year2035.svg" },
-            { id: '2036', url: "./year2036.svg" },
-            { id: '2037', url: "./year2037.svg" },
-            { id: '2038', url: "./year2038.svg" },
-            { id: '2039', url: "./year2039.svg" },
-            { id: '2040', url: "./year2040.svg" },
-           ],
+          //  imagesYear: [
+          //   { id: '2024', url: "./year2024.svg" },
+          //   { id: '2025', url: "./year2025.svg" },
+          //   { id: '2026', url: "./year2026.svg" },
+          //   { id: '2027', url: "./year2027.svg" },
+          //   { id: '2028', url: "./year2028.svg" },
+          //   { id: '2029', url: "./year2029.svg" },
+          //   { id: '2030', url: "./year2030.svg" },
+          //   { id: '2031', url: "./year2031.svg" },
+          //   { id: '2032', url: "./year2032.svg" },
+          //   { id: '2033', url: "./year2033.svg" },
+          //   { id: '2034', url: "./year2034.svg" },
+          //   { id: '2035', url: "./year2035.svg" },
+          //   { id: '2036', url: "./year2036.svg" },
+          //   { id: '2037', url: "./year2037.svg" },
+          //   { id: '2038', url: "./year2038.svg" },
+          //   { id: '2039', url: "./year2039.svg" },
+          //   { id: '2040', url: "./year2040.svg" },
+          //  ],
 
-          calendarTable: {
-            date:0,
-	          installationDate:0,
-            quantity: 0,
-	          hotelName:"",
-            hotelCity:"",
-	          hotelAddress:"",
-            hotelStars:"",
-            priceRoom:0,
-            priceBedTwin:0,
-	          priceBedTriple:0,
-	          priceBedQuadriple:0,
-            cashback:0,
-            cashbackPercent:0,
-            cashbackNoCheckIn:0,
-            cashbackNoCheckInPercent:0,
-            administratorID:0,
-            administratorName:0,
-          },
+          // calendarTable: {
+          //   date:0,
+	        //   installationDate:0,
+          //   quantity: 0,
+	        //   hotelName:"",
+          //   hotelCity:"",
+	        //   hotelAddress:"",
+          //   hotelStars:"",
+          //   priceRoom:0,
+          //   priceBedTwin:0,
+	        //   priceBedTriple:0,
+	        //   priceBedQuadriple:0,
+          //   cashback:0,
+          //   cashbackPercent:0,
+          //   cashbackNoCheckIn:0,
+          //   cashbackNoCheckInPercent:0,
+          //   administratorID:0,
+          //   administratorName:0,
+          // },
           
+            installationDate:0,
             cashbackNoCheckInPercent:0,
             cashbackNoCheckInRUB:0,
             cashbackPercent:0,
@@ -876,8 +895,9 @@ var startSetting = {
 
     mounted() {
 
-      this.loading = true;
+      this.loading = false;
       this.loadLazyData();
+      this.updateDataForCalendar();
     },
 
 
@@ -1017,22 +1037,103 @@ var startSetting = {
 
 
 
-
-
-
       setShowDate(d) {
 				this.showDate = d;
 			},
 
+      updateDataForCalendar(){
 
-      putDataToServer(){
+        this.loading = true;
+
+         var schedule = [];
+         var i;
+         var j;
+         var index;
+   
+         if (this.selectedHotels.length > 0 ) {
+
+             for (i = 0; i <= this.scData.length - 1; i++) {
+               for (j = 0; j <= this.scData[i].schedule.length - 1; j++) {
+
+                   schedule.push({
+                             name:   this.scData[i].schedule[j].resourceName,
+                             value:  this.scData[i].schedule[j].text,
+                         startYear:  new Date(this.scData[i].schedule[j].start).getFullYear(),
+                        startMonth:  new Date(this.scData[i].schedule[j].start).getMonth() + 1,
+                          startDay:  new Date(this.scData[i].schedule[j].start).getDate(),
+                              diff:  getDateDiff(
+                                       new Date(this.scData[i].schedule[j].start),
+                                       new Date(this.scData[i].schedule[j].end)
+                                     ),    
+                    });
+
+                }
+              }
+
+   
+           for (index = this.selectedHotels.length - 1; index >= 0; index--) {
+               var jsonSelectedHotels = [{name: this.selectedHotels[index].label, address: this.selectedHotels[index].value, city: this.selectedHotels[index].city}];
+            }
+
+          var yearStartDate = new Date(this.setting.startDate).getFullYear()
+          var monthStartDate = new Date(this.setting.startDate).getMonth() + 1
+          var dayStartDate = new Date(this.setting.startDate).getDate()
+
+          var yearEndDate = new Date(this.setting.endDate).getFullYear()
+          var monthEndDate = new Date(this.setting.endDate).getMonth() + 1
+          var dayEndDate = new Date(this.setting.endDate).getDate()-1 
 
 
+          //var round = Math.round;
 
-      },
+
+           axios
+            .put('https://localhost:9090/updateDataForCalendar',
+             {
+               installationDate:  0,
+               hotels:            jsonSelectedHotels,
+               resources:         schedule,
+               startDay:          dayStartDate,
+               startMonth:        monthStartDate,
+               startYear:         yearStartDate,
+               endDay:            dayEndDate,
+               endMonth:          monthEndDate,
+               endYear:           yearEndDate,
+
+             // priceRoom:                round(this.price_one),
+             // priceBedTwin:             round(this.price_two),
+             // priceBedTriple:           round(this.price_three),
+            // priceBedQuadriple:        round(this.price_four),
+            // numbersQuantity:          round(this.quantityNumbers),
+            // cashback:                 round(this.cashbackRUB),
+            // cashbackPercent:          round(this.cashbackPercent),
+            // cashbackNoCheckIn:        round(this.cashbackNoCheckIn),
+            // cashbackNoCheckInPercent: round(this.cashbackNoCheckInPercent),
+            // // startDay:                 dayStartDate,
+            // startMonth:               monthStartDate,
+            // startYear:                yearStartDate,
+            // endDay:                   dayEndDate,
+            // endMonth:                 monthEndDate,
+            // endYear:                  yearEndDate,
+         
+
+            })
 
       
+           .then((res) => {
+              this.loadLazyData()
+            })
+               
+            .catch((error) => {
+              //console.log(error.res.data);
+            });
 
+            this.loading = false;
+    
+        }
+     },
+
+    
       loadLazyData() {
 
         var today = new Date();
@@ -1061,25 +1162,26 @@ var startSetting = {
 
 
         this.setting = {
-                                  startDate: `${yearStartDate}/${monthStartDate}/${dayStartDate} 00:00`,
-                                  endDate: `${yearEndDate}/${monthEndDate}/${dayEndDate} 24:00`,
-                                  weekdayText: ["ВС", "ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ"],
-                                  unit: 1440, // Minutes 
-                                  borderW: 1, // Px
-                                  dateDivH: 26, // Px 26
-                                  timeDivH: 26, // Px
-                                  unitDivW: 54, // Px //width of the cells
-                                  titleDivW: 8, // Percent
-                                  rowH: 57, // Px
-                                 };
+                          startDate: `${yearStartDate}/${monthStartDate}/${dayStartDate} 00:00`,
+                          endDate: `${yearEndDate}/${monthEndDate}/${dayEndDate} 24:00`,
+                          resourceNames:["quantity", "price_room", "price_bed_twin", "price_bed_triple", "price_bed_quadriple", "cashback", "cashback_percent", "cashback_no_check_in","cashback_no_check_in_percent"],
+                          weekdayText: ["ВС", "ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ"],
+                          unit: 1440, // Minutes 
+                          borderW: 1, // Px
+                          dateDivH: 26, // Px 26
+                          timeDivH: 26, // Px
+                          unitDivW: 54, // Px //width of the cells
+                          titleDivW: 8, // Percent
+                          rowH: 57, // Px
+                        };
 
         //var jsonSelectedHotels = []     
         var h  
 
-         console.log("yearStartDate =>" + yearStartDate);
-         console.log("this.selectedHotels.length =>" + this.selectedHotels.length)
 
-         if (this.selectedHotels.length > 0 ) {
+         console.log("loadLazyData():  this.selectedHotels.length =>" + this.selectedHotels.length)
+
+      if (this.selectedHotels.length > 0 ) {
 
           // jsonSelectedHotels.push({
           //                        name: this.selectedHotels[0].label,
@@ -1088,6 +1190,8 @@ var startSetting = {
           //                      });
                               
          h = this.selectedHotels[0].label
+
+         console.log("loadLazyData():  this.selectedHotels[0].label =>" + this.selectedHotels[0].label)
          
         const param = {startDay:   dayStartDate, 
                        startMonth: monthStartDate, 
@@ -1100,7 +1204,7 @@ var startSetting = {
         
         this.loading = true;
 
-        // setTimeout(() => {
+   
                  axios
                 .get('https://localhost:9090/getCalendarTable', {params: param})
                 .then((res) => {
@@ -1112,35 +1216,28 @@ var startSetting = {
                 //console.log(error.res.data);
                 });
 
-                 this.loading = false;
-
-
-                 console.log("this.setting.startDate =>" + this.setting.startDate);
-                 console.log("this.setting.endDate =>" + this.setting.endDate);
-
-                
-
-
-        //  }, Math.random() * 1);
+                this.loading = false;
 
       }
 
-      },
+     
 
-    yearChanged: function (index) {
-      console.log('index' + index);
-      this.index = index
     },
 
-    nextYear: function (x) {
-      this.$refs.myswipe.swipetoNext();
-    },
-    previousYear: function (x) {
-      this.$refs.myswipe.swipetoPrevious();
-    },
-    goto2: function () {
-      this.$refs.myswipe.goTo(2);
-    },
+    // yearChanged: function (index) {
+    //   console.log('index' + index);
+    //   this.index = index
+    // },
+
+    // nextYear: function (x) {
+    //   this.$refs.myswipe.swipetoNext();
+    // },
+    // previousYear: function (x) {
+    //   this.$refs.myswipe.swipetoPrevious();
+    // },
+    // goto2: function () {
+    //   this.$refs.myswipe.goTo(2);
+    // },
 
 
         formatDateTime(value) {     
@@ -1193,75 +1290,7 @@ var startSetting = {
       },
 
 
-      setupDataForCalendar(){
-
-            if (this.datePicerValues.startDate != null && this.datePicerValues.endDate != null ){
-
-              var jsonSelectedHotels = []
-              var index;
-
-              for (index = this.selectedHotels.length - 1; index >= 0; --index) {
-                  console.log(this.selectedHotels[index]);
-
-                  jsonSelectedHotels.push({
-                                 name: this.selectedHotels[index].label,
-                                 address: this.selectedHotels[index].value,
-                                 city: this.selectedHotels[index].city,
-                               });
-
-              }
-
-              var yearStartDate = new Date(this.datePicerValues.startDate).getFullYear()
-              var monthStartDate = new Date(this.datePicerValues.startDate).getMonth() + 1
-              var dayStartDate = new Date(this.datePicerValues.startDate).getDate()
-
-              var yearEndDate = new Date(this.datePicerValues.endDate).getFullYear()
-              var monthEndDate = new Date(this.datePicerValues.endDate).getMonth() + 1
-              var dayEndDate = new Date(this.datePicerValues.endDate).getDate() //for period overlaps
-
-
-              var round = Math.round;
-
-        
-               axios
-                 .put('https://localhost:9090/updateDataForCalendar',
-                 {
-                  installationDate:         0,
-                  priceRoom:                round(this.price_one),
-                  priceBedTwin:             round(this.price_two),
-                  priceBedTriple:           round(this.price_three),
-                  priceBedQuadriple:        round(this.price_four),
-                  numbersQuantity:          round(this.quantityNumbers),
-                  cashback:                 round(this.cashbackRUB),
-                  cashbackPercent:          round(this.cashbackPercent),
-                  cashbackNoCheckIn:        round(this.cashbackNoCheckIn),
-                  cashbackNoCheckInPercent: round(this.cashbackNoCheckInPercent),
-                  startDay:                 dayStartDate,
-                  startMonth:               monthStartDate,
-                  startYear:                yearStartDate,
-                  endDay:                   dayEndDate,
-                  endMonth:                 monthEndDate,
-                  endYear:                  yearEndDate,
-                  jsonSelectedHotels,
-
-                 })
-              
-
-                 .then((res) => {
-
-                  console.log(res.data)
-
-                  this.loadLazyData()
-
-                 })
-                   .catch((error) => {
-                //console.log(error.res.data);
-                 });
-            }
-
-
-            
-      },
+      
 
 
       loadMultipleSelectHotels() {

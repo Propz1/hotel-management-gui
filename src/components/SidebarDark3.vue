@@ -4,7 +4,7 @@
     <div :class="$style.mainLinks">
       <NavigationLinkHomeHoverNo
         pageTitle="/home.svg"
-        linkToPageTitle="Главная"
+        linkToPageTitle="Гостиницы"
         propPosition="relative"
         propTop="unset"
         propLeft="unset"

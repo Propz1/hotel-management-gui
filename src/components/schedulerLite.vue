@@ -4,7 +4,7 @@
         <div
           class="sc-rows"
           :style="{
-            width: state.settingData.titleDivW + '%',
+            width: state.settingData.titleDivW +'%',
             height: state.contentH - 4 + 'px',
           }"
         >
@@ -64,7 +64,7 @@
                 :style="{
                   height: state.settingData.dateDivH + 'px',
                   background: 'black',
-                  width: 80 + '%',
+                  //width: 100 + '%',
                 }"
               >
 
@@ -174,19 +174,6 @@
 
       const state = reactive({
         settingData : props.setting,
-          
-        // {
-        //   startDate: new Date(),
-        //   endDate: new Date(),
-        //   weekdayText: ["ВС", "ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ"],
-        //   unit: 1440,
-        //   borderW: 1,
-        //   dateDivH: 30,
-        //   timeDivH: 30,
-        //   unitDivW: 50,
-        //   titleDivW: 20,
-        //   rowH: 25,
-        // },
         padding: 0,
         timeDivW: 0,
         dateDivW: 0,
@@ -232,6 +219,12 @@
         (100 / state.settingData.unit) *
           (state.settingData.unitDivW + state.settingData.borderW) -
         1;
+
+        // console.log(" state.dateDivW =>" +  state.dateDivW)
+        // console.log(" state.dateCnt =>" +  state.dateCnt)
+        // console.log(" state.contentW =>" +  state.contentW)
+        // console.log(" state.timeDivW =>" +  state.timeDivW)
+        // console.log("state.unitCnt =>" +  state.unitCnt)
   
       }
 
@@ -367,6 +360,26 @@
         }
         return year + "/" + month + "/" + date + " " + hours + ":" + minutes;
       };
+
+      const datetimeFormatterToRus = (dateText) => {
+        let dateObj = new Date(dateText)
+        let year = dateObj.getFullYear();
+        let month = dateObj.getMonth() + 1;
+        if (month < 10) {
+          month = "0" + month;
+        }
+        let date = dateObj.getDate();
+        let hours = dateObj.getHours();
+        if (hours < 10) {
+          hours = "0" + hours;
+        }
+        let minutes = dateObj.getMinutes();
+        if (minutes < 10) {
+          minutes = "0" + minutes;
+        }
+        return date + "." + month + "." + year + " " + hours + ":" + minutes;
+      };
+
       /**
        * Add days to object
        *
@@ -543,12 +556,19 @@
             textMsg = msg;
         }
 
+        if (props.scheduleData[rowIndex].schedule == null) {
+          props.scheduleData[rowIndex].schedule = []
+        }
+
+
         props.scheduleData[rowIndex].schedule.push({
           text: textMsg,
           start: datetimeFormatter(newStartDateObj),
           end: datetimeFormatter(newEndDateObj),
+          resourceName: state.settingData.resourceNames[rowIndex],
         });
-        console.log(props.scheduleData[rowIndex].schedule);
+
+        console.log("props.scheduleData[rowIndex].schedule =>" + props.scheduleData[rowIndex].schedule);
         state.isSelectingIndex =
           props.scheduleData[state.isSelectingRowIndex].schedule.length - 1;
       };
@@ -756,15 +776,16 @@
       const clickEvent = (rowIndex, keyNo, contentText) => {
         console.log("clickEvent from schedulerLite", rowIndex, keyNo, contentText);
         
+        let targetData = props.scheduleData[rowIndex].schedule[keyNo]
         let textMsg = contentText;
-        let msg = prompt("Change your message:", contentText);
+        let msg = prompt(`Изменение значения:\n (период: ${datetimeFormatterToRus(targetData.start)} - ${datetimeFormatterToRus(targetData.end)}) `, contentText); 
         if (msg == null || msg == "") {
             textMsg = contentText;
         } else {
             textMsg = msg;
         }
         props.scheduleData[rowIndex].schedule[keyNo].text = textMsg;
-        let targetData = props.scheduleData[rowIndex].schedule[keyNo];
+        //let targetData = props.scheduleData[rowIndex].schedule[keyNo];
         emit('click-event', targetData.start, targetData.end, targetData.text, targetData);
       }
       /**

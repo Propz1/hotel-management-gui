@@ -62,7 +62,7 @@
            <Toolbar :class="$style.toolbarTableStyle" style="min-height: 2rem">
              <!-- <Toolbar style="border-radius: 3rem; background-image: linear-gradient(to right, var(--bluegray-500), var(--bluegray-800))"> -->
                 <template #start>
-                  <ToggleButton v-model="editingFrozen" class="p-inputtext-sm" onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="✍🏼" offLabel="✍🏼" style="min-width: 3rem; margin-left: 0.4rem; margin-right: 1rem; border-radius: 0.5rem"/>
+                  <ToggleButton v-model="editingFrozen" class="p-inputtext-sm" onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="🖍" offLabel="🖍" style="min-width: 3rem; margin-left: 0.4rem; margin-right: 1rem; border-radius: 0.5rem"/>
                   <ToggleButton v-model="requisitionNumberFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="№" offLabel="№" style="min-width: 3.5rem; margin-left: 0.5rem; margin-right: 1rem; border-radius: 1rem" />
                   <ToggleButton v-model="applicationSubmissionTimeFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Дата заявки" offLabel="Дата заявки" style="min-width: 8.8rem; margin-right: 1rem; border-radius: 1rem" />
                   <ToggleButton v-model="rejectButtonFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="👎" offLabel="👎" style="min-width: 3.5rem; margin-left: 1rem; margin-right: 1rem; border-radius: 1rem" />
@@ -100,7 +100,7 @@
             resizableColumns columnResizeMode="expand"    
             lazy paginator :first="first"  
             :rows="40"
-            scrollable scrollHeight="1080px"
+            scrollable scrollHeight="1034px"
             :virtualScrollerOptions="{ itemSize: 36 }"
             v-model:filters="filters" ref="dt" 
             :totalRecords="totalRecords" :loading="loading" @page="onPage($event)" @sort="onSort($event)" @filter="onFilter($event)" filterDisplay="row"
@@ -109,10 +109,7 @@
              v-model:editingRows="editingRows" editMode="row" dataKey="id" @row-edit-save="onRowEditSave" 
              :pt="{
                table: { style: 'min-width: 40rem' },
-              //  bodyrow: ({ props }) => ({
-              //   class: [{ 'font-bold': props.frozenRow }]
-              //   }),
-              column: {
+               column: {
                     bodycell: ({ state }) => ({
                         style:  state['d_editing']&&'padding-top: 0.6rem; padding-bottom: 0.6rem'
                     })
