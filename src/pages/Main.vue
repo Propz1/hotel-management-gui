@@ -6,21 +6,13 @@
         <Toolbar class="mb-4" :class="$style.toolbarTableStyle">
             <template #start>
                 <Button label="Добавить" icon="pi pi-plus" severity="success" class="mr-2" style="min-width: 8rem; padding-left:0.7rem; padding-right:0.5rem; margin-left:0.4rem; margin-right: 0.4rem; height:35px; background-color: var(--indigo-600); color: var(--primary-color-text);" @click="openNew" />
-                <!-- <Button label="Удалить" icon="pi pi-trash" severity="danger" style="min-width: 3.5rem; padding-left:1rem; padding-right:0.5rem; margin-left:0.4rem; margin-right: 0.4rem; height:35px; background-color: var(--red-700); color: var(--primary-color-text);" @click="confirmDeleteSelected" :disabled="!selectedHotels || !selectedHotels.length" /> -->
                 <Button label="Экспорт" icon="pi pi-upload" severity="help" style="min-width: 8rem; padding-left:0.7rem; padding-right:0.5rem; margin-left:0.4rem; margin-right: 0.4rem; height:35px; background-color: var(--teal-800); color: var(--primary-color-text);" @click="exportCSV($event)"  />
               </template>
-
-            <template #center>
-                <!-- <FileUpload mode="basic" accept="image/*" :maxFileSize="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block" /> -->
-               
-            </template>
         </Toolbar>
 
         <Toolbar :class="$style.toolbar2TableStyle" style="padding-left: 0.1rem; min-height: 2rem;">     
                    <template #start>
                      <div :class="$style.buttonsToggle">
-
-                       <!-- <ToggleButton v-model="selectionFrozen" class="p-inputtext-sm" onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="⃣" offLabel="⃣" style="min-width: 3rem; margin-left: 0.2rem; margin-right: 1rem; border-radius: 0.5rem"/>     -->
                        <ToggleButton v-model="editingFrozen" class="p-inputtext-sm" onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="🖍 | 🗑️" offLabel=" 🖍 | 🗑️ " style="min-width: 5rem; margin-left: 0.4rem; margin-right: 1rem; border-radius: 0.5rem"/>  
                        <ToggleButton v-model="statusFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Статус" offLabel="Статус" style="min-width: 5rem; margin-right: 1rem; border-radius: 0.5rem"/>
                        <ToggleButton v-model="codeFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="код" offLabel="код" style="min-width: 3.5rem; margin-left: 0.1rem; margin-right: 0.1rem; border-radius: 0.5rem" />
@@ -35,7 +27,6 @@
                        <ToggleButton v-model="siteFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="🌐" offLabel="🌐" style="min-width: 3rem; margin-right: 1rem; border-radius: 0.5rem"/>
                        <ToggleButton v-model="photoCatalogFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Каталог фото" offLabel="Каталог фото" style="min-width: 5rem; margin-right: 1rem; border-radius: 0.5rem" />
                        <ToggleButton v-model="descriptionFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Описание" offLabel="Описание" style="min-width: 5.4rem; margin-right: 1rem; border-radius: 0.5rem" />
-           
                       </div>
                     </template>
                   </Toolbar> 
@@ -55,23 +46,6 @@
           :virtualScrollerOptions="{ itemSize: 36 }"
           > 
 
-          <!-- paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" :rowsPerPageOptions="[5,10,25]"
-            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-          :paginator="true"  -->
-
-            <!-- <template #header>
-                <div class="flex flex-wrap gap-2 align-items-center justify-content-between">
-                    <h4 class="m-0">Manage Products</h4>
-                   <IconField iconPosition="left">
-                        <InputIcon>
-                            <i class="pi pi-search" />
-                        </InputIcon>
-                        <InputText v-model="filters['global'].value" placeholder="Search..." />
-                    </IconField> 
-                 </div>
-            </template> -->
-
-            <!-- <Column selectionMode="multiple" style="width: 3rem; padding-left: 1.5rem; padding-right: 2rem;" :exportable="false" :frozen="selectionFrozen"></Column> -->
             <Column :exportable="false" style="min-width:8rem" :frozen="editingFrozen">
                 <template #body="slotProps">
                     <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editHotel(slotProps.data)" />
@@ -118,10 +92,7 @@
                     {{ formatDateTime(data.updateDate) }}
                 </template>
             </Column>
-            <Column field="id" header="id" style="min-width: 11.5rem; width: 10%; padding-left: 0.9rem; padding-right: 0.9rem; text-align: left" :frozen="codeFrozen"></Column>
-
-
-         
+            <Column field="id" header="id" style="min-width: 11.5rem; width: 10%; padding-left: 0.9rem; padding-right: 0.9rem; text-align: left" :frozen="codeFrozen"></Column>  
         </DataTable>
     </div>
 
@@ -240,8 +211,6 @@
         </template>
     </Dialog>
 </div>
-
-
 
 </template>
 <script>
@@ -521,9 +490,6 @@
                  this.hotel = {};
             }
         },
-
-
-
 
         editHotel(hotel) {
             this.hotel = {...hotel};

@@ -353,158 +353,10 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
-//import { FilterMatchMode } from 'primevue/api';
 import { FilterMatchMode, FilterOperator } from 'primevue/api';
 import { defineComponent } from "vue";
 import SidebarDark from "../components/SidebarDark.vue";
-import { CustomerService } from '../components/demo/components/CustomerService';
 import axios from 'axios-https-proxy-fix';
-//import axios from 'axios';
-  //import ToastService from 'primevue/toastservice';
-  //import { inject } from 'vue';
-
-
-//   const proxy = {
-//   host: 'https://localhost',
-//   port: 9090,
-//   // auth: {
-//   //   username: 'some_login',
-//   //   password: 'some_pass'
-//   // }
-// };
-
-
-// const customers = ref();
-// const filters = ref({
-//     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-//     name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-//     'country.name': { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-//     representative: { value: null, matchMode: FilterMatchMode.IN },
-//     status: { value: null, matchMode: FilterMatchMode.EQUALS },
-//     verified: { value: null, matchMode: FilterMatchMode.EQUALS }
-// });
-// const representatives = ref([
-//     { name: 'Amy Elsner', image: 'amyelsner.png' },
-//     { name: 'Anna Fali', image: 'annafali.png' },
-//     { name: 'Asiya Javayant', image: 'asiyajavayant.png' },
-//     { name: 'Bernardo Dominic', image: 'bernardodominic.png' },
-//     { name: 'Elwin Sharvill', image: 'elwinsharvill.png' },
-//     { name: 'Ioni Bowcher', image: 'ionibowcher.png' },
-//     { name: 'Ivan Magalhaes', image: 'ivanmagalhaes.png' },
-//     { name: 'Onyama Limba', image: 'onyamalimba.png' },
-//     { name: 'Stephen Shaw', image: 'stephenshaw.png' },
-//     { name: 'XuXue Feng', image: 'xuxuefeng.png' }
-// ]);
-// const statuses = ref(['unqualified', 'qualified', 'new', 'negotiation', 'renewal', 'proposal']);
-// const loading = ref(true);
-
-// onMounted(() => {
-//     CustomerService.getCustomersMedium().then((data) => {
-//             customers.value = getCustomers(data);
-//             loading.value = false;
-//         });
-// });
-
-// const getCustomers = (data) => {
-//     return [...(data || [])].map((d) => {
-//         d.date = new Date(d.date);
-
-//         return d;
-//     });
-// };
-// const formatDate = (value) => {
-//     return value.toLocaleDateString('en-US', {
-//         day: '2-digit',
-//         month: '2-digit',
-//         year: 'numeric'
-//     });
-// };
-// const formatCurrency = (value) => {
-//     return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-// };
-// const getSeverity = (status) => {
-//     switch (status) {
-//         case 'unqualified':
-//             return 'danger';
-
-//         case 'qualified':
-//             return 'success';
-
-//         case 'new':
-//             return 'info';
-
-//         case 'negotiation':
-//             return 'warning';
-
-//         case 'renewal':
-//             return null;
-//     }
-// }
-
-
-
-
-  // const PrimeVueToastSymbol = Symbol();
-  // const toast = inject(PrimeVueToastSymbol);
-  // const onClickButton = () => {
-  //        toast.add({severity: 'success', summary: 'PrimeTime', detail: userName.value});
-  //     }
-
-
-  // import { useToast } from 'primevue/usetoast';
-
-  // const toast = useToast();
-
-  //   const showSuccess = () => {
-  //        toast.add({severity: 'success', summary: 'PrimeTime', detail: userName.value});
-  //     }
-
-
-
-  //import { text } from "body-parser";
-  //import { StoreExample } from "../store.js";
-  // import { useToast} from 'primevue/usetoast';
-  // const toast = useToast();
-
-  //const toast = useToast();
-
-  // const onClickButton = () => {
-  //    ToastService.useToast().add({severity: 'success', summary: 'PrimeTime', detail: text.value});
-  //    //toast.add({severity: 'success', summary: 'PrimeTime', detail: text.value});
-  // }
-
-
-
-// import TableLite from "../components/TableLite.vue";
-//  // import TableLite from "vue3-table-lite";
-
-// // Fake Data for 'asc' sortable
-// const sampleData1 = (offst, limit) => {
-//   offst = offst + 1;
-//   let data = [];
-//   for (let i = offst; i <= limit; i++) {
-//     data.push({
-//       id: i,
-//       name: "TEST" + i,
-//       email: "test" + i + "@example.com",
-//     });
-//   }
-//   return data;
-// };
-
-// // Fake Data for 'desc' sortable
-// const sampleData2 = (offst, limit) => {
-//   let data = [];
-//   for (let i = limit; i > offst; i--) {
-//     data.push({
-//       id: i,
-//       name: "TEST" + i,
-//       email: "test" + i + "@example.com",
-//     });
-//   }
-//   return data;
-// };
 
 
   export default defineComponent({
@@ -514,37 +366,7 @@ import axios from 'axios-https-proxy-fix';
 
             editingRows: [],
             statuses: ['new', 'confirmed', 'rejected', 'cancelled'],
-
-            lockedRequisitions: [
-                // {
-                //     user: {
-                //       telegramId: 5135,
-                //       name: 'Иван Грозный',
-                //       email: 'sfdf@mail.ru', 
-                //       phone: '+79218568586',
-                //     },
-                //     hotel: {
-                //         name: 'Лучший',
-                //         code: 'somthing',
-                //         city: 'Москва',
-                //         codeCity: 'MOW',
-                //         address: 'ул. Преображения дом 1',
-                //         stars: 1,
-                //         phone: '+78123546688'
-                //     },
-                //     status: 'новая',
-                //     checkInDaty: '2019-05-05',
-                //     checkOutDay: '2019-05-05',
-                //     applicationSubmissionTime: '2019-05-05',
-                //     applicationStatusDate: '2019-05-05',
-                //     cost: 0,
-           
-                //     // representative: {
-                //     //     name: 'Amy Elsner',
-                //     //     image: 'amyelsner.png'
-                //     // }
-                // }
-            ],
+            lockedRequisitions: [],
           
             requisitionNumberFrozen: null,
             applicationSubmissionTimeFrozen: null,
@@ -573,18 +395,6 @@ import axios from 'axios-https-proxy-fix';
             selectAll: false,
             first: 0,
             filters: null, 
-            //{
-            //     'user.name': {value: '', matchMode: 'contains'},
-            //     'user.email': {value: '', matchMode: FilterMatchMode.CONTAINS},
-            //     'user.phone': {value: '', matchMode: 'contains'},
-            //     'hotel.city': {value: '', matchMode: 'contains'},
-            //     'hotel.name': {value: '', matchMode: 'contains'},
-            //     'hotel.stars': {value: '', matchMode: 'contains'},
-             //   'checkInDate': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
-             //    'checkOutDate': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
-            //     'applicationSubmissionTime': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
-            //     'applicationStatusDate': { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
-            // },
 
             lazyParams: {},
             columns: [
@@ -643,69 +453,7 @@ import axios from 'axios-https-proxy-fix';
 
     name: "Requisitions",
     components: { SidebarDark, InputText, Button, ToggleButton, Toast, DataTable, Column, Dropdown, Tag, Calendar},
-   
-    // setup() {
-    // // Table config
-    // const table = reactive({
-    //   isLoading: false,
-    //   columns: [
-    //     {
-    //       label: "ID",
-    //       field: "id",
-    //       width: "3%",
-    //       sortable: true,
-    //       isKey: true,
-    //     },
-    //     {
-    //       label: "Name",
-    //       field: "name",
-    //       width: "10%",
-    //       sortable: true,
-    //     },
-    //     {
-    //       label: "Email",
-    //       field: "email",
-    //       width: "15%",
-    //       sortable: true,
-    //     },
-    //   ],
-    //   rows: [],
-    //   totalRecordCount: 0,
-    //   sortable: {
-    //     order: "id",
-    //     sort: "asc",
-    //   },
-    // });
-
-    // /**
-    //  * Search Event
-    //  */
-    // const doSearch = (offset, limit, order, sort) => {
-    //   table.isLoading = true;
-    //   setTimeout(() => {
-    //     table.isReSearch = offset == undefined ? true : false;
-    //     if (offset >= 10 || limit >= 20) {
-    //       limit = 20;
-    //     }
-    //     if (sort == "asc") {
-    //       table.rows = sampleData1(offset, limit);
-    //     } else {
-    //       table.rows = sampleData2(offset, limit);
-    //     }
-    //     table.totalRecordCount = 20;
-    //     table.sortable.order = order;
-    //     table.sortable.sort = sort;
-    //   }, 600);
-    // };
-
-    // // First get data
-    // doSearch(0, 10, "id", "asc");
-
-    // return {
-    //   table,
-    //   doSearch,
-    // };
- // },
+  
 
     methods: {
       onLinkMainPageClick() {
@@ -735,16 +483,7 @@ import axios from 'axios-https-proxy-fix';
       onLinkSettingsPageContainerClick() {
         this.$router.push("/settings");
       },
-      // onClickButton() {
-      //    toast.add({severity: 'success', summary: 'Готово', detail: text.value});
-      // },
-      // fillRequisitionsTable(){
-      //   CustomerService.getCustomersMedium().then((data) => (this.customers = data));
-      // }
 
-      // formatCurrency(value) {
-      //       return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-      //   },
 
       onRowEditSave(event) {
 
@@ -856,12 +595,6 @@ import axios from 'axios-https-proxy-fix';
         formatDateTime(value) {     
 
           const date = new Date(value/1000000);
-
-          //  console.log(typeof value); 
-          //  console.log(value);
-          //  console.log(typeof date); 
-          //  console.log(date instanceof Date); // shows 'true'
-
     
           return date.toLocaleDateString('ru-RU', {
            day: '2-digit',
@@ -1020,8 +753,7 @@ import axios from 'axios-https-proxy-fix';
             return value.toLocaleString('ru-RU', {style: 'currency', currency: 'RUB'});
         },
 
-       
-
+      
         getColorPerson(guests) {
 
            switch (guests) {
@@ -1104,16 +836,14 @@ import axios from 'axios-https-proxy-fix';
                   })
                     .catch((error) => {
                     //console.log(error.res.data);
-                });
-             //    CustomerService.getCustomers({ lazyEvent: JSON.stringify(this.lazyParams) }).then((data) => {
-            //         this.customers = data.customers;
-            //         //this.customers = data;
-            //         this.totalRecords = data.totalRecords;
+                  });
+
                      this.loading = false;
-            //     });
-           }, Math.random() * 2 + 3);
+    
+            }, Math.random() * 2 + 3);
 
         },
+
         onPage(event) {
             this.lazyParams = event;
             this.loadLazyData(event);
@@ -1139,14 +869,7 @@ import axios from 'axios-https-proxy-fix';
             }
         },
         onRowSelect(event) {
-           // this.selectAll = this.selectedRequisitions.length === this.totalRecords
-
-           console.log("Индекс" + event.index)
-
-          
-  
            this.selectAll = false
-         //  this.selectedRequisitions = this.requisitionsTable[event.index]
         },
 
         onRowUnselect() {
@@ -1192,9 +915,6 @@ import axios from 'axios-https-proxy-fix';
 
     thisTotalCosts() {
             let total = 0;
-            // for(let req of this.requisitionsTable) {
-            //     total += req.cost;
-            // }
 
             return this.formatCurrency(total);
         }
@@ -1283,9 +1003,4 @@ import axios from 'axios-https-proxy-fix';
       padding:10px;
     }
 
-
-    /* .buttons{
-      background-color: #6e6ef7;
-      color: #f8f8f9; 
-    } */
   </style>
