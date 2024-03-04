@@ -1,7 +1,7 @@
 
 ## Hotel management web GUI (boilerplate)
 
-This project is intended to configure room rates' pricing settings, management hotels (addeting, delete, setting hotels properties) and management booking requests (requisitions clients).
+This project is intended to configure room rates' pricing settings, management hotels (addeting, deleting, setting hotels properties) and management booking requests (requisitions clients).
 
 ### Project setup
 
