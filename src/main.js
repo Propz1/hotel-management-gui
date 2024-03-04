@@ -25,11 +25,6 @@ import RadioButton from 'primevue/radiobutton';
 import Tag from 'primevue/tag';
 import MultiSelect from 'primevue/multiselect';
 
-
-//import './assets/theme.css';
-//import FilterMatchMode from 'primevue/api';
-//import 'primevue/resources/themes/lara-dark-teal/theme.css'
-//import 'primevue/resources/themes/lara-light-teal/theme.css'
 import 'primevue/resources/themes/lara-light-indigo/theme.css'
 import 'primevue/resources/primevue.min.css';
 import 'primeicons/primeicons.css';
@@ -49,21 +44,6 @@ import Occupancy from "./pages/Occupancy.vue";
 import CalendarPage from "./pages/CalendarPage.vue";
 import Main from "./pages/Main.vue";
 import "./global.css";
-//import "./css/default.css";
-
-
-
-// import Vue from "vue";
-// import "vue-easytable/libs/theme-default/index.css";
-// import VueEasytable from "vue-easytable";
-
-// Vue.use(VueEasytable);
-
-// new Vue({
-//     el: "#app",
-//     render: (h) => h(App),
-// });
-
 
 
 const routes = [
@@ -143,42 +123,12 @@ const addMetaTag = (value) => {
 
 const vuetify = createVuetify({ components, directives });
 
-//createApp(App).use(router).use(vuetify).mount("#app");
-
-
-// app.use(PrimeVue, {
-//   filterMatchModeOptions: {
-//       text: [
-//           FilterMatchMode.STARTS_WITH,
-//           FilterMatchMode.CONTAINS,
-//           FilterMatchMode.NOT_CONTAINS,
-//           FilterMatchMode.ENDS_WITH,
-//           FilterMatchMode.EQUALS,
-//           FilterMatchMode.NOT_EQUALS
-//       ],
-//       numeric: [
-//           FilterMatchMode.EQUALS,
-//           FilterMatchMode.NOT_EQUALS,
-//           FilterMatchMode.LESS_THAN,
-//           FilterMatchMode.LESS_THAN_OR_EQUAL_TO,
-//           FilterMatchMode.GREATER_THAN,
-//           FilterMatchMode.GREATER_THAN_OR_EQUAL_TO
-//       ],
-//       date: [
-//           FilterMatchMode.DATE_IS,
-//           FilterMatchMode.DATE_IS_NOT,
-//           FilterMatchMode.DATE_BEFORE,
-//           FilterMatchMode.DATE_AFTER
-//       ]
-//   }
-// });
-
 const app = createApp(App)
 
-app.use(router)
-app.use(vuetify)
+app.use(router);
+app.use(vuetify);
 app.use(PrimeVue);
-app.use(ToastService)
+app.use(ToastService);
 
 
 //app.component('ToastService', ToastService)
@@ -187,19 +137,18 @@ app.component('Button', Button);
 app.component('ToggleButton', ToggleButton);
 app.component('Calendar', Calendar);
 app.component('DataTable', DataTable);
-app.component('Column', Column)
-app.component('Row', Row)
-app.component('ColumnGroup', ColumnGroup)
-app.component('Toast', Toast)
-app.component('Paginator', Paginator)
-app.component('Toolbar',Toolbar)
-app.component('Dropdown', Dropdown)
-app.component('Dialog', Dialog)
-app.component('RadioButton', RadioButton)
-app.component('Tag', Tag)
-app.component('MultiSelect', MultiSelect)
-app.component('InputNumber', InputNumber)
-
+app.component('Column', Column);
+app.component('Row', Row);
+app.component('ColumnGroup', ColumnGroup);
+app.component('Toast', Toast);
+app.component('Paginator', Paginator);
+app.component('Toolbar',Toolbar);
+app.component('Dropdown', Dropdown);
+app.component('Dialog', Dialog);
+app.component('RadioButton', RadioButton);
+app.component('Tag', Tag);
+app.component('MultiSelect', MultiSelect);
+app.component('InputNumber', InputNumber);
 
 app.mount("#app");
 

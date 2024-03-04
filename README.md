@@ -1,8 +1,27 @@
-# Ormand4
-  
-Note: Please ensure you have installed <code><a href="https://nodejs.org/en/download/">nodejs</a></code>
-  
-To preview and run the project on your device:
-1) Open project folder in <a href="https://code.visualstudio.com/download">Visual Studio Code</a>
-2) In the terminal, run `npm install`
-3) Run `npm run start` to view project in browser
+
+## Hotel management web GUI (boilerplate)
+
+This project is intended to configure room rates' pricing settings, management hotels (addeting, delete, setting hotels properties) and management booking requests (requisitions clients).
+
+### Project setup
+
+`npm install`
+
+### To view project in browser
+
+`npm run start`
+
+### Compiles and hot-reloads for development
+
+`npm run serve`
+
+### Compiles and minifies for production
+
+`npm run build`
+
+### Lints and fixes files
+
+`npm run lint`
+
+### Customize configuration
+See [Configuration Reference.](https://cli.vuejs.org/config/)

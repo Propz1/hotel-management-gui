@@ -12,7 +12,7 @@
 
 !*.js
 !*.vue
-
+!*.css
 
 !README.md
 !LICENSE
@@ -27,16 +27,8 @@
 # ...even if they are in subdirectories
 !*/
 
-
 # # Dependencies
  !*/node_modules
-
-# # Production build
-# !*/dist/
-
-# # Local environment
-# !*.env.local
-# !*.env.*.local
 
 # # Logs
 # !npm-debug.log*

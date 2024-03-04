@@ -1,7 +1,11 @@
 {
-  "name": "ormand4",
+  "name": "hotel-management-gui",
   "version": "0.1.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Propz1/hotel-management-gui.git"
+  },
   "type": "module",
   "scripts": {
     "start": "vite",
