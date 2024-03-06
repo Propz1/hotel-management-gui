@@ -250,7 +250,7 @@
             <Column field="hotel.city" header="Город" filterField="hotel.city" filterMatchMode="contains" style="min-width: 180px; padding-left: 1rem; padding-right: 1rem" alignFrozen="left" :frozen="hotelCityFrozen">    
               <template #body="{ data }">
                     <div class="flex align-items-center gap-2">
-                        <img alt="flag" src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" :class="`flag flag-${data.hotel.code}`" style="width: 24px" />
+                        <img alt="flag" src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" :class="`flag flag-${data.hotel.id}`" style="width: 24px" />
                         <span>{{ data.hotel.city }}</span>
                     </div>
                 </template>
@@ -300,31 +300,7 @@
 
             <Column field="comment" header="Комментарий" filterMatchMode="contains" style="min-width: 120px; padding-left: 1rem; padding-right: 1rem"></Column>
 
-            <Column field="user.telegramId" header="Id клиента" style="min-width: 2rem; width: 3%; padding-left: 1rem; padding-right: 1rem"></Column>   
-
-            
-            
-      
-           
-            <!-- <Column field="representative.name" header="Аватар" filterField="representative.name" sortable>
-                <template #body="{ data }">
-                    <div class="flex align-items-center gap-2">
-                        <img :alt="data.representative.name" :src="`https://primefaces.org/cdn/primevue/images/avatar/${data.representative.image}`" style="width: 32px" />
-                        <span>{{ data.representative.name }}</span>
-                    </div>
-                </template>
-                <template #filter="{filterModel,filterCallback}">
-                    <InputText type="text" v-model="filterModel.value" @keydown.enter="filterCallback()" class="p-column-filter" placeholder="Search"/>
-                </template>
-            </Column> -->
-
-            <!-- <ColumnGroup type="footer">
-            <Row>
-                <Column footer="Всего стоимость:" :colspan="3" footerStyle="text-align:right"/>
-                <Column :footer="thisTotalCosts" />
-            </Row>
-        </ColumnGroup> --> 
-            
+            <Column field="user.telegramId" header="Id клиента" style="min-width: 2rem; width: 3%; padding-left: 1rem; padding-right: 1rem"></Column>               
         </DataTable>
 	</div>
 
@@ -332,23 +308,6 @@
     </div>
   
 </div>
-
-
-
-   <!-- <div>
-//      <table-lite
-//     :is-loading="table.isLoading"
-//     :columns="table.columns"
-//     :rows="table.rows"
-//     :total="table.totalRecordCount"
-//     :sortable="table.sortable"
-//     :messages="table.messages"
-//     @do-search="doSearch"
-//     @is-finished="table.isLoading = false"
-//   ></table-lite>
-// </div> -->
-
-
 
 </template>
 
@@ -406,7 +365,7 @@ import axios from 'axios-https-proxy-fix';
                 {field: 'anotherHotel', header: 'Другая гостиница'},
                 {field: 'hotel.name', header: 'Гостиница'},
                 {field: 'hotel.stars', header: 'Звезд'},
-                {field: 'hotel.code', header: 'Гостиница (код)'},
+                {field: 'hotel.id', header: 'Гостиница (id)'},
                 {field: 'hotel.city', header: 'Город'},
                 {field: 'hotel.codeCity', header: 'Код \nгорода'},
                 {field: 'hotel.address', header: 'Адрес \nгостиницы'},
@@ -488,16 +447,17 @@ import axios from 'axios-https-proxy-fix';
       onRowEditSave(event) {
 
             let { newData, index } = event;
-
             this.requisitionsTable[index] = newData;
 
-            const param = {requisitionNumber: this.requisitionsTable[index].requisitionNumber,
-               status: "",
-               anotherHotel: this.requisitionsTable[index].anotherHotel,
-               anotherCity: this.requisitionsTable[index].anotherCity,
-               cost: this.requisitionsTable[index].cost, 
-               cashback: this.requisitionsTable[index].cashback,
-               cashbackNoCheckIn: this.requisitionsTable[index].cashbackNoCheckIn};
+            const param = {
+                           requisitionNumber: this.requisitionsTable[index].requisitionNumber,
+                           status:            "",
+                           anotherHotel:      this.requisitionsTable[index].anotherHotel,
+                           anotherCity:       this.requisitionsTable[index].anotherCity,
+                           cost:              this.requisitionsTable[index].cost, 
+                           cashback:          this.requisitionsTable[index].cashback,
+                           cashbackNoCheckIn: this.requisitionsTable[index].cashbackNoCheckIn
+                          };
 
 
           axios
@@ -522,16 +482,18 @@ import axios from 'axios-https-proxy-fix';
 
         if (this.requisitionsTable[index].status === 'new' || this.requisitionsTable[index].status === 'rejected') {
           
-          const param = {requisitionNumber: this.requisitionsTable[index].requisitionNumber, 
-                         status: 'confirmed',  
-                         anotherHotel: this.requisitionsTable[index].anotherHotel,
-                         anotherCity: this.requisitionsTable[index].anotherCity,
-                         cost: this.requisitionsTable[index].cost, 
-                         cashback: this.requisitionsTable[index].cashback,
-                         cashbackNoCheckIn: this.requisitionsTable[index].cashbackNoCheckIn};
+          const param = {
+                         requisitionNumber:  this.requisitionsTable[index].requisitionNumber, 
+                         status:            'confirmed',  
+                         anotherHotel:       this.requisitionsTable[index].anotherHotel,
+                         anotherCity:        this.requisitionsTable[index].anotherCity,
+                         cost:               this.requisitionsTable[index].cost, 
+                         cashback:           this.requisitionsTable[index].cashback,
+                         cashbackNoCheckIn:  this.requisitionsTable[index].cashbackNoCheckIn
+                        };
 
 
-                    axios
+                  axios
                     .patch('https://localhost:9090/bookingRequest', null,
 
                     {params: param})
@@ -555,15 +517,17 @@ import axios from 'axios-https-proxy-fix';
 
            if (this.requisitionsTable[index].status === 'new' || this.requisitionsTable[index].status === 'confirmed') {
   
-           const param = {requisitionNumber: this.requisitionsTable[index].requisitionNumber,
-                          status: 'rejected',      
-                          anotherHotel: this.requisitionsTable[index].anotherHotel,
-                          anotherCity: this.requisitionsTable[index].anotherCity,
-                          cost: this.requisitionsTable[index].cost,
-                          cashback: this.requisitionsTable[index].cashback,
-                          cashbackNoCheckIn: this.requisitionsTable[index].cashbackNoCheckIn};
+           const param = {
+                          requisitionNumber: this.requisitionsTable[index].requisitionNumber,
+                          status:            'rejected',      
+                          anotherHotel:      this.requisitionsTable[index].anotherHotel,
+                          anotherCity:       this.requisitionsTable[index].anotherCity,
+                          cost:              this.requisitionsTable[index].cost,
+                          cashback:          this.requisitionsTable[index].cashback,
+                          cashbackNoCheckIn: this.requisitionsTable[index].cashbackNoCheckIn
+                         };
 
-            axios
+          axios
             .patch('https://localhost:9090/bookingRequest', null,
 
             {params: param})

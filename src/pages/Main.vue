@@ -15,7 +15,6 @@
                      <div :class="$style.buttonsToggle">
                        <ToggleButton v-model="editingFrozen" class="p-inputtext-sm" onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="🖍 | 🗑️" offLabel=" 🖍 | 🗑️ " style="min-width: 5rem; margin-left: 0.4rem; margin-right: 1rem; border-radius: 0.5rem"/>  
                        <ToggleButton v-model="statusFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Статус" offLabel="Статус" style="min-width: 5rem; margin-right: 1rem; border-radius: 0.5rem"/>
-                       <ToggleButton v-model="codeFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="код" offLabel="код" style="min-width: 3.5rem; margin-left: 0.1rem; margin-right: 0.1rem; border-radius: 0.5rem" />
                        <ToggleButton v-model="nameFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Название" offLabel="Название" style="min-width: 4rem; margin-left: 0.5rem; margin-right: 0.5rem; border-radius: 0.5rem" />
                        <ToggleButton v-model="nameTelegramFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Название (телеграм)" offLabel="Название (телеграм)" style="min-width: 3.5rem; margin-left: 0.5rem; margin-right: 1rem; border-radius: 0.5rem" />
                        <ToggleButton v-model="starsFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Звезд" offLabel="Звезд" style="min-width: 5rem; margin-right: 0.5rem; border-radius: 0.5rem" />
@@ -65,7 +64,6 @@
                     </Dropdown>
               </template>
             </Column>
-            <Column field="code" header="Код" style="min-width: 11.5rem; width: 10%; padding-left: 0.1rem; padding-right: 0.1rem; text-align: left" :frozen="codeFrozen"></Column>
             <Column field="name" header="Название" style="min-width: 16rem; width: 10%; padding-left: 1.5rem; padding-right: 0.1rem; text-align: left" :frozen="nameFrozen"></Column>
             <Column field="nameTelegram" header="Название (в телеграм)" style="min-width: 18rem; width: 10%; padding-left: 0.1rem; padding-right: 0.1rem; text-align: left" :frozen="nameTelegramFrozen"></Column>
             <Column field="stars" header="Звезд" :showFilterMenu="false" :filterMenuStyle="{ width: '4rem' }" style="min-width:4rem; padding-left: 0.1rem; padding-right: 0.1rem; text-align: center" :frozen="starsFrozen">
@@ -99,13 +97,7 @@
     </div>
 
     <Dialog v-model:visible="hotelDialog" :style="{width: '800px' }" header="Создание / редактирование гостиницы" :modal="true" class="p-fluid">
-        
-        <div class="field col">
-                <label for="code" style="margin-left: 0.5rem; margin-right:0.5rem;margin-top:0.5rem;margin-bottom:1rem; font-weight: 600; font-size: large; color: var(--blue-900)">Код гостиницы</label>
-                <InputText id="code" v-model="hotel.code" required="true" :class="{'p-invalid': submitted && !hotel.code}" style="padding:0.2rem; margin-left:0.5rem; margin-right:0.5rem;margin-top:0.5rem;margin-bottom:0.5rem; background-color: var(--surface-50); width: 780px;"/>
-                <small class="p-error" v-if="submitted && !hotel.code">Заполните код гостиницы.</small>
-        </div>
-          
+                  
         <div class="field">
             <label for="name" style="margin-left: 0.5rem; margin-right:0.5rem;margin-top:0.5rem;margin-bottom:1rem; font-weight: 600; font-size: large; color: var(--blue-900)">Название</label>
             <InputText id="name" v-model.trim="hotel.name" required="true" autofocus :class="{'p-invalid': submitted && !hotel.name}" style="padding:0.2rem; margin-left:0.5rem; margin-right:0.5rem;margin-top:0.5rem;margin-bottom:0.5rem; background-color: var(--surface-50); width: 780px;"/>
@@ -131,7 +123,8 @@
                 <small class="p-error" v-if="submitted && !hotel.cityTelegram">Укажите город для Телеграм.</small>
               </div>
             <div class="field col">
-                <label for="codeCity" style="margin-left: 0.5rem; margin-right:0.5rem;margin-top:0.5rem;margin-bottom:0.5rem; font-weight: 600; font-size: large;color: var(--blue-900)">Код города</label>
+                <label for="codeCity" style="margin-left: 0.5rem; margin-right:0.5rem;margin-top:0.5rem;margin-bottom:0.5rem; font-weight: 600; font-size: large;color: var(--blue-900)">Код города (3-и буквы).</label>
+                <small class="p-text">см. таблицу: https://www.vitalhit.com/blog/citis-url/</small> 
                 <InputText id="codeCity" v-model="hotel.codeCity" style="padding:0.2rem; margin-left:0.5rem; margin-right:0.5rem;margin-top:0.5rem;margin-bottom:0.5rem; background-color: var(--surface-50); width: 780px;"/>
               </div>
             <div class="field col">
@@ -257,7 +250,6 @@
 
             selectionFrozen: null,    
             editingFrozen: null,   
-            codeFrozen: null,
             nameFrozen: null,
             nameTelegramFrozen: null,
             starsFrozen: null,
@@ -454,7 +446,6 @@
 
                     {
                      id:               this.hotel.id,
-	                   code:             this.hotel.code,
                      name:             this.hotel.name,
 	                   nameTelegram:     this.hotel.nameTelegram,
 	                   city:             this.hotel.city,
@@ -512,9 +503,9 @@
         deleteHotel() {
 
           let name = this.hotel.name
-          let code = this.hotel.code
+          let id = this.hotel.id
 
-          const param = {code: this.hotel.code};
+          const param = {id: this.hotel.id};
         
             axios
              .delete('https://localhost:9090/deleteHotel',
@@ -534,11 +525,11 @@
              .catch((error) => {
 
                   if (error.response.status == 404){ 
-                     this.$toast.add({severity:'warn', summary: '', detail: 'Гостиница ' + name + '(код  ' + code + ') не удалена (не найдена)!', life: 5500});
+                     this.$toast.add({severity:'warn', summary: '', detail: 'Гостиница ' + name + '(id  ' + id + ') не удалена (не найдена)!', life: 5500});
                   }else if (error.response.status == 500){ 
-                     this.$toast.add({severity:'warn', summary: '', detail: 'Гостиница ' + name + '(код ' + code + ') не удалена. Нет подключения к базе данных!', life: 5500});
+                     this.$toast.add({severity:'warn', summary: '', detail: 'Гостиница ' + name + '(id ' + id + ') не удалена. Нет подключения к базе данных!', life: 5500});
                   }else {
-                     this.$toast.add({severity:'warn', summary: '', detail: 'Гостиница ' + name + '(код ' + code + ') не удалена!', life: 5500});
+                     this.$toast.add({severity:'warn', summary: '', detail: 'Гостиница ' + name + '(id ' + id + ') не удалена!', life: 5500});
                   };
 
               });
