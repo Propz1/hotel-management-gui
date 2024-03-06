@@ -64,7 +64,7 @@
                     </Dropdown>
               </template>
             </Column>
-            <Column field="name" header="Название" style="min-width: 16rem; width: 10%; padding-left: 1.5rem; padding-right: 0.1rem; text-align: left" :frozen="nameFrozen"></Column>
+            <Column field="name" header="Название" style="min-width: 16rem; width: 10%; padding-left: 0rem; padding-right: 0.1rem; text-align: left" :frozen="nameFrozen"></Column>
             <Column field="nameTelegram" header="Название (в телеграм)" style="min-width: 18rem; width: 10%; padding-left: 0.1rem; padding-right: 0.1rem; text-align: left" :frozen="nameTelegramFrozen"></Column>
             <Column field="stars" header="Звезд" :showFilterMenu="false" :filterMenuStyle="{ width: '4rem' }" style="min-width:4rem; padding-left: 0.1rem; padding-right: 0.1rem; text-align: center" :frozen="starsFrozen">
               <template #body="{ data }">
@@ -96,7 +96,7 @@
         </DataTable>
     </div>
 
-    <Dialog v-model:visible="hotelDialog" :style="{width: '800px' }" header="Создание / редактирование гостиницы" :modal="true" class="p-fluid">
+    <Dialog v-model:visible="hotelDialog" :style="{width: '820px' }" header="Создание / редактирование гостиницы" :modal="true" class="p-fluid">
                   
         <div class="field">
             <label for="name" style="margin-left: 0.5rem; margin-right:0.5rem;margin-top:0.5rem;margin-bottom:1rem; font-weight: 600; font-size: large; color: var(--blue-900)">Название</label>
