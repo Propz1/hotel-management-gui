@@ -25,6 +25,7 @@
                        <ToggleButton v-model="orderCityFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Порядок городв" offLabel="Порядок городов" style="min-width: 6rem; margin-right: 1rem; border-radius: 0.5rem" />
                        <ToggleButton v-model="phoneFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="📞" offLabel="📞" style="min-width: 3rem; margin-right: 1rem; border-radius: 0.5rem"/>
                        <ToggleButton v-model="siteFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="🌐" offLabel="🌐" style="min-width: 3rem; margin-right: 1rem; border-radius: 0.5rem"/>
+                       <ToggleButton v-model="emailFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Эл. почта" offLabel="Эл. почта" style="min-width: 4rem; margin-right: 1rem; border-radius: 0.5rem"/>
                        <ToggleButton v-model="photoCatalogFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Каталог фото" offLabel="Каталог фото" style="min-width: 5rem; margin-right: 1rem; border-radius: 0.5rem" />
                        <ToggleButton v-model="descriptionFrozen" class="p-inputtext-sm"  onIcon="pi pi-lock" offIcon="pi pi-lock-open" onLabel="Описание" offLabel="Описание" style="min-width: 5.4rem; margin-right: 1rem; border-radius: 0.5rem" />
                       </div>
@@ -52,7 +53,7 @@
                     <Button icon="pi pi-trash" outlined rounded severity="danger" @click="confirmDeleteHotel(slotProps.data)" />
                 </template>
             </Column>
-            <Column field="status" header="Статус" :showFilterMenu="false" :filterMenuStyle="{ width: '7rem' }" style="min-width: 7rem; padding-left: 0.3rem; padding-right: 3rem; text-align: left" :frozen="statusFrozen">
+            <Column field="status" header="Статус" :showFilterMenu="false" :filterMenuStyle="{ width: '7rem' }" style="min-width: 7rem; padding-left: 0.3rem; padding-right: 1rem; text-align: left" :frozen="statusFrozen">
               <template #body="{ data }">
                   <Tag :value=formatStatus(data.status) :severity="getSeverity(formatStatus(data.status))" style="color: white; font-size: 1rem; font-weight:400; padding-left: 0.7rem; padding-right: 0.7rem;"/>
               </template>
@@ -65,7 +66,7 @@
               </template>
             </Column>
             <Column field="code" header="Код" style="min-width: 11.5rem; width: 10%; padding-left: 0.1rem; padding-right: 0.1rem; text-align: left" :frozen="codeFrozen"></Column>
-            <Column field="name" header="Название" style="min-width: 16rem; width: 10%; padding-left: 0.1rem; padding-right: 0.1rem; text-align: left" :frozen="nameFrozen"></Column>
+            <Column field="name" header="Название" style="min-width: 16rem; width: 10%; padding-left: 1.5rem; padding-right: 0.1rem; text-align: left" :frozen="nameFrozen"></Column>
             <Column field="nameTelegram" header="Название (в телеграм)" style="min-width: 18rem; width: 10%; padding-left: 0.1rem; padding-right: 0.1rem; text-align: left" :frozen="nameTelegramFrozen"></Column>
             <Column field="stars" header="Звезд" :showFilterMenu="false" :filterMenuStyle="{ width: '4rem' }" style="min-width:4rem; padding-left: 0.1rem; padding-right: 0.1rem; text-align: center" :frozen="starsFrozen">
               <template #body="{ data }">
@@ -85,6 +86,7 @@
             <Column field="orderCity" header="Порядок городов" style="min-width:3rem; padding-left: 1rem; padding-right: 1rem; text-align: center" :frozen="orderCityFrozen"></Column>
             <Column field="phone" header="Телефон 📞" style="min-width: 16rem; padding-left: 1.5rem; padding-right: 1.5rem" :frozen="phoneFrozen"></Column>
             <Column field="site" header="Сайт 🌐" style="min-width:16rem; padding-left: 1.5rem; padding-right: 1.5rem" :frozen="siteFrozen"></Column>
+            <Column field="email" header="Эл. почта 📧" style="min-width:16rem; padding-left: 1.5rem; padding-right: 1.5rem" :frozen="emailFrozen"></Column>
             <Column field="photoCatalog" header="Каталог для фото" style="min-width:16rem" :frozen="photoCatalogFrozen"></Column>
             <Column field="description" header="Описание" style="min-width:16rem" :frozen="descriptionFrozen"></Column>
             <Column field="updateDate" header="Дата изменения" style="min-width: 11.5rem; width: 10%; padding-left: 0.9rem; padding-right: 0.9rem; text-align: left" :frozen="codeFrozen">
@@ -148,12 +150,16 @@
                 <small class="p-error" v-if="submitted && !hotel.address">Укажите адрес.</small>
               </div>
             <div class="field col">
-                <label for="phone" style="margin-left: 0.5rem; margin-right:0.5rem;margin-top:0.5rem;margin-bottom:0.5rem; font-weight: 600; font-size: large;color: var(--blue-900)">Телефон</label>
+                <label for="phone" style="margin-left: 0.5rem; margin-right:0.5rem;margin-top:0.5rem;margin-bottom:0.5rem; font-weight: 600; font-size: large;color: var(--blue-900)">Телефон 📞</label>
                 <InputText id="phone" v-model="hotel.phone" style="padding:0.2rem; margin-left:0.5rem; margin-right:0.5rem;margin-top:0.5rem;margin-bottom:0.5rem; background-color: var(--surface-50); width: 780px;"/>
               </div>
             <div class="field col">
-                <label for="site" style="margin-left: 0.5rem; margin-right:0.5rem;margin-top:0.5rem;margin-bottom:0.5rem; font-weight: 600; font-size: large;color: var(--blue-900)">Сайт</label>
+                <label for="site" style="margin-left: 0.5rem; margin-right:0.5rem;margin-top:0.5rem;margin-bottom:0.5rem; font-weight: 600; font-size: large;color: var(--blue-900)">Сайт 🌐</label>
                 <InputText id="site" v-model="hotel.site" style="padding:0.2rem; margin-left:0.5rem; margin-right:0.5rem;margin-top:0.5rem;margin-bottom:0.5rem; background-color: var(--surface-50); width: 780px;"/>
+            </div>
+            <div class="field col">
+                <label for="email" style="margin-left: 0.5rem; margin-right:0.5rem;margin-top:0.5rem;margin-bottom:0.5rem; font-weight: 600; font-size: large;color: var(--blue-900)">Почта 📧</label>
+                <InputText id="email" v-model="hotel.email" style="padding:0.2rem; margin-left:0.5rem; margin-right:0.5rem;margin-top:0.5rem;margin-bottom:0.5rem; background-color: var(--surface-50); width: 780px;"/>
             </div>
             <div class="field col">
                 <label for="photoCatalog" style="margin-left: 0.5rem; margin-right:0.5rem;margin-top:0.5rem;margin-bottom:0.5rem; font-weight: 600; font-size: large;color: var(--blue-900)">Каталог фотографий</label>
@@ -261,6 +267,7 @@
             orderCityFrozen: null,
             phoneFrozen: null,
             siteFrozen: null,
+            emailFrozen: null,
             statusFrozen: null,
             photoCatalogFrozen: null,
             descriptionFrozen: null,
@@ -459,6 +466,7 @@
 	                   address:          this.hotel.address,
                      phone:            this.hotel.phone,
                      site:             this.hotel.site,
+                     email:            this.hotel.email,
                      photoCatalog:     this.hotel.photoCatalog,
                      description:      this.hotel.description,
                      updateDate:       0,  
