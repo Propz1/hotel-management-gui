@@ -214,7 +214,7 @@
                 </template>
             </Column>
 
-            <Column field="cashbackNoCheckIn" header="Кешбэк (незаезд)" style="min-width: 6rem; width: 2%; padding-left: 1rem; padding-right: 1rem;" bodyStyle="text-align:center" alignFrozen="left" :frozen="cashbackNoCheckInFrozen">
+            <Column field="cashbackNoCheckIn" header="Кешбэк (без заезда)" style="min-width: 6rem; width: 2%; padding-left: 1rem; padding-right: 1rem;" bodyStyle="text-align:center" alignFrozen="left" :frozen="cashbackNoCheckInFrozen">
                  <template #body="{ data }">
                     <span class="font-bold">{{ formatCurrency(data.cashbackNoCheckIn) }}</span>
                 </template>
