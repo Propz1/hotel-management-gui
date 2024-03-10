@@ -393,7 +393,7 @@ var startSetting = {
 
    
            for (index = this.selectedHotels.length - 1; index >= 0; index--) {
-               var jsonSelectedHotels = [{name: this.selectedHotels[index].label, address: this.selectedHotels[index].value, city: this.selectedHotels[index].city}];
+               var jsonSelectedHotels = [{name: this.selectedHotels[index].label, id: this.selectedHotels[index].id, address:this.selectedHotels[index].address, city: this.selectedHotels[index].city}];
             }
 
           var yearStartDate = new Date(this.setting.startDate).getFullYear()
@@ -435,6 +435,8 @@ var startSetting = {
 
     
       loadLazyData() {
+
+        this.scData=[]
 
         var today = new Date();
 
